@@ -17,10 +17,10 @@ export default function Pricing() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="inline-flex items-center px-6 py-2 bg-foreground text-background mb-10"
+                        className="inline-flex items-center px-6 py-2 bg-foreground text-background mb-10 text-[10px] font-black uppercase tracking-[0.4em]"
                     >
                         <Sparkles className="w-3.5 h-3.5 mr-3 text-vibe-pink" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em]">SYSTEM.INVEST</span>
+                        <span>SYSTEM.INVEST</span>
                     </motion.div>
                     
                     <h2 className="text-6xl md:text-9xl font-black text-foreground tracking-tightest leading-[0.85] mb-12 uppercase">
