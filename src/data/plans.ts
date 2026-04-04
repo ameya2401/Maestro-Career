@@ -1,7 +1,7 @@
 export interface Plan {
     id: string;
     name: string;
-    priceInr: number;
+
     description: string;
     features: string[];
     extraFeatures?: string[];
@@ -13,7 +13,7 @@ export const PLANS: Plan[] = [
     {
         id: "startup",
         name: "Startup",
-        priceInr: 5000,
+
         description: "Essential guidance for starting your career journey.",
         color: "blue",
         features: [
@@ -40,7 +40,7 @@ export const PLANS: Plan[] = [
     {
         id: "growth",
         name: "Growth",
-        priceInr: 8000,
+
         description: "Comprehensive support for career discovery and profile building.",
         mostPopular: true,
         color: "purple",
@@ -68,7 +68,7 @@ export const PLANS: Plan[] = [
     {
         id: "excel",
         name: "Excel",
-        priceInr: 13000,
+
         description: "The ultimate track for career mastery and global opportunities.",
         color: "cyan",
         features: [
