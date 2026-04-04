@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useRef } from "react";
-import { ClipboardList, BrainCircuit, Lightbulb, Rocket, Sparkles } from "lucide-react";
+import { ClipboardList, BrainCircuit, Lightbulb, Rocket } from "lucide-react";
 
 export default function HowItWorks() {
   const containerRef = useRef<HTMLElement>(null);

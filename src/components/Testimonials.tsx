@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { Quote } from "lucide-react";
 import NextImage from "next/image";
 
@@ -71,24 +71,24 @@ export default function Testimonials() {
                 <div className="absolute inset-y-0 left-0 w-1/6 md:w-1/4 bg-gradient-to-r from-background to-transparent z-20 pointer-events-none" />
                 <div className="absolute inset-y-0 right-0 w-1/6 md:w-1/4 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
 
-                <div 
+                <div
                     className="flex shrink-0 gap-8 min-w-max px-4 animate-marquee hover:[animation-play-state:paused]"
                 >
                     {testimonials.map((testimonial, idx) => (
-                        <div 
+                        <div
                             key={idx}
                             className="relative w-[350px] md:w-[450px] shrink-0 rounded-[2.5rem] bg-card p-10 shadow-xl shadow-primary/5 border border-border flex flex-col justify-between whitespace-normal"
                         >
                             <Quote className="absolute top-8 right-8 w-10 h-10 text-primary/10" />
-                            
+
                             <blockquote className="text-muted-foreground text-base leading-relaxed mb-10 font-medium italic">
                                 <p>{`"${testimonial.body}"`}</p>
                             </blockquote>
-                            
+
                             <figcaption className="mt-auto flex items-center gap-x-5">
-                                <NextImage 
-                                    className="h-14 w-14 rounded-2xl bg-gray-50 object-cover shadow-md border border-white ring-2 ring-primary/5" 
-                                    src={testimonial.author.imageUrl} 
+                                <NextImage
+                                    className="h-14 w-14 rounded-2xl bg-gray-50 object-cover shadow-md border border-white ring-2 ring-primary/5"
+                                    src={testimonial.author.imageUrl}
                                     alt={testimonial.author.name}
                                     width={56}
                                     height={56}

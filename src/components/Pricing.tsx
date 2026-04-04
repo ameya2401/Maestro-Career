@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, X, ChevronDown, Sparkles } from "lucide-react";
+import { Check, X, ChevronDown } from "lucide-react";
 import { PLANS, formatInr, type Plan } from "@/data/plans";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,7 +38,7 @@ function PricingCard({ plan, index }: { plan: Plan; index: number }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
 
-    const getAuraColor = (color: string) => {
+    const getAuraColor = () => {
         // Use theme-aware shadows instead of hardcoded colors
         return 'group-hover:shadow-[0_0_80px_-10px_hsla(var(--primary),0.3)] hover:border-primary/50';
     };
@@ -56,7 +56,7 @@ function PricingCard({ plan, index }: { plan: Plan; index: number }) {
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
             onClick={() => setIsSelected(!isSelected)}
-            className={`group relative rounded-[3rem] p-10 xl:p-14 border transition-all duration-500 flex flex-col bg-card/10 backdrop-blur-xl cursor-pointer min-h-[800px] lg:min-h-[950px] ${getAuraColor(plan.color)} ${getSelectedStyle()} ${plan.mostPopular && !isSelected ? 'ring-1 ring-primary/10' : ''}`}
+            className={`group relative rounded-[3rem] p-10 xl:p-14 border transition-all duration-500 flex flex-col bg-card/10 backdrop-blur-xl cursor-pointer min-h-[800px] lg:min-h-[950px] ${getAuraColor()} ${getSelectedStyle()} ${plan.mostPopular && !isSelected ? 'ring-1 ring-primary/10' : ''}`}
         >
             {plan.mostPopular && (
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 bg-primary text-primary-foreground rounded-full shadow-2xl z-30 ring-4 ring-background animate-bounce-subtle">

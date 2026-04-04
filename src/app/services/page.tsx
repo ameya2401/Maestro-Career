@@ -5,15 +5,12 @@ import Footer from "@/components/Footer";
 import { motion, useTransform, useSpring, useMotionValue } from "framer-motion";
 import {
   Brain as BrainIcon,
-  Target,
   GraduationCap,
   Briefcase,
   Rocket,
   Users,
-  Sparkles,
   ArrowRight,
-  MessageCircle,
-  Lightbulb
+  MessageCircle
 } from "lucide-react";
 import React, { useState } from "react";
 import Link from "next/link";
