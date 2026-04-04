@@ -1,14 +1,11 @@
-import { NextResponse } from "next/server";
-import {
-    AUTH_COOKIE_NAME,
-    getCookieMaxAgeSeconds,
-    verifyRegistrationOtp,
-} from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { verifyRegistrationOtp } from "@/lib/auth-supabase";
 import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
+import { createRouteHandlerClient } from "@/lib/supabase/route";
 
 export const runtime = "nodejs";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
         const ip = getClientIp(req.headers);
         const ipRate = consumeRateLimit({
@@ -39,32 +36,20 @@ export async function POST(req: Request) {
             }
         }
 
-        const result = await verifyRegistrationOtp({
-            email: body?.email ?? "",
-            mobile: body?.mobile ?? "",
-            countryCode: body?.countryCode ?? "+1",
+        const { supabase, applyToResponse } = createRouteHandlerClient(req);
+        const result = await verifyRegistrationOtp(supabase, {
+            email: body?.email ?? body?.identifier ?? "",
             otp: body?.otp ?? "",
         });
 
-        const response = NextResponse.json({
+        return applyToResponse(NextResponse.json({
             success: true,
             message: "Registration completed successfully.",
             user: result.user,
-        });
-
-        response.cookies.set({
-            name: AUTH_COOKIE_NAME,
-            value: result.sessionToken,
-            httpOnly: true,
-            sameSite: "lax",
-            secure: process.env.NODE_ENV === "production",
-            path: "/",
-            maxAge: getCookieMaxAgeSeconds(),
-        });
-
-        return response;
+        }));
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unable to verify OTP.";
-        return NextResponse.json({ success: false, message }, { status: 400 });
+        const status = message.includes("Supabase auth is not configured") ? 503 : 400;
+        return NextResponse.json({ success: false, message }, { status });
     }
 }

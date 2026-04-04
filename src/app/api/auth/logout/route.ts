@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AUTH_COOKIE_NAME, logoutFromSessionToken } from "@/lib/auth";
+import { logoutFromSession } from "@/lib/auth-supabase";
+import { createRouteHandlerClient } from "@/lib/supabase/route";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-    const token = req.cookies.get(AUTH_COOKIE_NAME)?.value;
-    await logoutFromSessionToken(token);
-
-    const response = NextResponse.json({ success: true, message: "Logged out successfully." });
-    response.cookies.set({
-        name: AUTH_COOKIE_NAME,
-        value: "",
-        path: "/",
-        maxAge: 0,
-    });
-
-    return response;
+    try {
+        const { supabase, applyToResponse } = createRouteHandlerClient(req);
+        await logoutFromSession(supabase);
+        return applyToResponse(NextResponse.json({ success: true, message: "Logged out successfully." }));
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unable to log out.";
+        const status = message.includes("Supabase auth is not configured") ? 503 : 400;
+        return NextResponse.json({ success: false, message }, { status });
+    }
 }

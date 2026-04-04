@@ -238,7 +238,7 @@ function hashOtp(otp: string, salt: string) {
 }
 
 function generateOtp() {
-    const num = Math.floor(100000 + Math.random() * 900000);
+    const num = Math.floor(1000 + Math.random() * 9000);
     return String(num);
 }
 
