@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AUTH_COOKIE_NAME, completeProfileFromSessionToken } from "@/lib/auth";
+import { completeProfileFromSession } from "@/lib/auth-supabase";
 import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
+import { createRouteHandlerClient } from "@/lib/supabase/route";
 
 export const runtime = "nodejs";
 
@@ -19,10 +20,10 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const token = req.cookies.get(AUTH_COOKIE_NAME)?.value;
         const body = await req.json();
+        const { supabase, applyToResponse } = createRouteHandlerClient(req);
 
-        const user = await completeProfileFromSessionToken(token, {
+        const user = await completeProfileFromSession(supabase, {
             name: body?.name ?? "",
             preferredServices: Array.isArray(body?.preferredServices) ? body.preferredServices : [],
             password: body?.password ?? "",
@@ -33,14 +34,19 @@ export async function POST(req: NextRequest) {
             city: body?.city,
         });
 
-        return NextResponse.json({
+        return applyToResponse(NextResponse.json({
             success: true,
             message: "Profile completed successfully.",
             user,
-        });
+        }));
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unable to complete profile.";
-        const status = message === "Unauthorized" ? 401 : 400;
+        const status =
+            message === "Unauthorized"
+                ? 401
+                : message.includes("Supabase auth is not configured")
+                    ? 503
+                    : 400;
         return NextResponse.json({ success: false, message }, { status });
     }
 }

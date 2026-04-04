@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requestRegistrationOtp } from "@/lib/auth";
+import { requestRegistrationOtp } from "@/lib/auth-supabase";
 import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -47,16 +47,16 @@ export async function POST(req: Request) {
 
         return NextResponse.json({
             success: true,
-            message: "OTP sent to your email and mobile number.",
+            message: "OTP sent to your email address.",
+            target: result.emailTarget,
             targets: {
                 email: result.emailTarget,
-                mobile: result.mobileTarget,
             },
             expiresInSeconds: result.expiresInSeconds,
-            ...(result.debugOtp ? { debugOtp: result.debugOtp } : {}),
         });
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unable to request OTP.";
-        return NextResponse.json({ success: false, message }, { status: 400 });
+        const status = message.includes("Supabase auth is not configured") ? 503 : 400;
+        return NextResponse.json({ success: false, message }, { status });
     }
 }
