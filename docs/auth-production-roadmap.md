@@ -1,96 +1,80 @@
-# Auth Production Roadmap
+﻿## Replace JSON/Mobile OTP Auth with Supabase Auth + Brevo Email OTP
 
-This project currently has a hardened interim auth layer (with secure OTP handling and rate limiting) while you prepare production infrastructure.
+### Summary
+- [ ] Move auth off the local JSON/terminal OTP prototype and onto **Supabase Auth** for users, sessions, password login, and email OTP verification.
+- [ ] Use **Brevo as Supabase Auth's SMTP provider**, so OTP/reset emails are delivered by Brevo but the app does not send OTP emails directly itself.
+- [ ] Remove **all mobile OTP behavior**. Keep **mobile required** in registration as profile/contact data only, not as an auth identifier and not as a verification step.
+- [ ] Launch as a **fresh production auth system** with no migration from [`data/auth-prototype.json`](/E:/study/maestro/maestro-career/data/auth-prototype.json).
 
-## What Is Already Implemented
+### Key Changes
+- [ ] Add Supabase helpers and session plumbing:
+  - [ ] Add `@supabase/supabase-js` and `@supabase/ssr`.
+  - [ ] Add server/client/admin helpers under a new `src/lib/supabase/` area.
+  - [ ] Add `middleware.ts` to refresh Supabase auth cookies and protect authenticated routes like `/dashboard`.
+- [ ] Replace the current custom auth core:
+  - [ ] Retire the JSON-backed OTP/session logic in [`src/lib/auth.ts`](/E:/study/maestro/maestro-career/src/lib/auth.ts) and the provider switcher in [`src/lib/otp-delivery.ts`](/E:/study/maestro/maestro-career/src/lib/otp-delivery.ts).
+  - [ ] Keep only reusable validation/util pieces that still matter locally: name/email/mobile/password/date-of-birth validation and dashboard shaping.
+- [ ] Create Supabase tables for app-specific profile data:
+  - [ ] Add `public.profiles`: `id uuid pk -> auth.users.id`, `full_name`, `mobile`, `date_of_birth`, `terms_accepted_at`, `onboarding_completed`, `preferred_services text[]`, `user_type`, `study_field`, `domain`, `company_role`, `city`, `last_login_at`, `last_login_method`, `login_count`, timestamps.
+  - [ ] Add `public.auth_activity`: `id`, `user_id`, `type`, `message`, `created_at`.
+  - [ ] Apply RLS so users can read/update only their own profile and own activity; server routes may use the service role for admin checks/upserts tied to auth events.
+- [ ] Rebuild auth route behavior around Supabase:
+  - [ ] Register request: validate input, reject already-confirmed email, `signUp` with email/password and metadata, or treat an unconfirmed existing signup as resend/update.
+  - [ ] Register verify OTP: `verifyOtp`, upsert initial `profiles` row from signup metadata, log registration activity, leave user signed in.
+  - [ ] Password login: `signInWithPassword` by **email only**.
+  - [ ] Email OTP login request: `signInWithOtp({ email, options: { shouldCreateUser: false } })`.
+  - [ ] Email OTP login verify: `verifyOtp`, update `last_login_at`, `last_login_method="otp"`, increment `login_count`, log activity.
+  - [ ] Forgot password: replace OTP recovery with Supabase reset-email flow through Brevo SMTP.
+  - [ ] Logout/me/profile setup: move to Supabase session lookup + `profiles`/`auth_activity` reads and writes.
+- [ ] Update the auth UI:
+  - [ ] In [`src/app/auth/page.tsx`](/E:/study/maestro/maestro-career/src/app/auth/page.tsx), change login choices to **Email + Password** and **Email + OTP**.
+  - [ ] Registration step 1 still collects mobile, but step 2 says OTP was sent to email only and no longer asks for mobile/country code during verification.
+  - [ ] Forgot-password UI becomes a single email entry + "check your email" confirmation instead of OTP entry/reset-token screens.
+  - [ ] Remove all debug/mobile-OTP copy from the auth hero, forms, placeholders, and success messages.
+- [ ] Keep the current dashboard/header contracts working:
+  - [ ] Preserve `/api/auth/me` as the single place that combines Supabase user data with `profiles` and recent `auth_activity`, so [`src/app/dashboard/page.tsx`](/E:/study/maestro/maestro-career/src/app/dashboard/page.tsx) and [`src/components/Header.tsx`](/E:/study/maestro/maestro-career/src/components/Header.tsx) need only targeted auth-state adjustments, not a full rewrite.
 
-- OTP values are no longer stored in plain text; only salted hashes are persisted.
-- Auth endpoints include basic server-side rate limiting for OTP request/verify and password login.
-- OTP delivery is provider-driven through `OTP_PROVIDER` (`mock`, `twilio`, `resend`).
-- Session cookies remain `httpOnly` and `secure` in production.
-- Strict auth errors can be enabled (`AUTH_STRICT_ERRORS=true`) to reduce account enumeration risk.
+### Public APIs / Interfaces
+- [ ] Replace generic `identifier` auth payloads with explicit `email` fields for:
+  - [ ] login password
+  - [ ] login request OTP
+  - [ ] login verify OTP
+  - [ ] forgot password request
+- [ ] Registration contracts become:
+  - [ ] `POST /api/auth/register/request-otp`: `fullName`, `email`, `mobile`, `password`, `dateOfBirth`, `acceptedTerms`
+  - [ ] `POST /api/auth/register/verify-otp`: `email`, `otp`
+- [ ] Keep `POST /api/auth/profile/setup` saving onboarding/profile fields, but now write to Supabase `public.profiles`.
+- [ ] Add new env surface in `.env.example`:
+  - [ ] `NEXT_PUBLIC_SUPABASE_URL`
+  - [ ] `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  - [ ] `SUPABASE_SERVICE_ROLE_KEY`
+  - [ ] `NEXT_PUBLIC_APP_URL`
+- [ ] Configure Supabase dashboard:
+  - [ ] email auth enabled
+  - [ ] phone auth disabled
+  - [ ] confirm-email enabled
+  - [ ] custom SMTP configured with Brevo
+  - [ ] auth email templates changed to OTP-based content for signup/login and reset-link content for password recovery
 
-## Recommended Providers (Freemium -> Production Scale)
+### Test Plan
+- [ ] Register a brand-new user with email/password/mobile/profile data; confirm only the email OTP is required; verify dashboard session is created.
+- [ ] Log out and log back in with email/password.
+- [ ] Log out and log back in with email OTP; confirm no new user is auto-created.
+- [ ] Re-request signup OTP for an unconfirmed email and verify resend behavior still works.
+- [ ] Attempt signup with an already confirmed email and confirm the user gets a clear duplicate-account error.
+- [ ] Trigger forgot password, receive Brevo-delivered reset email, set a new password, and log in with it.
+- [ ] Refresh `/dashboard`, open header profile menu, and log out to confirm session persistence/clearing works through Supabase cookies.
+- [ ] Run `npm run lint` and `npm run build`.
 
-### SMS + WhatsApp OTP
+### Assumptions
+- [ ] Use **Supabase Auth + Brevo SMTP**, not a custom Brevo API mailer inside the app.
+- [ ] Mobile stays **required** at registration but is **not used for login, OTP, or account verification**.
+- [ ] Mobile is stored as profile data only and is **not enforced as a unique auth identifier**.
+- [ ] No import is performed from the prototype JSON auth store for this production launch.
 
-1. Twilio
-- Why: enterprise-grade reliability, global delivery, strong compliance tooling.
-- Free/trial: trial credits with verified recipient limits.
-- Scale fit: excellent for high traffic and multi-country rollout.
-- In this codebase: set `OTP_PROVIDER=twilio`, add Twilio env values.
-
-2. MessageBird
-- Why: strong omnichannel APIs and enterprise support.
-- Free/trial: trial credits available depending on region.
-- Scale fit: strong; good fallback/secondary provider.
-
-3. Vonage (Nexmo)
-- Why: mature SMS APIs, global coverage.
-- Free/trial: limited credits.
-- Scale fit: strong for large-scale OTP.
-
-### Email OTP
-
-1. Resend
-- Why: modern API, excellent developer experience, good deliverability for transactional flows.
-- Free/trial: free tier suitable for early stage.
-- Scale fit: good; move to paid plans as volume grows.
-- In this codebase: set `OTP_PROVIDER=resend`, add Resend env values.
-
-2. Amazon SES
-- Why: low cost at high volume, mature deliverability controls.
-- Free/trial: AWS free tier for new accounts.
-- Scale fit: very strong for large volume.
-
-3. SendGrid
-- Why: common enterprise choice with strong templates and analytics.
-- Free/trial: free tier available.
-- Scale fit: strong.
-
-## Provider Strategy for Production
-
-- Primary: Twilio (SMS/WhatsApp) + Resend (Email)
-- Fallback: MessageBird or Vonage for SMS failover
-- Policy:
-  - Registration OTP: mobile first
-  - Login OTP: channel based on identifier (email/mobile)
-  - If provider fails, return a retryable error and log incident telemetry
-
-## Supabase Migration Plan (When Credentials Are Available)
-
-1. Create Supabase project
-- Enable Postgres + Auth settings + Row Level Security.
-- Add service role keys in server-only env.
-
-2. Replace JSON file auth store
-- Migrate users, otp challenges, sessions, and activity logs to Postgres tables.
-- Keep hashed password + hashed OTP approach.
-
-3. Add DB constraints and indexes
-- Unique indexes on email and mobile.
-- Index OTP and session lookup columns (`identifier`, `tokenHash`, `expiresAt`).
-
-4. Add background cleanup
-- TTL cleanup for expired OTP challenges and sessions.
-- Scheduled job or DB native cleanup strategy.
-
-5. Observability
-- Add audit logs for auth events and provider failures.
-- Add dashboard metrics: OTP success rate, resend frequency, failed login rate.
-
-## Security Checklist Before Launch
-
-- Keep `AUTH_DEBUG_OTP=false` in all non-local environments.
-- Set `AUTH_STRICT_ERRORS=true` in production.
-- Keep `OTP_PROVIDER=mock` only for local/dev.
-- Enforce HTTPS everywhere; cookies must be `secure` in production.
-- Rotate provider API keys and store them in secure secret management.
-- Add CAPTCHA on OTP request endpoints if abuse starts increasing.
-- Add backup OTP provider before paid campaigns drive traffic.
-
-## Next Work Item
-
-After provider credentials are available:
-- Implement `sms` and `whatsapp` templates for live providers.
-- Move auth storage to Supabase/Postgres and keep current API contracts unchanged.
+### References
+- [ ] [Supabase Next.js server-side auth](https://supabase.com/docs/guides/auth/server-side/nextjs)
+- [ ] [Supabase password auth](https://supabase.com/docs/reference/javascript/auth-signinwithpassword)
+- [ ] [Supabase email OTP auth](https://supabase.com/docs/reference/javascript/auth-signinwithotp)
+- [ ] [Supabase custom SMTP for auth emails](https://supabase.com/docs/guides/auth/auth-smtp)
+- [ ] [Supabase auth email templates](https://supabase.com/docs/guides/auth/auth-email-templates)

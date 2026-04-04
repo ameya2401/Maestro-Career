@@ -1,10 +1,11 @@
-import { NextResponse } from "next/server";
-import { resetPasswordWithToken } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { resetPasswordWithSession } from "@/lib/auth-supabase";
 import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
+import { createRouteHandlerClient } from "@/lib/supabase/route";
 
 export const runtime = "nodejs";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
         const ip = getClientIp(req.headers);
         const ipRate = consumeRateLimit({
@@ -20,17 +21,23 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        await resetPasswordWithToken({
-            resetToken: body?.resetToken ?? "",
+        const { supabase, applyToResponse } = createRouteHandlerClient(req);
+        await resetPasswordWithSession(supabase, {
             password: body?.password ?? "",
         });
 
-        return NextResponse.json({
+        return applyToResponse(NextResponse.json({
             success: true,
             message: "Password reset successful. You can now log in with your new password.",
-        });
+        }));
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unable to reset password.";
-        return NextResponse.json({ success: false, message }, { status: 400 });
+        const status =
+            message === "Unauthorized"
+                ? 401
+                : message.includes("Supabase auth is not configured")
+                    ? 503
+                    : 400;
+        return NextResponse.json({ success: false, message }, { status });
     }
 }

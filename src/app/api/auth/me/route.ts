@@ -1,18 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AUTH_COOKIE_NAME, getDashboardData } from "@/lib/auth";
+import { getDashboardData } from "@/lib/auth-supabase";
+import { createRouteHandlerClient } from "@/lib/supabase/route";
 
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
-    const token = req.cookies.get(AUTH_COOKIE_NAME)?.value;
-    const dashboard = await getDashboardData(token);
+    try {
+        const { supabase, applyToResponse } = createRouteHandlerClient(req);
+        const { data: { user } } = await supabase.auth.getUser();
 
-    if (!dashboard) {
-        return NextResponse.json(
-            { success: false, message: "Unauthorized" },
-            { status: 401 }
-        );
+        if (!user) {
+            return NextResponse.json(
+                { success: false, message: "No active session found" },
+                { status: 200 } // Return 200 to silence console errors during race conditions
+            );
+        }
+
+        const dashboard = await getDashboardData(supabase);
+        if (!dashboard) {
+            return NextResponse.json(
+                { success: false, message: "Unauthorized" },
+                { status: 401 }
+            );
+        }
+
+        return applyToResponse(NextResponse.json({ success: true, data: dashboard }));
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unable to load the current session.";
+        const status = message.includes("Supabase auth is not configured") ? 503 : 400;
+        return NextResponse.json({ success: false, message }, { status });
     }
-
-    return NextResponse.json({ success: true, data: dashboard });
 }

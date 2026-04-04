@@ -1,14 +1,11 @@
-import { NextResponse } from "next/server";
-import {
-    AUTH_COOKIE_NAME,
-    getCookieMaxAgeSeconds,
-    loginWithPassword,
-} from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { loginWithPassword } from "@/lib/auth-supabase";
 import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
+import { createRouteHandlerClient } from "@/lib/supabase/route";
 
 export const runtime = "nodejs";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
         const ip = getClientIp(req.headers);
         const ipRate = consumeRateLimit({
@@ -24,10 +21,10 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const identifier = String(body?.identifier ?? "").trim().toLowerCase();
-        if (identifier) {
+        const email = String(body?.email ?? body?.identifier ?? "").trim().toLowerCase();
+        if (email) {
             const identifierRate = consumeRateLimit({
-                key: `auth:login:password:identifier:${identifier}`,
+                key: `auth:login:password:identifier:${email}`,
                 limit: 12,
                 windowMs: 15 * 60 * 1000,
             });
@@ -39,30 +36,20 @@ export async function POST(req: Request) {
             }
         }
 
-        const result = await loginWithPassword({
-            identifier: body?.identifier ?? "",
+        const { supabase, applyToResponse } = createRouteHandlerClient(req);
+        const result = await loginWithPassword(supabase, {
+            email: body?.email ?? body?.identifier ?? "",
             password: body?.password ?? "",
         });
 
-        const response = NextResponse.json({
+        return applyToResponse(NextResponse.json({
             success: true,
             message: "Login successful.",
             user: result.user,
-        });
-
-        response.cookies.set({
-            name: AUTH_COOKIE_NAME,
-            value: result.sessionToken,
-            httpOnly: true,
-            sameSite: "lax",
-            secure: process.env.NODE_ENV === "production",
-            path: "/",
-            maxAge: getCookieMaxAgeSeconds(),
-        });
-
-        return response;
+        }));
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unable to login with password.";
-        return NextResponse.json({ success: false, message }, { status: 400 });
+        const status = message.includes("Supabase auth is not configured") ? 503 : 400;
+        return NextResponse.json({ success: false, message }, { status });
     }
 }

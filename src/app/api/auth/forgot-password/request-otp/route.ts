@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requestForgotPasswordOtp } from "@/lib/auth";
+import { requestForgotPasswordEmail } from "@/lib/auth-supabase";
 import { consumeRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -35,20 +35,18 @@ export async function POST(req: Request) {
             }
         }
 
-        const result = await requestForgotPasswordOtp({
-            identifier: body?.identifier ?? "",
+        const result = await requestForgotPasswordEmail({
+            email: body?.email ?? body?.identifier ?? "",
         });
 
         return NextResponse.json({
             success: true,
-            message: `OTP sent to your ${result.channel}.`,
+            message: "Password reset link sent to your email address.",
             target: result.target,
-            channel: result.channel,
-            expiresInSeconds: result.expiresInSeconds,
-            ...(result.debugOtp ? { debugOtp: result.debugOtp } : {}),
         });
     } catch (error) {
         const message = error instanceof Error ? error.message : "Unable to request OTP.";
-        return NextResponse.json({ success: false, message }, { status: 400 });
+        const status = message.includes("Supabase auth is not configured") ? 503 : 400;
+        return NextResponse.json({ success: false, message }, { status });
     }
 }
