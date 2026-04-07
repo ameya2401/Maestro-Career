@@ -465,7 +465,7 @@ function toPublicUser(user: User, profile: ProfileRow | null): PublicUser {
         paymentId: profile?.payment_id ?? undefined,
         transactionId: profile?.transaction_id ?? undefined,
         paymentToken: profile?.payment_token ?? undefined,
-        psychometricTestLink: profile?.psychometric_test_link ?? undefined,
+        psychometricTestLink: profile?.psychometric_test_link ?? undefined, // Mapping for User Dashboard visibility
     };
 }
 
