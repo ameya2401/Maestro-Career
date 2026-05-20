@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -200,4 +201,12 @@ export default function AssessmentPage() {
             <Footer />
         </main>
     );
+=======
+import TestPageClient from "./TestPageClient";
+
+export const dynamic = "force-dynamic";
+
+export default function TestPage() {
+    return <TestPageClient />;
+>>>>>>> 859efa387dd4ad028b63e0a6f0699b8c2717116d
 }

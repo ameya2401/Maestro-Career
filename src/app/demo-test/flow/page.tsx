@@ -1,5 +1,6 @@
-"use client";
+import { redirect } from "next/navigation";
 
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircle2, Circle, Loader2 } from 'lucide-react';
@@ -75,4 +76,8 @@ export default function FlowStatusSection() {
             </div>
         </div>
     );
+=======
+export default function DemoTestFlowPage() {
+    redirect("/test");
+>>>>>>> 859efa387dd4ad028b63e0a6f0699b8c2717116d
 }

@@ -39,8 +39,21 @@ export async function updateSession(request: NextRequest) {
     const isSetupMode =
         (pathname === "/auth" || pathname === "/register") && request.nextUrl.searchParams.get("setup") === "1";
 
+    const isTestRoute = pathname === "/test" || pathname.startsWith("/test/");
+    const isTestApi = pathname.startsWith("/api/test/");
+
     if (pathname.startsWith("/dashboard") && !user) {
         return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    if ((isTestRoute || isTestApi) && !user) {
+        if (isTestApi) {
+            return NextResponse.json({ success: false, message: "Authentication required." }, { status: 401 });
+        }
+
+        const url = new URL("/login", request.url);
+        url.searchParams.set("next", pathname);
+        return NextResponse.redirect(url);
     }
 
     if (isAuthEntryRoute && user && !isRecoveryMode && !isSetupMode) {

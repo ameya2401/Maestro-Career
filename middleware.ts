@@ -37,9 +37,16 @@ export const config = {
         "/auth/:path*",
         "/login",
         "/register",
+<<<<<<< HEAD
         "/admin/:path*",
         "/api/admin/:path*",
         "/test/:path*",
         "/api/test/:path*",
+=======
+        "/test/:path*",
+        "/api/test/:path*",
+        "/admin/:path*",
+        "/api/admin/:path*",
+>>>>>>> 859efa387dd4ad028b63e0a6f0699b8c2717116d
     ],
 };

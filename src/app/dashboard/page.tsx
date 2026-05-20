@@ -45,6 +45,16 @@ interface RazorpayOptions {
 
 type RazorpayCtor = new (options: RazorpayOptions) => { open: () => void };
 
+type InternalTestAccessResponse = {
+    success: boolean;
+    authenticated: boolean;
+    grant: { status: "active" | "revoked"; bankVersion: string; grantedAt: string } | null;
+    attempt: { id: string; status: "in_progress" | "submitted" | "expired"; expires_at: string } | null;
+    latestAttempt: { id: string; status: "in_progress" | "submitted" | "expired" } | null;
+    latestResultId: string | null;
+    serverTime: string;
+};
+
 const SERVICE_OPTIONS = [
     "Career Coaching",
     "Psychometric Assessment",
@@ -62,8 +72,13 @@ export default function DashboardPage() {
     const [dashboard, setDashboard] = useState<DashboardResponse["data"]>(undefined);
     const [isPaying, setIsPaying] = useState(false);
     const [selectingPlanId, setSelectingPlanId] = useState<string | null>(null);
+<<<<<<< HEAD
     const [testAccess, setTestAccess] = useState<{ hasAccess: boolean; grantStatus: string; activeAttempt: any } | null>(null);
     const [latestResult, setLatestResult] = useState<any>(null);
+=======
+    const [internalTestAccess, setInternalTestAccess] = useState<InternalTestAccessResponse | null>(null);
+    const [internalTestLoading, setInternalTestLoading] = useState(false);
+>>>>>>> 859efa387dd4ad028b63e0a6f0699b8c2717116d
 
     const selectedPlan = dashboard?.profile.selectedPlanId ? getPlanById(dashboard.profile.selectedPlanId) : null;
 
@@ -106,10 +121,31 @@ export default function DashboardPage() {
         }
     }, [router]);
 
+    const loadInternalTest = useCallback(async () => {
+        setInternalTestLoading(true);
+        try {
+            const resp = await fetch("/api/test/access", { method: "GET", cache: "no-store" });
+            const data = (await resp.json()) as InternalTestAccessResponse;
+            if (!resp.ok || !data.success) return;
+            setInternalTestAccess(data);
+        } catch {
+            // Ignore internal test status failures to avoid blocking dashboard.
+        } finally {
+            setInternalTestLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
         void loadData();
     }, [loadData]);
 
+<<<<<<< HEAD
+=======
+    useEffect(() => {
+        if (!dashboard) return;
+        void loadInternalTest();
+    }, [dashboard, loadInternalTest]);
+>>>>>>> 859efa387dd4ad028b63e0a6f0699b8c2717116d
 
     const handleLogout = async () => {
         await fetch("/api/auth/logout", { method: "POST" });
@@ -262,6 +298,14 @@ export default function DashboardPage() {
             setSelectingPlanId(null);
         }
     };
+
+    const internalGrantActive = internalTestAccess?.grant?.status === "active";
+    const internalInProgress = internalTestAccess?.attempt?.status === "in_progress";
+    const internalCompletedAttemptId =
+        internalTestAccess?.latestAttempt &&
+            (internalTestAccess.latestAttempt.status === "submitted" || internalTestAccess.latestAttempt.status === "expired")
+            ? internalTestAccess.latestAttempt.id
+            : null;
 
     return (
         <main className="min-h-screen bg-background text-foreground transition-colors duration-500">
@@ -471,6 +515,76 @@ export default function DashboardPage() {
                                     </div>
                                 )}
 
+<<<<<<< HEAD
+=======
+                                <div className="rounded-3xl border border-border/20 bg-card p-8 flex flex-col justify-between shadow-sm relative overflow-hidden">
+                                    <div className="relative z-10">
+                                        <div className="flex items-center justify-between gap-4 mb-6">
+                                            <h2 className="text-lg font-semibold text-foreground">Internal Assessment</h2>
+                                            <button
+                                                type="button"
+                                                onClick={loadInternalTest}
+                                                disabled={internalTestLoading}
+                                                className="rounded-lg border border-border/20 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/30 disabled:opacity-60"
+                                            >
+                                                {internalTestLoading ? "Refreshing..." : "Refresh"}
+                                            </button>
+                                        </div>
+
+                                        {!internalTestAccess ? (
+                                            <p className="text-sm text-foreground/60 leading-relaxed">
+                                                {internalTestLoading ? "Checking access..." : "Access status unavailable right now."}
+                                            </p>
+                                        ) : internalCompletedAttemptId ? (
+                                            <p className="text-sm text-foreground/60 leading-relaxed">
+                                                You&apos;ve completed the internal assessment. View your stored results anytime.
+                                            </p>
+                                        ) : internalInProgress ? (
+                                            <p className="text-sm text-foreground/60 leading-relaxed">
+                                                Your internal assessment is in progress. Resume where you left off.
+                                            </p>
+                                        ) : internalGrantActive ? (
+                                            <p className="text-sm text-foreground/60 leading-relaxed">
+                                                Your internal assessment is ready. Start when you&apos;re prepared.
+                                            </p>
+                                        ) : dashboard.profile.paymentStatus !== "paid" ? (
+                                            <p className="text-sm text-foreground/60 leading-relaxed">
+                                                Complete payment first. Admin access is granted after payment is verified.
+                                            </p>
+                                        ) : (
+                                            <p className="text-sm text-foreground/60 leading-relaxed">
+                                                Awaiting admin access grant. This will appear once issued.
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="relative z-10 mt-8">
+                                        {internalCompletedAttemptId ? (
+                                            <Link
+                                                href={`/test/result/${internalCompletedAttemptId}`}
+                                                className="w-full inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm py-4 transition-colors"
+                                            >
+                                                View Result →
+                                            </Link>
+                                        ) : internalGrantActive ? (
+                                            <Link
+                                                href="/test"
+                                                className="w-full inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm py-4 transition-colors"
+                                            >
+                                                {internalInProgress ? "Resume Internal Test →" : "Start Internal Test →"}
+                                            </Link>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                disabled
+                                                className="w-full inline-flex items-center justify-center rounded-xl bg-primary text-primary-foreground font-medium text-sm py-4 opacity-50"
+                                            >
+                                                Awaiting Access
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+>>>>>>> 859efa387dd4ad028b63e0a6f0699b8c2717116d
                             </div>
 
                             {!dashboard.profile.onboardingCompleted && (
