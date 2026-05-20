@@ -1,10 +1,39 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
+import { createRouteHandlerClient } from '@/lib/supabase/route';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const { scores, primaryQuadrant, secondaryQuadrant } = data;
+    const { attemptId } = data;
+
+    if (!attemptId) {
+      return NextResponse.json({ error: 'Missing attemptId' }, { status: 400 });
+    }
+
+    const { supabase } = createRouteHandlerClient(req);
+
+    const { data: userResp } = await supabase.auth.getUser();
+    if (!userResp.user) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
+    const { data: resultData, error: dbError } = await supabase
+      .from('assessment_results')
+      .select('*')
+      .eq('attempt_id', attemptId)
+      .eq('user_id', userResp.user.id)
+      .single();
+
+    if (dbError || !resultData) {
+      return NextResponse.json({ error: 'Result not found' }, { status: 404 });
+    }
+
+    const name = userResp.user.user_metadata?.name || 'User';
+    
+    // Result data structure
+    const topMatches = resultData.career_matches?.slice(0, 5) || [];
+    const primaryMatch = topMatches[0] || { title: 'Unknown', summary: 'N/A', score: 0 };
 
     const htmlContent = `
       <!DOCTYPE html>
@@ -28,6 +57,9 @@ export async function POST(req: Request) {
           p { font-size: 18px; line-height: 1.6; }
           .footer { position: absolute; bottom: 30px; left: 60px; right: 60px; font-size: 14px; color: #aaa; text-align: center; border-top: 1px solid #eee; padding-top: 10px; }
           .chart-container { width: 100%; max-width: 600px; margin: 40px auto; height: 350px; }
+          .match-item { background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 6px solid #1294DD; }
+          .match-title { font-size: 24px; font-weight: 600; margin: 0 0 10px 0; }
+          .match-score { font-size: 20px; color: #1294DD; font-weight: bold; margin-bottom: 10px; }
         </style>
       </head>
       <body>
@@ -36,8 +68,8 @@ export async function POST(req: Request) {
           <h1 class="title">Maestro Career</h1>
           <p class="subtitle">Complete Psychometric & Aptitude Report</p>
           <div style="margin-top: 60px; font-size: 22px;">
-            <p style="margin-bottom: 5px; color: white;">Prepared for: <strong>Demo User</strong></p>
-            <p style="margin-top: 0; color: rgba(255,255,255,0.8);">Date: ${new Date().toLocaleDateString()}</p>
+            <p style="margin-bottom: 5px; color: white;">Prepared for: <strong>${name}</strong></p>
+            <p style="margin-top: 0; color: rgba(255,255,255,0.8);">Date: ${new Date(resultData.created_at).toLocaleDateString()}</p>
           </div>
         </div>
 
@@ -46,85 +78,54 @@ export async function POST(req: Request) {
           <div class="header">1. Assessment Overview</div>
           <p>
             The Maestro Career Assessment combines rigorous psychometric profiling with aptitude evaluation to pinpoint your natural strengths and cognitive inclinations. 
-            By analyzing your responses across a 60-second timed environment, we have categorized your tendencies into four major quadrants:
-            <strong>Healthcare, Engineering, Law, and Design.</strong>
+            By analyzing your responses, we have evaluated your core competencies across logical reasoning, numerical ability, analytical thinking, emotional stability, adaptability, and more.
           </p>
-          <div class="card section">
-            <h2>Methodology</h2>
-            <p>12 tailored questions mapping into key professional vectors, analyzing problem solving, logic, and emotional intelligence under pressure.</p>
-          </div>
-          <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
-        </div>
-
-        <!-- Page 3: Score Breakdown -->
-        <div class="page">
-          <div class="header">2. Score Breakdown</div>
           <div class="grid" style="margin-top: 40px;">
             <div class="card">
-              <h2>Doctor (Healthcare)</h2>
-              <p style="font-size: 32px; font-weight: bold; margin: 10px 0;">${scores.Doctor} Points</p>
-              <p style="font-size: 14px; color: #666;">Measures compassion and analytical grace.</p>
+              <h2>Overall Index</h2>
+              <p style="font-size: 32px; font-weight: bold; margin: 10px 0;">${Math.round(resultData.overall_index)}%</p>
             </div>
             <div class="card" style="border-left-color: #10B981;">
-              <h2>Engineer (Tech)</h2>
-              <p style="font-size: 32px; font-weight: bold; margin: 10px 0;">${scores.Engineer} Points</p>
-              <p style="font-size: 14px; color: #666;">Measures logical systems thinking.</p>
+              <h2>Aptitude Index</h2>
+              <p style="font-size: 32px; font-weight: bold; margin: 10px 0;">${Math.round(resultData.aptitude_index)}%</p>
             </div>
             <div class="card" style="border-left-color: #F59E0B;">
-              <h2>Lawyer (Advocacy)</h2>
-              <p style="font-size: 32px; font-weight: bold; margin: 10px 0;">${scores.Lawyer} Points</p>
-              <p style="font-size: 14px; color: #666;">Measures negotiation and critical reading.</p>
-            </div>
-            <div class="card" style="border-left-color: #8B5CF6;">
-              <h2>Artist (Design)</h2>
-              <p style="font-size: 32px; font-weight: bold; margin: 10px 0;">${scores.Artist} Points</p>
-              <p style="font-size: 14px; color: #666;">Measures creative and visual problem solving.</p>
+              <h2>Psychometric Index</h2>
+              <p style="font-size: 32px; font-weight: bold; margin: 10px 0;">${Math.round(resultData.psychometric_index)}%</p>
             </div>
           </div>
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
 
-        <!-- Page 4: Visual Data -->
+        <!-- Page 3: Best Suited Career Path -->
         <div class="page">
-          <div class="header">3. Aptitude Distribution</div>
-          <p>Visual breakdown of your cognitive alignment across all four major quadrants.</p>
-          <div class="chart-container">
-            <canvas id="barChart"></canvas>
-          </div>
-          <div class="chart-container" style="height: 300px;">
-            <canvas id="pieChart"></canvas>
-          </div>
-          <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
-        </div>
-
-        <!-- Page 5: Best Suited Career Path -->
-        <div class="page">
-          <div class="header">4. Primary Recommendation</div>
-          <p style="font-size: 24px;">Your highest scoring domain is:</p>
-          <h1 style="font-size: 56px; color: #1294DD; margin: 20px 0;">${primaryQuadrant} Path</h1>
-          <p>
-            Your responses indicate a powerful alignment with this quadrant. 
-            You exhibit the core competencies required to succeed and find fulfillment here.
-          </p>
+          <div class="header">2. Primary Recommendation</div>
+          <p style="font-size: 24px;">Your highest scoring career path is:</p>
+          <h1 style="font-size: 56px; color: #1294DD; margin: 20px 0;">${primaryMatch.title}</h1>
+          <p style="font-size: 24px; font-weight: bold; color: #555;">Compatibility Score: ${Math.round(primaryMatch.score)}%</p>
           <div class="card section">
             <h2>Why this fits you</h2>
-            <p>Your problem-solving approach and time-management under pressure match the typical profile of top performers in this field. You naturally apply the required mental models seamlessly.</p>
+            <p>${primaryMatch.summary || 'Your problem-solving approach and professional tendencies strongly align with the key competencies of this career path.'}</p>
           </div>
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
 
-        <!-- Page 6: Secondary Recommendations -->
+        <!-- Page 4: Top Career Matches -->
         <div class="page">
-          <div class="header">5. Secondary Strengths</div>
-          <p style="font-size: 24px;">Your supporting domain is:</p>
-          <h2 style="font-size: 40px; color: #555; margin: 20px 0;">${secondaryQuadrant} Path</h2>
-          <p>
-            Your secondary domain suggests versatility. You can often act as a bridge between your primary domain and this one, making you highly valuable in cross-functional roles. Integrating these two paths creates a unique, highly competitive professional profile.
-          </p>
+          <div class="header">3. Top Career Matches</div>
+          <p>Here are the highest ranking career profiles based on your assessment results:</p>
+          <div style="margin-top: 30px;">
+            ${topMatches.map((m: { title: string, score: number }) => {
+              return '<div class="match-item">' +
+                '<h3 class="match-title">' + m.title + '</h3>' +
+                '<div class="match-score">' + Math.round(m.score) + '% Compatibility</div>' +
+              '</div>';
+            }).join('')}
+          </div>
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
 
-        <!-- Page 7: Conclusion -->
+        <!-- Page 5: Conclusion -->
         <div class="page" style="text-align: center; justify-content: center; align-items: center;">
           <h2 style="color: #1294DD; font-size: 40px;">Professional Journey Ahead</h2>
           <p style="max-width: 600px; margin: 20px auto;">
@@ -136,59 +137,6 @@ export async function POST(req: Request) {
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
 
-        <script>
-          // Render charts
-          Chart.defaults.animation = false; // Important for PDF generation
-          
-          const scores = {
-            Doctor: ${scores.Doctor},
-            Engineer: ${scores.Engineer},
-            Lawyer: ${scores.Lawyer},
-            Artist: ${scores.Artist}
-          };
-
-          const labels = ['Doctor', 'Engineer', 'Lawyer', 'Artist'];
-          const data = [scores.Doctor, scores.Engineer, scores.Lawyer, scores.Artist];
-          const colors = ['#1294DD', '#10B981', '#F59E0B', '#8B5CF6'];
-
-          const ctxBar = document.getElementById('barChart').getContext('2d');
-          new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-              labels: labels,
-              datasets: [{
-                label: 'Aptitude Points',
-                data: data,
-                backgroundColor: colors,
-                borderWidth: 1
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { display: false } },
-              scales: { y: { beginAtZero: true } }
-            }
-          });
-
-          const ctxPie = document.getElementById('pieChart').getContext('2d');
-          new Chart(ctxPie, {
-            type: 'doughnut',
-            data: {
-              labels: labels,
-              datasets: [{
-                data: data,
-                backgroundColor: colors,
-                borderWidth: 1
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { position: 'right' } }
-            }
-          });
-        </script>
       </body>
       </html>
     `;
@@ -214,7 +162,7 @@ export async function POST(req: Request) {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="Maestro-Career-Report.pdf"',
+        'Content-Disposition': 'attachment; filename="Maestro-Career-Report-' + attemptId + '.pdf"',
       },
     });
 
