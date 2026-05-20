@@ -52,6 +52,23 @@ interface AdminEditForm {
     psychometricTestLink: string;
 }
 
+type InternalAssessmentAccess = {
+    paymentStatus: "paid" | "unpaid" | null;
+    grant: {
+        status: "active" | "revoked";
+        granted_at: string;
+        revoked_at: string | null;
+    } | null;
+    latestAttempt: {
+        id: string;
+        status: "in_progress" | "submitted" | "expired";
+        started_at: string;
+        expires_at: string;
+        submitted_at: string | null;
+    } | null;
+    latestResultId: string | null;
+};
+
 function inferPaymentMethod(user: AdminUser): PaymentMethod {
     if (user.payment_method === "razorpay" || user.payment_method === "cash" || user.payment_method === "manual_upi") {
         return user.payment_method;
@@ -142,7 +159,53 @@ export default function AdminDashboardPage() {
     const [savingUserId, setSavingUserId] = useState<string | null>(null);
     const [linkInput, setLinkInput] = useState<Record<string, string>>({});
     const [sendingLink, setSendingLink] = useState<Record<string, boolean>>({});
+    const [internalAccess, setInternalAccess] = useState<Record<string, InternalAssessmentAccess | undefined>>({});
+    const [internalAccessLoading, setInternalAccessLoading] = useState<Record<string, boolean>>({});
     const router = useRouter();
+
+    const loadInternalAccess = useCallback(async (userId: string) => {
+        setInternalAccessLoading((current) => ({ ...current, [userId]: true }));
+
+        try {
+            const resp = await fetch(`/api/admin/users/${userId}/assessment-access`, { cache: "no-store" });
+            const data = await resp.json();
+            if (!resp.ok || !data?.success) {
+                throw new Error(data?.message || "Unable to load internal assessment access.");
+            }
+
+            setInternalAccess((current) => ({ ...current, [userId]: data.data as InternalAssessmentAccess }));
+        } catch (e) {
+            window.alert(e instanceof Error ? e.message : "Unable to load internal assessment access.");
+        } finally {
+            setInternalAccessLoading((current) => ({ ...current, [userId]: false }));
+        }
+    }, []);
+
+    const updateInternalAccess = useCallback(
+        async (userId: string, action: "grant" | "revoke") => {
+            setInternalAccessLoading((current) => ({ ...current, [userId]: true }));
+
+            try {
+                const resp = await fetch(`/api/admin/users/${userId}/assessment-access`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action }),
+                });
+                const data = await resp.json();
+
+                if (!resp.ok || !data?.success) {
+                    throw new Error(data?.message || "Unable to update internal assessment access.");
+                }
+
+                setInternalAccess((current) => ({ ...current, [userId]: data.data as InternalAssessmentAccess }));
+            } catch (e) {
+                window.alert(e instanceof Error ? e.message : "Unable to update internal assessment access.");
+            } finally {
+                setInternalAccessLoading((current) => ({ ...current, [userId]: false }));
+            }
+        },
+        [],
+    );
 
     const syncLinkInputs = useCallback((nextUsers: AdminUser[]) => {
         setLinkInput((current) => {
@@ -265,6 +328,7 @@ export default function AdminDashboardPage() {
     const handleEditStart = (user: AdminUser) => {
         setEditingUserId(user.id);
         setEditForm(createEditForm(user));
+        void loadInternalAccess(user.id);
     };
 
     const handleEditCancel = () => {
@@ -411,6 +475,8 @@ export default function AdminDashboardPage() {
                                         const currentPaymentMethod = isEditing ? editForm.paymentMethod : inferPaymentMethod(user);
                                         const currentPaymentStatus = isEditing ? editForm.paymentStatus : user.payment_status ?? "unpaid";
                                         const displayedLink = linkInput[user.id] ?? user.psychometric_test_link ?? "";
+                                        const internal = internalAccess[user.id];
+                                        const internalLoading = internalAccessLoading[user.id] ?? false;
 
                                         return (
                                             <div
@@ -549,11 +615,10 @@ export default function AdminDashboardPage() {
                                                         <div className="flex items-center justify-between mb-2 gap-3">
                                                             <h3 className="text-sm font-semibold text-foreground">Transaction Profile</h3>
                                                             <span
-                                                                className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase ${
-                                                                    currentPaymentStatus === "paid"
+                                                                className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase ${currentPaymentStatus === "paid"
                                                                         ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                                                                         : "bg-rose-500/10 text-rose-600 border border-rose-500/20"
-                                                                }`}
+                                                                    }`}
                                                             >
                                                                 {currentPaymentStatus}
                                                             </span>
@@ -769,6 +834,74 @@ export default function AdminDashboardPage() {
                                                                 </div>
                                                             )}
                                                         </div>
+
+                                                        {isEditing ? (
+                                                            <div className="mt-6 rounded-2xl border border-border/20 bg-background/50 p-6">
+                                                                <div className="flex items-center justify-between gap-3">
+                                                                    <h4 className="text-sm font-semibold text-foreground">Internal Assessment Access</h4>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => void loadInternalAccess(user.id)}
+                                                                        disabled={internalLoading}
+                                                                        className="rounded-lg border border-border/20 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/30 disabled:opacity-60"
+                                                                    >
+                                                                        {internalLoading ? "Loading..." : "Refresh"}
+                                                                    </button>
+                                                                </div>
+
+                                                                <div className="mt-4 space-y-2 text-sm">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <span className="text-foreground/60">Payment</span>
+                                                                        <span className="font-semibold text-foreground">
+                                                                            {internal?.paymentStatus ?? "unknown"}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="flex items-center justify-between">
+                                                                        <span className="text-foreground/60">Grant</span>
+                                                                        <span
+                                                                            className={`font-semibold ${internal?.grant?.status === "active"
+                                                                                    ? "text-emerald-600"
+                                                                                    : "text-foreground"
+                                                                                }`}
+                                                                        >
+                                                                            {internal?.grant?.status ?? "not granted"}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="flex items-center justify-between">
+                                                                        <span className="text-foreground/60">Latest attempt</span>
+                                                                        <span className="font-semibold text-foreground">
+                                                                            {internal?.latestAttempt?.status ?? "none"}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                {internal?.latestAttempt?.id ? (
+                                                                    <div className="mt-4 rounded-xl border border-border/20 bg-card px-4 py-3 text-xs text-foreground/70">
+                                                                        Attempt: <span className="font-mono">{internal.latestAttempt.id}</span>
+                                                                    </div>
+                                                                ) : null}
+
+                                                                <div className="mt-5 flex flex-col sm:flex-row gap-3">
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => void updateInternalAccess(user.id, "grant")}
+                                                                        disabled={internalLoading}
+                                                                        className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
+                                                                    >
+                                                                        Grant access
+                                                                    </button>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => void updateInternalAccess(user.id, "revoke")}
+                                                                        disabled={internalLoading}
+                                                                        className="inline-flex items-center justify-center rounded-xl border border-border/20 bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:border-border/50 disabled:opacity-60"
+                                                                    >
+                                                                        Revoke
+                                                                    </button>
+                                                                </div>
+
+                                                            </div>
+                                                        ) : null}
 
                                                         {currentPaymentStatus !== "paid" ? (
                                                             <p className="text-xs font-medium text-rose-500 border border-rose-500/20 bg-rose-500/10 px-3 py-2 rounded-lg text-center">

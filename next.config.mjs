@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const isWindows = process.platform === 'win32';
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -12,6 +14,7 @@ const nextConfig = {
       },
     ],
   },
+  ...(isWindows ? { outputFileTracing: false } : {}),
 };
 
 export default nextConfig;
