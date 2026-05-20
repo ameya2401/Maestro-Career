@@ -62,6 +62,8 @@ export default function DashboardPage() {
     const [dashboard, setDashboard] = useState<DashboardResponse["data"]>(undefined);
     const [isPaying, setIsPaying] = useState(false);
     const [selectingPlanId, setSelectingPlanId] = useState<string | null>(null);
+    const [testAccess, setTestAccess] = useState<{ hasAccess: boolean; grantStatus: string; activeAttempt: any } | null>(null);
+    const [latestResult, setLatestResult] = useState<any>(null);
 
     const selectedPlan = dashboard?.profile.selectedPlanId ? getPlanById(dashboard.profile.selectedPlanId) : null;
 
@@ -73,16 +75,25 @@ export default function DashboardPage() {
 
     const loadData = useCallback(async () => {
         try {
-            const resp = await fetch("/api/auth/me", { method: "GET" });
-            const data: DashboardResponse = await resp.json();
+            const [meResp, accessResp, resultResp] = await Promise.all([
+                fetch("/api/auth/me", { method: "GET" }),
+                fetch("/api/test/access", { method: "GET" }),
+                fetch("/api/test/results/latest", { method: "GET" })
+            ]);
 
-            if (!resp.ok || !data.success || !data.data) {
+            const data: DashboardResponse = await meResp.json();
+            const accessData = await accessResp.json();
+            const resultData = await resultResp.json();
+
+            if (!meResp.ok || !data.success || !data.data) {
                 router.replace("/login");
                 return;
             }
 
             const profile = data.data.profile;
             setDashboard(data.data);
+            setTestAccess(accessData);
+            if (resultData.success) setLatestResult(resultData.result);
             setOnboardingData((prev) => ({
                 ...prev,
                 name: profile.name === "Learner" ? "" : profile.name,
@@ -98,6 +109,7 @@ export default function DashboardPage() {
     useEffect(() => {
         void loadData();
     }, [loadData]);
+
 
     const handleLogout = async () => {
         await fetch("/api/auth/logout", { method: "POST" });
@@ -366,33 +378,99 @@ export default function DashboardPage() {
                                     </div>
                                 )}
 
-                                {dashboard.profile.psychometricTestLink ? (
-                                    <div className="rounded-3xl border border-primary/20 bg-primary/5 p-8 flex flex-col justify-between relative overflow-hidden">
+                                {latestResult && (
+                                    <div className="rounded-3xl border border-emerald-500/20 bg-emerald-500/5 p-8 flex flex-col justify-between relative overflow-hidden shadow-sm">
                                         <div className="relative z-10">
-                                            <div className="flex items-center gap-3 justify-start mb-6">
-                                                <h2 className="text-lg font-semibold text-foreground">Psychometric Assessment</h2>
+                                            <div className="flex items-center gap-3 justify-start mb-4">
+                                                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                                                    <span className="text-emerald-500 text-lg">✓</span>
+                                                </div>
+                                                <h2 className="text-lg font-bold text-foreground">Intelligence Analysis</h2>
+                                            </div>
+                                            <div className="space-y-1 mb-6">
+                                                <div className="text-xs uppercase font-bold tracking-widest opacity-40">Your Archetype</div>
+                                                <div className="text-xl font-black text-emerald-600 uppercase tracking-tighter">{latestResult.archetype?.title}</div>
                                             </div>
                                             <p className="text-sm text-foreground/60 leading-relaxed mb-8">
-                                                Your personalized psychometric assessment is ready. Click below to begin.
+                                                Your comprehensive psychometric dossier is ready. Review your multi-dimensional career DNA and strategic roadmap.
                                             </p>
                                         </div>
-                                        <div className="relative z-10 mt-auto">
-                                            <a
-                                                href={dashboard.profile.psychometricTestLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="w-full inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm py-4 transition-colors"
+                                        <div className="relative z-10 mt-auto flex flex-col gap-2">
+                                            <Link
+                                                href={`/report?resultId=${latestResult.id}`}
+                                                className="w-full inline-flex items-center justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[14px] py-4 shadow-lg shadow-emerald-900/20 transition-all active:scale-[0.98]"
                                             >
-                                                Start Assessment &rarr;
+                                                View Intelligence Dossier &rarr;
+                                            </Link>
+                                            <a
+                                                href={`/api/generate-report?resultId=${latestResult.id}`}
+                                                target="_blank"
+                                                className="text-center text-[11px] font-bold uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity py-2"
+                                            >
+                                                Download PDF (High Fidelity)
                                             </a>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {testAccess?.hasAccess || dashboard.profile.psychometricTestLink ? (
+                                    <div className={`rounded-3xl border border-primary/20 bg-primary/5 p-8 flex flex-col justify-between relative overflow-hidden shadow-sm ${latestResult ? 'opacity-60 scale-95' : ''}`}>
+                                        <div className="relative z-10">
+                                            <div className="flex items-center gap-3 justify-start mb-4">
+                                                <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                                                    <span className="text-primary text-lg">⚡</span>
+                                                </div>
+                                                <h2 className="text-lg font-bold text-foreground">Psychometric Intelligence</h2>
+                                            </div>
+                                            <p className="text-sm text-foreground/60 leading-relaxed mb-8">
+                                                {testAccess?.hasAccess
+                                                    ? "Your secure internal assessment is active. This is a 50-question comprehensive evaluation."
+                                                    : "Your personalized external assessment link is ready. Click below to begin."}
+                                            </p>
+                                        </div>
+                                        <div className="relative z-10 mt-auto flex flex-col gap-3">
+                                            {testAccess?.hasAccess && (
+                                                <Link
+                                                    href="/test"
+                                                    className="w-full inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-[14px] py-4 shadow-lg shadow-primary/20 transition-all active:scale-[0.98]"
+                                                >
+                                                    Start Internal Assessment &rarr;
+                                                </Link>
+                                            )}
+                                            {dashboard.profile.psychometricTestLink && (
+                                                <a
+                                                    href={dashboard.profile.psychometricTestLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={`w-full inline-flex items-center justify-center rounded-xl border border-border/40 hover:border-border/60 text-foreground font-medium text-[14px] py-4 transition-all ${testAccess?.hasAccess ? 'opacity-80 scale-95' : 'bg-primary text-primary-foreground border-transparent'}`}
+                                                >
+                                                    {testAccess?.hasAccess ? "Manual External Link" : "Start Assessment \u2192"}
+                                                </a>
+                                            )}
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="rounded-3xl border border-border/20 bg-card p-10 flex flex-col items-center justify-center text-center shadow-sm">
-                                        <h3 className="text-xl font-semibold text-foreground mb-2">Assessment Link Pending</h3>
-                                        <p className="text-sm text-foreground/60 max-w-sm">After you complete your payment, your assessment link will be generated and displayed here within 24-48 hours.</p>
+                                        <div className="w-12 h-12 rounded-full bg-foreground/5 flex items-center justify-center mb-6">
+                                            <span className="text-foreground/30 text-xl">🔒</span>
+                                        </div>
+                                        <h3 className="text-xl font-bold text-foreground mb-2">Assessment Locked</h3>
+                                        <p className="text-sm text-foreground/50 max-w-sm mb-6">
+                                            {dashboard.profile.paymentStatus === 'paid'
+                                                ? "You have paid. Awaiting admin to grant your internal test access (usually within 12-24 hours)."
+                                                : "Purchase a plan to unlock the full psychometric intelligence assessment."}
+                                        </p>
+                                        {dashboard.profile.paymentStatus !== 'paid' && (
+                                            <button
+                                                onClick={handlePayNow}
+                                                className="text-primary text-sm font-bold hover:underline"
+                                            >
+                                                Pay Now to Unlock &rarr;
+                                            </button>
+                                        )}
                                     </div>
                                 )}
+
                             </div>
 
                             {!dashboard.profile.onboardingCompleted && (

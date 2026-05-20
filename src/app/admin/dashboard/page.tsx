@@ -242,40 +242,63 @@ export default function AdminDashboardPage() {
                                                     </div>
 
                                                     {/* Distribute Assessment Link */}
-                                                    <div className="lg:col-span-4 rounded-xl flex flex-col justify-between">
-                                                        <h3 className="text-sm font-semibold text-foreground mb-4">Assessment Link</h3>
-
-                                                        <div className="space-y-4">
-                                                            <input
-                                                                type="text"
-                                                                placeholder="Paste URL here..."
-                                                                value={linkInput[user.id] || ""}
-                                                                onChange={(e) => setLinkInput({ ...linkInput, [user.id]: e.target.value })}
-                                                                className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[14px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/40 focus:border-primary focus:ring-4 focus:ring-primary/20"
-                                                            />
-                                                            <button
-                                                                onClick={() => handleSendLink(user.id)}
-                                                                disabled={sendingLink[user.id] || !linkInput[user.id] || user.payment_status !== "paid"}
-                                                                className="w-full relative flex items-center justify-center bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-xl text-[14px] font-medium transition-all disabled:opacity-50"
-                                                            >
-                                                                {sendingLink[user.id] ? "Sending..." : (
-                                                                    <>
-                                                                        {user.payment_status === "paid" ? "Issue Assessment \u2192" : "Await Payment"}
-                                                                    </>
-                                                                )}
-                                                            </button>
+                                                    <div className="lg:col-span-4 flex flex-col gap-6">
+                                                        <div className="rounded-xl bg-background/30 p-4 border border-border/10">
+                                                            <h3 className="text-sm font-semibold text-foreground mb-4">Legacy Link Flow</h3>
+                                                            <div className="space-y-4">
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="Paste URL here..."
+                                                                    value={linkInput[user.id] || ""}
+                                                                    onChange={(e) => setLinkInput({ ...linkInput, [user.id]: e.target.value })}
+                                                                    className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[14px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/40 focus:border-primary focus:ring-4 focus:ring-primary/20"
+                                                                />
+                                                                <button
+                                                                    onClick={() => handleSendLink(user.id)}
+                                                                    disabled={sendingLink[user.id] || !linkInput[user.id] || user.payment_status !== "paid"}
+                                                                    className="w-full relative flex items-center justify-center bg-background border border-border/40 hover:border-border/60 text-foreground px-6 py-3 rounded-xl text-[14px] font-medium transition-all disabled:opacity-50"
+                                                                >
+                                                                    {sendingLink[user.id] ? "Processing..." : "Issue Manual Link \u2192"}
+                                                                </button>
+                                                            </div>
                                                         </div>
 
-                                                        {user.payment_status !== "paid" && (
-                                                            <p className="text-xs font-medium text-rose-500 mt-3 border border-rose-500/20 bg-rose-500/10 px-3 py-2 rounded-lg text-center">Payment pending.</p>
-                                                        )}
-
-                                                        {user.psychometric_test_link && (
-                                                            <div className="mt-4 flex items-center text-emerald-600 font-medium text-sm gap-2">
-                                                                <span>Link Active</span>
+                                                        <div className="space-y-3">
+                                                            <div className="rounded-xl bg-blue-500/5 p-4 border border-blue-500/20">
+                                                                <h3 className="text-sm font-semibold text-blue-400 mb-2">Internal Testing Unit</h3>
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        const resp = await fetch(`/api/admin/users/${user.id}/grant-access?action=grant`, { method: 'POST' });
+                                                                        const d = await resp.json();
+                                                                        if (d.success) alert(d.message);
+                                                                    }}
+                                                                    disabled={user.payment_status !== "paid"}
+                                                                    className="w-full bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl text-[12px] font-bold transition-all disabled:opacity-50"
+                                                                >
+                                                                    Grant Test Access
+                                                                </button>
                                                             </div>
-                                                        )}
+
+                                                            <div className="rounded-xl bg-emerald-500/5 p-4 border border-emerald-500/20">
+                                                                <h3 className="text-sm font-semibold text-emerald-400 mb-2">Analysis Hub</h3>
+                                                                <div className="flex gap-2">
+                                                                    <button
+                                                                        onClick={() => window.open(`/report?resultId=latest&userId=${user.id}`, '_blank')}
+                                                                        className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-[12px] font-bold transition-all"
+                                                                    >
+                                                                        View Dossier
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => window.open(`/api/generate-report?userId=${user.id}`, '_blank')}
+                                                                        className="flex-1 border border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 px-4 py-2 rounded-lg text-[12px] font-medium transition-all"
+                                                                    >
+                                                                        Fetch PDF
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         );

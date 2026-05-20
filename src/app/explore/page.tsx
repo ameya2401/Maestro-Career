@@ -15,7 +15,7 @@ import {
 
 export default function ExplorationPage() {
     return (
-        <main className="min-h-screen bg-slate-50 font-sans selection:bg-primary/20">
+        <main className="min-h-screen bg-[#030712] font-sans selection:bg-primary/30">
             <Header />
 
             {/* 1. Hero Section */}

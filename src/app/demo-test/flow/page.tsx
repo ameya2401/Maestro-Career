@@ -38,8 +38,8 @@ export default function FlowStatusSection() {
                             <div
                                 key={step.id}
                                 className={`flex items-center p-4 rounded-xl border ${isCompleted ? 'border-green-200 bg-green-50' :
-                                        isCurrent ? 'border-primary bg-blue-50' :
-                                            'border-gray-100 bg-gray-50 opacity-60'
+                                    isCurrent ? 'border-primary bg-blue-50' :
+                                        'border-gray-100 bg-gray-50 opacity-60'
                                     }`}
                             >
                                 <div className="mr-4">
