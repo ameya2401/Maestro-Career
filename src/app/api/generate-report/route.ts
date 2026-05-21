@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 
 export async function GET(req: Request) {
     try {
@@ -13,9 +14,15 @@ export async function GET(req: Request) {
 
         const printUrl = `${baseUrl}/report?resultId=${resultId}&print=true`;
 
+        const isLocal = process.env.NODE_ENV === 'development';
         const browser = await puppeteer.launch({
+            args: isLocal ? [] : chromium.args,
+            executablePath: isLocal ?
+                (process.platform === 'win32'
+                    ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+                    : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+                : await chromium.executablePath(),
             headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
 
         const page = await browser.newPage();
