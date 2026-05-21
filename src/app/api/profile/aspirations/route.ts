@@ -21,7 +21,11 @@ export async function POST(req: NextRequest) {
 
         if (error) {
             console.error("Aspirations update error:", error);
-            return applyToResponse(NextResponse.json({ success: false, message: "Failed to update aspirations" }, { status: 500 }));
+            const detail = error.message || "Database update failed";
+            return applyToResponse(NextResponse.json({
+                success: false,
+                message: `Failed to update aspirations: ${detail} (Code: ${error.code})`
+            }, { status: 500 }));
         }
 
         return applyToResponse(NextResponse.json({ success: true, message: "Aspirations updated" }));
