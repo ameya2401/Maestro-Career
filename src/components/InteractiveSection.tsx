@@ -71,8 +71,8 @@ export default function InteractiveSection() {
           {/* Card 1: Our Objective */}
           <TiltCard className="h-[450px] bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 group">
             <div className="h-full w-full p-10 flex flex-col justify-between bg-card/50 backdrop-blur-md rounded-[3rem]">
-              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
-                <Gamepad2 className="w-8 h-8 text-primary" />
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
+                <span className="text-xl font-black text-primary">01</span>
               </div>
               <div className="space-y-3">
                 <span className="text-xs font-bold tracking-wider text-primary">What we do</span>
@@ -82,17 +82,14 @@ export default function InteractiveSection() {
                   <p>• Subject matter expertise in career coaching</p>
                 </div>
               </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                <MousePointer2 className="w-20 h-20 text-primary/30 rotate-12" />
-              </div>
             </div>
           </TiltCard>
 
           {/* Card 2: Our Schedule */}
           <TiltCard className="h-[450px] bg-gradient-to-br from-secondary/20 to-transparent border border-secondary/30">
             <div className="h-full w-full p-10 flex flex-col justify-between bg-card/50 backdrop-blur-md rounded-[3rem]">
-              <div className="w-16 h-16 rounded-2xl bg-secondary/30 flex items-center justify-center">
-                <Brain className="w-8 h-8 text-secondary-foreground" />
+              <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                <span className="text-xl font-black text-secondary-foreground">02</span>
               </div>
               <div className="space-y-3">
                 <span className="text-xs font-bold tracking-wider text-secondary-foreground">When we do</span>

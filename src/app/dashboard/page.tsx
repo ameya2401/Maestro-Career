@@ -74,6 +74,9 @@ export default function DashboardPage() {
     const [selectingPlanId, setSelectingPlanId] = useState<string | null>(null);
     const [internalTestAccess, setInternalTestAccess] = useState<InternalTestAccessResponse | null>(null);
     const [internalTestLoading, setInternalTestLoading] = useState(false);
+    const [careerGoals, setCareerGoals] = useState({ dream: "", profession: "", education: "" });
+    const [savingGoals, setSavingGoals] = useState(false);
+    const [goalsMessage, setGoalsMessage] = useState("");
 
     const selectedPlan = dashboard?.profile.selectedPlanId ? getPlanById(dashboard.profile.selectedPlanId) : null;
 
@@ -109,6 +112,16 @@ export default function DashboardPage() {
                 name: profile.name === "Learner" ? "" : profile.name,
                 preferredServices: profile.preferredServices,
             }));
+            try {
+                if (profile.careerGoals) {
+                    const parsed = JSON.parse(profile.careerGoals);
+                    setCareerGoals({
+                        dream: parsed.dream || "",
+                        profession: parsed.profession || "",
+                        education: parsed.education || ""
+                    });
+                }
+            } catch (e) { }
         } catch {
             setError("Unable to load dashboard right now.");
         } finally {
@@ -187,6 +200,32 @@ export default function DashboardPage() {
             setError(err instanceof Error ? err.message : "Unable to complete profile.");
         } finally {
             setSavingProfile(false);
+        }
+    };
+
+    const handleSaveGoals = async (e: FormEvent) => {
+        e.preventDefault();
+        setError("");
+        setGoalsMessage("");
+        setSavingGoals(true);
+
+        try {
+            const resp = await fetch("/api/profile/aspirations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ career_goals: JSON.stringify(careerGoals) }),
+            });
+            const data = await resp.json();
+
+            if (!resp.ok || !data.success) {
+                throw new Error(data.message || "Unable to save goals.");
+            }
+            setGoalsMessage("Goals saved successfully.");
+            await loadData();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Unable to save goals.");
+        } finally {
+            setSavingGoals(false);
         }
     };
 
@@ -420,9 +459,6 @@ export default function DashboardPage() {
                                     <div className="rounded-3xl border border-emerald-500/20 bg-emerald-500/5 p-8 flex flex-col justify-between relative overflow-hidden shadow-sm">
                                         <div className="relative z-10">
                                             <div className="flex items-center gap-3 justify-start mb-4">
-                                                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                                                    <span className="text-emerald-500 text-lg">✓</span>
-                                                </div>
                                                 <h2 className="text-lg font-bold text-foreground">Intelligence Analysis</h2>
                                             </div>
                                             <div className="space-y-1 mb-6">
@@ -455,9 +491,6 @@ export default function DashboardPage() {
                                     <div className={`rounded-3xl border border-primary/20 bg-primary/5 p-8 flex flex-col justify-between relative overflow-hidden shadow-sm ${latestResult ? 'opacity-60 scale-95' : ''}`}>
                                         <div className="relative z-10">
                                             <div className="flex items-center gap-3 justify-start mb-4">
-                                                <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                                                    <span className="text-primary text-lg">⚡</span>
-                                                </div>
                                                 <h2 className="text-lg font-bold text-foreground">Psychometric Intelligence</h2>
                                             </div>
                                             <p className="text-sm text-foreground/60 leading-relaxed mb-8">
@@ -577,6 +610,59 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
 
+                            </div>
+
+                            {/* MY CAREER GOALS */}
+                            <div className="rounded-2xl border border-border/20 bg-card p-6 md:p-8 shadow-sm">
+                                <div className="max-w-2xl">
+                                    <h2 className="text-xl font-bold text-foreground mb-1">My Career Goals</h2>
+                                    <p className="text-foreground/60 text-sm mb-6">
+                                        Tell us what you want to achieve. This will be included in your final Career Report.
+                                    </p>
+
+                                    <form onSubmit={handleSaveGoals} className="flex flex-col gap-5">
+                                        <div>
+                                            <label className="block text-sm font-medium text-foreground mb-1.5">My Goal / Dream</label>
+                                            <input
+                                                type="text"
+                                                value={careerGoals.dream}
+                                                onChange={(e) => setCareerGoals({ ...careerGoals, dream: e.target.value })}
+                                                placeholder="e.g. I want to build houses"
+                                                className="w-full bg-background border border-border/40 text-foreground text-sm px-4 py-2.5 rounded-lg focus:border-primary/50 transition-colors"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-foreground mb-1.5">Profession I Want</label>
+                                            <input
+                                                type="text"
+                                                value={careerGoals.profession}
+                                                onChange={(e) => setCareerGoals({ ...careerGoals, profession: e.target.value })}
+                                                placeholder="e.g. Civil Engineer"
+                                                className="w-full bg-background border border-border/40 text-foreground text-sm px-4 py-2.5 rounded-lg focus:border-primary/50 transition-colors"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-foreground mb-1.5">Degree / Education to Pursue</label>
+                                            <input
+                                                type="text"
+                                                value={careerGoals.education}
+                                                onChange={(e) => setCareerGoals({ ...careerGoals, education: e.target.value })}
+                                                placeholder="e.g. B.Tech in Civil Engineering"
+                                                className="w-full bg-background border border-border/40 text-foreground text-sm px-4 py-2.5 rounded-lg focus:border-primary/50 transition-colors"
+                                            />
+                                        </div>
+                                        <div className="pt-2 flex items-center gap-4">
+                                            <button
+                                                type="submit"
+                                                disabled={savingGoals}
+                                                className="rounded-lg bg-primary hover:bg-primary/90 text-white px-6 py-2.5 text-sm font-medium transition-colors disabled:opacity-70"
+                                            >
+                                                {savingGoals ? "Saving..." : "Save Goals"}
+                                            </button>
+                                            {goalsMessage && <span className="text-emerald-600 text-sm font-medium">{goalsMessage}</span>}
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
 
                             {/* ... rest of dashboard omitted for brevity, unchanged ... */}

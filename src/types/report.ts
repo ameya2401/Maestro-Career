@@ -7,6 +7,7 @@ export interface UserProfile {
     stream: string;
     interests: string[];
     careerInterests: string[];
+    careerGoals?: string;
     reportDate: string;
 }
 
@@ -15,6 +16,12 @@ export interface CareerMatch {
     score: number;
     compatibilityLevel: string;
     description: string;
+}
+
+export interface BadCareerMatch {
+    career: string;
+    score: number;
+    reason: string;
 }
 
 export interface ChartDataPoint {
@@ -49,6 +56,7 @@ export interface ReportData {
     recommendations: {
         bestCareers: string[];
         alternativeCareers: string[];
+        badCareers?: BadCareerMatch[];
         growthAdvice: string[];
     };
 

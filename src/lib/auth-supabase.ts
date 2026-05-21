@@ -43,6 +43,7 @@ interface ProfileRow {
     transaction_id: string | null;
     payment_token: string | null;
     psychometric_test_link: string | null;
+    career_goals: string | null;
     created_at: string;
     updated_at: string;
 }
@@ -81,6 +82,7 @@ export interface PublicUser {
     transactionId?: string;
     paymentToken?: string;
     psychometricTestLink?: string;
+    careerGoals?: string;
 }
 
 export interface DashboardData {
@@ -466,6 +468,7 @@ function toPublicUser(user: User, profile: ProfileRow | null): PublicUser {
         transactionId: profile?.transaction_id ?? undefined,
         paymentToken: profile?.payment_token ?? undefined,
         psychometricTestLink: profile?.psychometric_test_link ?? undefined, // Mapping for User Dashboard visibility
+        careerGoals: profile?.career_goals ?? undefined,
     };
 }
 

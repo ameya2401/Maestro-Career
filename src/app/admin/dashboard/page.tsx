@@ -107,11 +107,20 @@ function formatManualCash(value: number | null) {
     }).format(value);
 }
 
+interface Inquiry {
+    id: string;
+    name: string;
+    email: string;
+    created_at: string;
+}
+
 export default function AdminDashboardPage() {
     const [users, setUsers] = useState<AdminUser[]>([]);
+    const [inquiries, setInquiries] = useState<Inquiry[]>([]);
     const [stats, setStats] = useState<AdminStats>({ uniqueVisitors: 0 });
     const [loading, setLoading] = useState(true);
     const [statsLoading, setStatsLoading] = useState(false);
+    const [viewMode, setViewMode] = useState<"users" | "inquiries">("users");
     const [error, setError] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [editingUserId, setEditingUserId] = useState<string | null>(null);
@@ -223,17 +232,19 @@ export default function AdminDashboardPage() {
                 return;
             }
 
-            const [usersResp, statsResp] = await Promise.all([
+            const [usersResp, statsResp, inquiriesResp] = await Promise.all([
                 fetch("/api/admin/users", { cache: "no-store" }),
                 fetch("/api/admin/stats", { cache: "no-store" }),
+                fetch("/api/admin/inquiries", { cache: "no-store" }),
             ]);
-            const [usersData, statsData] = await Promise.all([usersResp.json(), statsResp.json()]);
+            const [usersData, statsData, inquiriesData] = await Promise.all([usersResp.json(), statsResp.json(), inquiriesResp.json()]);
 
             if (!usersResp.ok || !usersData?.success) {
                 throw new Error(usersData?.message || "Failed to fetch user database.");
             }
 
             setUsers(usersData.data ?? []);
+            if (inquiriesResp.ok && inquiriesData?.success) setInquiries(inquiriesData.data ?? []);
             syncLinkInputs(usersData.data ?? []);
 
             if (statsResp.ok && statsData?.success) {
@@ -409,11 +420,28 @@ export default function AdminDashboardPage() {
                         </div>
                     </div>
 
+                    <div className="flex border-b border-border/10 mb-2">
+                        <button
+                            type="button"
+                            onClick={() => setViewMode("users")}
+                            className={`pb-3 px-6 text-sm font-semibold transition-colors border-b-2 ${viewMode === "users" ? "border-primary text-primary" : "border-transparent text-foreground/50 hover:text-foreground"}`}
+                        >
+                            Active Leads
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setViewMode("inquiries")}
+                            className={`pb-3 px-6 text-sm font-semibold transition-colors border-b-2 ${viewMode === "inquiries" ? "border-primary text-primary" : "border-transparent text-foreground/50 hover:text-foreground"}`}
+                        >
+                            Contact Inquiries ({inquiries.length})
+                        </button>
+                    </div>
+
                     <div className="flex flex-col md:flex-row w-full gap-4">
                         <div className="flex-1 relative">
                             <input
                                 type="text"
-                                placeholder="Search leads by name, email, or mobile..."
+                                placeholder={`Search ${viewMode === "users" ? "leads" : "inquiries"} by name or email...`}
                                 value={searchTerm}
                                 onChange={(event) => setSearchTerm(event.target.value)}
                                 className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[15px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/70 focus:border-primary focus:ring-4 focus:ring-primary/20"
@@ -437,6 +465,27 @@ export default function AdminDashboardPage() {
                         <div className="max-w-4xl mx-auto rounded-3xl border border-destructive/20 bg-destructive/10 p-8 text-destructive text-center">
                             <h3 className="text-lg font-semibold mb-2">Error loading data</h3>
                             <p className="text-sm opacity-80">{error}</p>
+                        </div>
+                    ) : viewMode === "inquiries" ? (
+                        <div className="flex flex-col gap-4">
+                            {inquiries.filter(i => i.name.toLowerCase().includes(searchTerm.toLowerCase()) || i.email.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 ? (
+                                <div className="py-12 text-center border-t border-border/10">
+                                    <p className="text-sm text-foreground/50">No inquiries found.</p>
+                                </div>
+                            ) : (
+                                inquiries.filter(i => i.name.toLowerCase().includes(searchTerm.toLowerCase()) || i.email.toLowerCase().includes(searchTerm.toLowerCase())).map((inquiry) => (
+                                    <div key={inquiry.id} className="rounded-2xl border border-border/20 bg-card p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+                                        <div>
+                                            <h3 className="text-lg font-bold text-foreground">{inquiry.name}</h3>
+                                            <p className="text-sm font-medium text-primary mt-1">{inquiry.email}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-xs font-medium text-foreground/40 uppercase tracking-widest">Received On</p>
+                                            <p className="text-sm text-foreground mt-1">{new Date(inquiry.created_at).toLocaleString()}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     ) : (
                         <div className="flex flex-col gap-8">
@@ -593,8 +642,8 @@ export default function AdminDashboardPage() {
                                                             <h3 className="text-sm font-semibold text-foreground">Transaction Profile</h3>
                                                             <span
                                                                 className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase ${currentPaymentStatus === "paid"
-                                                                        ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
-                                                                        : "bg-rose-500/10 text-rose-600 border border-rose-500/20"
+                                                                    ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
+                                                                    : "bg-rose-500/10 text-rose-600 border border-rose-500/20"
                                                                     }`}
                                                             >
                                                                 {currentPaymentStatus}
@@ -812,78 +861,78 @@ export default function AdminDashboardPage() {
                                                         </div>
 
                                                         <div className="mt-6 rounded-2xl border border-border/20 bg-background/50 p-6">
-                                                                <div className="flex items-center justify-between gap-3">
-                                                                    <h4 className="text-sm font-semibold text-foreground">Internal Assessment Access</h4>
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => void loadInternalAccess(user.id)}
-                                                                        disabled={internalLoading}
-                                                                        className="rounded-lg border border-border/20 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/30 disabled:opacity-60"
-                                                                    >
-                                                                        {internalLoading ? "Loading..." : "Refresh Status"}
-                                                                    </button>
-                                                                </div>
-
-                                                                {internal ? (
-                                                                    <>
-                                                                        <div className="mt-4 space-y-2 text-sm">
-                                                                            <div className="flex items-center justify-between">
-                                                                                <span className="text-foreground/60">Payment</span>
-                                                                                <span className="font-semibold text-foreground">
-                                                                                    {internal.paymentStatus ?? "unknown"}
-                                                                                </span>
-                                                                            </div>
-                                                                            <div className="flex items-center justify-between">
-                                                                                <span className="text-foreground/60">Grant</span>
-                                                                                <span
-                                                                                    className={`font-semibold ${internal.grant?.status === "active"
-                                                                                            ? "text-emerald-600"
-                                                                                            : "text-foreground"
-                                                                                        }`}
-                                                                                >
-                                                                                    {internal.grant?.status ?? "not granted"}
-                                                                                </span>
-                                                                            </div>
-                                                                            <div className="flex items-center justify-between">
-                                                                                <span className="text-foreground/60">Latest attempt</span>
-                                                                                <span className="font-semibold text-foreground">
-                                                                                    {internal.latestAttempt?.status ?? "none"}
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        {internal.latestAttempt?.id ? (
-                                                                            <div className="mt-4 rounded-xl border border-border/20 bg-card px-4 py-3 text-xs text-foreground/70">
-                                                                                Attempt: <span className="font-mono">{internal.latestAttempt.id}</span>
-                                                                            </div>
-                                                                        ) : null}
-                                                                    </>
-                                                                ) : (
-                                                                    <div className="mt-4 text-xs text-foreground/60">
-                                                                        Status not loaded. Click refresh to view.
-                                                                    </div>
-                                                                )}
-
-                                                                <div className="mt-5 flex flex-col sm:flex-row gap-3">
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => void updateInternalAccess(user.id, "grant", internal)}
-                                                                        disabled={internalLoading}
-                                                                        className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
-                                                                    >
-                                                                        Grant access
-                                                                    </button>
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => void updateInternalAccess(user.id, "revoke", internal)}
-                                                                        disabled={internalLoading}
-                                                                        className="inline-flex items-center justify-center rounded-xl border border-border/20 bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:border-border/50 disabled:opacity-60"
-                                                                    >
-                                                                        Revoke
-                                                                    </button>
-                                                                </div>
-
+                                                            <div className="flex items-center justify-between gap-3">
+                                                                <h4 className="text-sm font-semibold text-foreground">Internal Assessment Access</h4>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => void loadInternalAccess(user.id)}
+                                                                    disabled={internalLoading}
+                                                                    className="rounded-lg border border-border/20 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/30 disabled:opacity-60"
+                                                                >
+                                                                    {internalLoading ? "Loading..." : "Refresh Status"}
+                                                                </button>
                                                             </div>
+
+                                                            {internal ? (
+                                                                <>
+                                                                    <div className="mt-4 space-y-2 text-sm">
+                                                                        <div className="flex items-center justify-between">
+                                                                            <span className="text-foreground/60">Payment</span>
+                                                                            <span className="font-semibold text-foreground">
+                                                                                {internal.paymentStatus ?? "unknown"}
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className="flex items-center justify-between">
+                                                                            <span className="text-foreground/60">Grant</span>
+                                                                            <span
+                                                                                className={`font-semibold ${internal.grant?.status === "active"
+                                                                                    ? "text-emerald-600"
+                                                                                    : "text-foreground"
+                                                                                    }`}
+                                                                            >
+                                                                                {internal.grant?.status ?? "not granted"}
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className="flex items-center justify-between">
+                                                                            <span className="text-foreground/60">Latest attempt</span>
+                                                                            <span className="font-semibold text-foreground">
+                                                                                {internal.latestAttempt?.status ?? "none"}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {internal.latestAttempt?.id ? (
+                                                                        <div className="mt-4 rounded-xl border border-border/20 bg-card px-4 py-3 text-xs text-foreground/70">
+                                                                            Attempt: <span className="font-mono">{internal.latestAttempt.id}</span>
+                                                                        </div>
+                                                                    ) : null}
+                                                                </>
+                                                            ) : (
+                                                                <div className="mt-4 text-xs text-foreground/60">
+                                                                    Status not loaded. Click refresh to view.
+                                                                </div>
+                                                            )}
+
+                                                            <div className="mt-5 flex flex-col sm:flex-row gap-3">
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => void updateInternalAccess(user.id, "grant", internal)}
+                                                                    disabled={internalLoading}
+                                                                    className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
+                                                                >
+                                                                    Grant access
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => void updateInternalAccess(user.id, "revoke", internal)}
+                                                                    disabled={internalLoading}
+                                                                    className="inline-flex items-center justify-center rounded-xl border border-border/20 bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:border-border/50 disabled:opacity-60"
+                                                                >
+                                                                    Revoke
+                                                                </button>
+                                                            </div>
+
+                                                        </div>
 
                                                         {currentPaymentStatus !== "paid" ? (
                                                             <p className="text-xs font-medium text-rose-500 border border-rose-500/20 bg-rose-500/10 px-3 py-2 rounded-lg text-center">

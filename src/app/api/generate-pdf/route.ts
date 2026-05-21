@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 import { createRouteHandlerClient } from '@/lib/supabase/route';
 
 export async function POST(req: NextRequest) {
@@ -36,7 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     const name = userResp.user.user_metadata?.name || 'User';
-    
+
     // Result data structure
     const topMatches = resultData.career_matches?.slice(0, 5) || [];
     const primaryMatch = topMatches[0] || { title: 'Unknown', summary: 'N/A', score: 0 };
@@ -132,11 +133,11 @@ export async function POST(req: NextRequest) {
           <p>Here are the highest ranking career profiles based on your assessment results:</p>
           <div style="margin-top: 30px;">
             ${topMatches.map((m: { title: string, score: number }) => {
-              return '<div class="match-item">' +
-                '<h3 class="match-title">' + m.title + '</h3>' +
-                '<div class="match-score">' + Math.round(m.score) + '% Compatibility</div>' +
-              '</div>';
-            }).join('')}
+      return '<div class="match-item">' +
+        '<h3 class="match-title">' + m.title + '</h3>' +
+        '<div class="match-score">' + Math.round(m.score) + '% Compatibility</div>' +
+        '</div>';
+    }).join('')}
           </div>
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
@@ -197,13 +198,19 @@ export async function POST(req: NextRequest) {
       </html>
     `;
 
+    const isLocal = process.env.NODE_ENV === 'development';
     const browser = await puppeteer.launch({
+      args: isLocal ? [] : chromium.args,
+      executablePath: isLocal ?
+        (process.platform === 'win32'
+          ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+          : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+        : await chromium.executablePath(),
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
     const page = await browser.newPage();
-    await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+    await page.setContent(htmlContent, { waitUntil: 'load' });
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
