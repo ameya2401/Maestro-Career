@@ -17,7 +17,7 @@ export async function POST(
                 .upsert({
                     user_id: userId,
                     bank_version: 'prototype-1-v1',
-                    status: 'granted'
+                    status: 'active'
                 }, { onConflict: 'user_id,bank_version' });
 
             if (error) throw error;
