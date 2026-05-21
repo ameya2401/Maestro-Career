@@ -140,7 +140,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                        <div style={{ width: '100%', maxWidth: '520px' }}>
+                        <div style={{ width: '100%', maxWidth: '520px', height: '400px' }}>
                             <ReportRadarChart data={data.charts.radarChart} isPrinting={isPrinting} />
                         </div>
                         <p className="dossier-body-sm" style={{ textAlign: 'center', maxWidth: '480px', marginTop: '2rem' }}>
@@ -385,31 +385,31 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
 
                         return (
                             <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
-                                <svg viewBox="0 0 480 380" width="420" height="320" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-                                    <circle cx="240" cy="100" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
-                                    <circle cx="240" cy="280" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                <svg viewBox="0 0 520 380" width="460" height="340" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                                    <circle cx="260" cy="100" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                    <circle cx="260" cy="280" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
                                     <circle cx="130" cy="190" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
-                                    <circle cx="350" cy="190" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
-                                    <circle cx="240" cy="190" r="60" fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="2" />
+                                    <circle cx="390" cy="190" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                    <circle cx="260" cy="190" r="60" fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="2" />
 
-                                    <text x="240" y="62" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[0]?.career ?? 'Poor Fit 1'}</text>
-                                    <text x="240" y="74" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[0]?.score ?? 20}% match</text>
+                                    <text x="260" y="62" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[0]?.career ?? 'Poor Fit 1'}</text>
+                                    <text x="260" y="74" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[0]?.score ?? 20}% match</text>
 
-                                    <text x="240" y="318" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[1]?.career ?? 'Poor Fit 2'}</text>
-                                    <text x="240" y="330" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[1]?.score ?? 20}% match</text>
+                                    <text x="260" y="318" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[1]?.career ?? 'Poor Fit 2'}</text>
+                                    <text x="260" y="330" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[1]?.score ?? 20}% match</text>
 
                                     <text x="80" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[2]?.career ?? 'Poor Fit 3'}</text>
                                     <text x="80" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[2]?.score ?? 20}% match</text>
 
-                                    <text x="400" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[3]?.career ?? 'Poor Fit 4'}</text>
-                                    <text x="400" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[3]?.score ?? 30}% match</text>
+                                    <text x="440" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[3]?.career ?? 'Poor Fit 4'}</text>
+                                    <text x="440" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[3]?.score ?? 30}% match</text>
 
-                                    <text x="240" y="136" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[0] ?? 'Good Fit 1'}</text>
-                                    <text x="240" y="248" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[1] ?? 'Good Fit 2'}</text>
+                                    <text x="260" y="136" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[0] ?? 'Good Fit 1'}</text>
+                                    <text x="260" y="248" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[1] ?? 'Good Fit 2'}</text>
 
-                                    <text x="240" y="183" textAnchor="middle" fontSize="10" fontWeight="900" fill="#15803d" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{bestCareer}</text>
-                                    <text x="240" y="198" textAnchor="middle" fontSize="8" fontWeight="700" fill="#16a34a">{data.careerMatches[0]?.score ?? 95}% match</text>
-                                    <text x="240" y="212" textAnchor="middle" fontSize="7" fill="#555">Best Fit</text>
+                                    <text x="260" y="183" textAnchor="middle" fontSize="10" fontWeight="900" fill="#15803d" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{bestCareer}</text>
+                                    <text x="260" y="198" textAnchor="middle" fontSize="8" fontWeight="700" fill="#16a34a">{data.careerMatches[0]?.score ?? 95}% match</text>
+                                    <text x="260" y="212" textAnchor="middle" fontSize="7" fill="#555">Best Fit</text>
                                 </svg>
                             </div>
                         );
