@@ -248,7 +248,7 @@ export default function CheckoutPage() {
                                         type="text"
                                         value={buyerName}
                                         onChange={(e) => setBuyerName(e.target.value)}
-                                        className="w-full rounded-lg border border-gray-300 px-4 py-3 bg-gray-50 focus:border-primary focus:ring-primary outline-none"
+                                        className="w-full rounded-lg border border-gray-300 px-4 py-3 bg-white text-gray-900 focus:border-primary focus:ring-primary outline-none"
                                         placeholder="Your name"
                                         required
                                     />
@@ -260,7 +260,7 @@ export default function CheckoutPage() {
                                         type="email"
                                         value={buyerEmail}
                                         onChange={(e) => setBuyerEmail(e.target.value)}
-                                        className="w-full rounded-lg border border-gray-300 px-4 py-3 bg-gray-50 focus:border-primary focus:ring-primary outline-none"
+                                        className="w-full rounded-lg border border-gray-300 px-4 py-3 bg-white text-gray-900 focus:border-primary focus:ring-primary outline-none"
                                         placeholder="you@example.com"
                                         required
                                     />
@@ -272,7 +272,7 @@ export default function CheckoutPage() {
                                         type="tel"
                                         value={buyerMobile}
                                         onChange={(e) => setBuyerMobile(e.target.value)}
-                                        className="w-full rounded-lg border border-gray-300 px-4 py-3 bg-gray-50 focus:border-primary focus:ring-primary outline-none"
+                                        className="w-full rounded-lg border border-gray-300 px-4 py-3 bg-white text-gray-900 focus:border-primary focus:ring-primary outline-none"
                                         placeholder="9876543210"
                                         required
                                     />
