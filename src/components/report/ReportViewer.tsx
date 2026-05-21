@@ -1,366 +1,484 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { MotionConfig, motion } from "framer-motion";
+import { MotionConfig } from "framer-motion";
 import { ReportData } from "@/types/report";
 import ReportRadarChart from "../charts/ReportRadarChart";
-import ReportBarChart from "../charts/ReportBarChart";
-import ReportPieChart from "../charts/ReportPieChart";
 import ComparisonGraph from "../charts/ComparisonGraph";
-import { CognitiveVenn, CareerDNA } from "./visuals/CognitiveComponents";
 
 interface ReportViewerProps {
     data: ReportData;
     isPrinting?: boolean;
 }
 
+/* ── tiny helper ── */
+const Footer = ({ page }: { page: number }) => (
+    <div className="dossier-footer">
+        <span>Maestro Career &copy; {new Date().getFullYear()}</span>
+        <span>Confidential</span>
+        <span>Page {page} of 12</span>
+    </div>
+);
+
 export default function ReportViewer({ data, isPrinting = false }: ReportViewerProps) {
     const [isMounted, setIsMounted] = useState(false);
-
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
-
+    useEffect(() => { setIsMounted(true); }, []);
     if (!isMounted) return null;
+
+    const overallScore = data.charts?.comparisonData?.find(d => d.label === 'Overall')?.userScore || 85;
+
+    /* ── find top aptitude key ── */
+    const aptEntries = Object.entries(data.aptitudeScores);
+    const topApt = aptEntries.length > 0
+        ? aptEntries.reduce((a, b) => (Number(b[1]) > Number(a[1]) ? b : a))
+        : ["N/A", 0];
 
     return (
         <MotionConfig transition={{ duration: isPrinting ? 0 : 0.4 }}>
-            <div className={`report-container ${isPrinting ? 'bg-white' : 'bg-[#010409] py-12'}`}>
+            <div className={`report-container ${isPrinting ? 'bg-white' : 'bg-[#0a0a0a] py-12'}`}>
 
-                {/* PAGE 1: IDENTITY & INTRODUCTION */}
-                <section className="dossier-page">
-                    <div className="flex flex-col h-full justify-between">
+                {/* ═══════════════════════════════════════════════
+                    PAGE 1 — COVER  (McKinsey-style centered)
+                ═══════════════════════════════════════════════ */}
+                <section className="dossier-page" style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                    {/* Thin top rule */}
+                    <div style={{ position: 'absolute', top: '20mm', left: '20mm', right: '20mm', borderTop: '1px solid #ddd' }} />
+
+                    <div style={{ marginBottom: '3rem' }}>
+                        <div style={{ fontSize: '9pt', letterSpacing: '0.25em', textTransform: 'uppercase', color: '#999', marginBottom: '2rem' }}>
+                            Maestro Career &middot; Psychometric &amp; Aptitude Division
+                        </div>
+                        <h1 className="dossier-title" style={{ fontSize: '54pt', color: '#030712', lineHeight: 1 }}>
+                            Intelligence<br />Dossier
+                        </h1>
+                    </div>
+
+                    {/* Subject bio block */}
+                    <div style={{ borderTop: '2px solid #030712', borderBottom: '2px solid #030712', padding: '1.5rem 0', maxWidth: '420px', width: '100%' }}>
+                        <div style={{ fontSize: '22pt', fontWeight: 800, marginBottom: '0.25rem' }}>{data.user.name}</div>
+                        <div style={{ fontSize: '9pt', color: '#666' }}>{data.user.email}</div>
+                        <div style={{ fontSize: '9pt', color: '#666', marginTop: '0.25rem' }}>Age {data.user.age} &middot; Class {data.user.class}</div>
+                    </div>
+
+                    {/* Date & Reference */}
+                    <div style={{ marginTop: '2.5rem', display: 'flex', gap: '3rem', justifyContent: 'center' }}>
                         <div>
-                            <div className="dossier-label mb-2 text-primary">Maestro Career // Psychological Intelligence Unit</div>
-                            <h1 className="dossier-title text-primary">Intelligence <br /> Dossier</h1>
-                            <div className="mt-8 border-t border-foreground/10 pt-8 max-w-md">
-                                <p className="text-sm opacity-80 leading-relaxed italic">
-                                    "The measure of intelligence is the ability to change." This comprehensive analysis quantifies the cognitive, behavioral, and professional architecture of the subject. It is designed to provide actionable pathways based on empirical data derived from rigorous psychometric evaluation.
-                                </p>
-                            </div>
+                            <div className="dossier-label">Report Date</div>
+                            <div style={{ fontSize: '13pt', fontWeight: 700, marginTop: '4px' }}>{data.user.reportDate}</div>
                         </div>
+                        <div>
+                            <div className="dossier-label">Reference</div>
+                            <div style={{ fontSize: '13pt', fontWeight: 700, marginTop: '4px' }}>MC-{data.user.id.slice(0, 8).toUpperCase()}</div>
+                        </div>
+                        <div>
+                            <div className="dossier-label">Overall Index</div>
+                            <div style={{ fontSize: '13pt', fontWeight: 700, marginTop: '4px', color: '#1294DD' }}>{overallScore}/100</div>
+                        </div>
+                    </div>
 
-                        <div className="grid grid-cols-3 gap-12 border-t border-foreground/10 pt-12">
-                            <div>
-                                <div className="dossier-label">Subject ID</div>
-                                <div className="text-xl font-bold">{data.user.name}</div>
-                                <div className="text-xs opacity-50">{data.user.email}</div>
-                                <div className="text-xs opacity-50 mt-1">Age: {data.user.age} | Class: {data.user.class}</div>
-                            </div>
-                            <div>
-                                <div className="dossier-label">Analysis Date</div>
-                                <div className="text-xl font-bold">{data.user.reportDate}</div>
-                                <div className="text-xs opacity-50">Reference: MC-PR1-{data.user.id.slice(0, 8)}</div>
-                                <div className="text-xs opacity-50 mt-1">Classification: Level 1 Analysis</div>
-                            </div>
-                            <div>
-                                <div className="dossier-label">Global Index</div>
-                                <div className="text-4xl font-black text-primary italic">{(data.charts?.comparisonData?.find(d => d.label === 'Overall')?.userScore || 85)} / 100</div>
-                                <div className="text-[10px] opacity-50 uppercase font-black mt-1">Intelligence Quotient</div>
-                            </div>
-                        </div>
+                    {/* Bottom branding */}
+                    <div style={{ position: 'absolute', bottom: '22mm', left: 0, right: 0, textAlign: 'center', fontSize: '7pt', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#bbb' }}>
+                        www.maestrocareer.com
                     </div>
                 </section>
 
-                {/* PAGE 2: EXECUTIVE SUMMARY */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 2 — EXECUTIVE SUMMARY
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header border-primary">
-                        <h2 className="text-2xl font-bold uppercase">Executive Summary</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">High-Level Architectural Overview</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '2rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Executive Summary</h2>
                     </div>
-                    <div className="flex-1 space-y-8 flex flex-col justify-center">
-                        <p className="text-sm leading-relaxed opacity-80">
-                            This dossier presents a synthesized view of the subject's operational parameters. The evaluation methodology encompasses multi-dimensional aptitude testing, behavioral response analysis, and professional affinity mapping. The resulting data isolates both dominant capabilities and structural vulnerabilities.
+
+                    <div className="dossier-body" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
+                        <p>
+                            This report presents the findings of a structured psychometric and aptitude assessment
+                            conducted on the above-named subject. The evaluation covered cognitive reasoning,
+                            analytical ability, behavioural disposition, and professional inclination to form a
+                            comprehensive profile of the individual&apos;s natural strengths and development needs.
                         </p>
-                        <div className="grid grid-cols-2 gap-8">
-                            <div className="bg-primary/5 p-6 border-l-4 border-primary">
-                                <h3 className="text-md font-bold uppercase mb-4">Core Strengths</h3>
-                                <ul className="space-y-3">
+
+                        {/* Two-column: Strengths / Improvement */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1rem' }}>
+                            <div>
+                                <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
+                                    Core Strengths
+                                </h3>
+                                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                                     {data.strengths.map((s, i) => (
-                                        <li key={i} className="text-sm flex items-start"><span className="text-primary mr-2">▪</span> {s}</li>
+                                        <li key={i} className="dossier-body-sm" style={{ marginBottom: '0.5rem', paddingLeft: '1rem', borderLeft: '2px solid #1294DD' }}>{s}</li>
                                     ))}
                                 </ul>
                             </div>
-                            <div className="bg-destructive/5 p-6 border-l-4 border-destructive">
-                                <h3 className="text-md font-bold uppercase mb-4">Optimization Areas</h3>
-                                <ul className="space-y-3">
+                            <div>
+                                <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
+                                    Areas for Development
+                                </h3>
+                                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                                     {data.improvementAreas.map((a, i) => (
-                                        <li key={i} className="text-sm flex items-start"><span className="text-destructive mr-2">▪</span> {a}</li>
+                                        <li key={i} className="dossier-body-sm" style={{ marginBottom: '0.5rem', paddingLeft: '1rem', borderLeft: '2px solid #e74c3c' }}>{a}</li>
                                     ))}
                                 </ul>
                             </div>
                         </div>
-                        <div className="bg-foreground/5 p-6 border border-foreground/10 rounded-sm">
-                            <h3 className="text-sm font-bold uppercase mb-2">Preliminary Conclusion</h3>
-                            <p className="text-xs leading-relaxed opacity-80">
-                                The subject demonstrates a high capacity for complex systemic comprehension. Their profile suggests rapid adaptation to new rule sets, making them highly viable for dynamic, non-linear environments where strategic foresight is required.
-                            </p>
-                        </div>
+
+                        <p className="dossier-body-sm" style={{ marginTop: '1.5rem', padding: '1rem', background: '#f8f8f8', borderLeft: '3px solid #1294DD' }}>
+                            The subject demonstrates strong capacity across multiple cognitive dimensions.
+                            The following pages present detailed aptitude metrics, behavioural mapping,
+                            career alignment data, and a personalised strategic roadmap.
+                        </p>
                     </div>
+                    <Footer page={2} />
                 </section>
 
-                {/* PAGE 3: COGNITIVE FOUNDATION */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 3 — APTITUDE RADAR (Full-width chart)
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header border-primary">
-                        <h2 className="text-2xl font-bold uppercase">Cognitive Foundation</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Multi-dimensional Aptitude Mapping</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Cognitive Profile</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Multi-dimensional Aptitude Mapping</p>
                     </div>
-                    <div className="flex-1 flex flex-col justify-center">
-                        <div className="w-full max-w-2xl mx-auto mb-8">
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                        <div style={{ width: '100%', maxWidth: '520px' }}>
                             <ReportRadarChart data={data.charts.radarChart} isPrinting={isPrinting} />
                         </div>
-                        <div className="bg-primary/5 p-6 border border-primary/20 rounded-sm mt-4">
-                            <h3 className="text-sm font-bold uppercase mb-2">Visual Interpretation</h3>
-                            <p className="text-xs leading-relaxed opacity-80">
-                                The radar topology illustrates the subject's cognitive bandwidth across core domains. Peaks represent natural neurological efficiencies—areas where processing speed and accuracy are significantly elevated above the baseline.
-                            </p>
-                        </div>
+                        <p className="dossier-body-sm" style={{ textAlign: 'center', maxWidth: '480px', marginTop: '2rem' }}>
+                            The radar chart above maps the subject&apos;s cognitive bandwidth across core assessment domains.
+                            Outward peaks indicate areas of natural proficiency; inward valleys suggest opportunity for targeted development.
+                        </p>
                     </div>
+                    <Footer page={3} />
                 </section>
 
-                {/* PAGE 4: DETAILED COGNITIVE METRICS */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 4 — APTITUDE SCORE BREAKDOWN
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header border-primary">
-                        <h2 className="text-2xl font-bold uppercase">Cognitive Deep-Dive</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Aptitude Vector Breakdown</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Aptitude Breakdown</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Individual Score Analysis</p>
                     </div>
-                    <div className="flex-1 space-y-6 flex flex-col justify-center">
-                        <p className="text-sm mb-4">A granular analysis of the specific logical structures utilized by the subject:</p>
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.25rem' }}>
                         {Object.entries(data.aptitudeScores).map(([key, value]) => (
-                            <div key={key} className="border-b border-foreground/10 pb-4">
-                                <div className="flex justify-between items-end mb-2">
-                                    <h3 className="text-sm font-bold uppercase tracking-widest">{key.replace(/_/g, ' ')}</h3>
-                                    <span className="text-2xl font-black text-primary">{value}%</span>
+                            <div key={key} style={{ paddingBottom: '1rem', borderBottom: '1px solid #eee' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.5rem' }}>
+                                    <span style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                        {key.replace(/_/g, ' ')}
+                                    </span>
+                                    <span style={{ fontSize: '18pt', fontWeight: 900, color: '#1294DD' }}>{value}%</span>
                                 </div>
-                                <div className="w-full bg-foreground/10 h-2 rounded-full overflow-hidden mb-3">
-                                    <div className="bg-primary h-full" style={{ width: `${value}%` }}></div>
+                                <div style={{ width: '100%', background: '#f0f0f0', height: '6px', borderRadius: '3px', overflow: 'hidden' }}>
+                                    <div style={{ width: `${value}%`, background: '#1294DD', height: '100%', borderRadius: '3px' }} />
                                 </div>
-                                <p className="text-xs opacity-70">
-                                    {Number(value) > 75 
-                                        ? `Exhibits exceptional proficiency. Capable of executing complex ${key.replace(/_/g, ' ')} operations with minimal cognitive fatigue.` 
-                                        : `Demonstrates standard capability. Can reliably process ${key.replace(/_/g, ' ')} tasks within normal environmental parameters.`}
+                                <p className="dossier-body-sm" style={{ marginTop: '0.4rem', fontSize: '8.5pt' }}>
+                                    {Number(value) > 75
+                                        ? `Strong proficiency. The subject handles ${key.replace(/_/g, ' ').toLowerCase()} tasks with confidence and speed.`
+                                        : `Developing proficiency. Focused practice in ${key.replace(/_/g, ' ').toLowerCase()} will yield measurable improvement.`}
                                 </p>
                             </div>
                         ))}
                     </div>
+                    <Footer page={4} />
                 </section>
 
-                {/* PAGE 5: BEHAVIORAL PERSONALITY MAPPING */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 5 — PSYCHOMETRIC PROFILE (Polarity Scales)
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header border-secondary">
-                        <h2 className="text-2xl font-bold uppercase">Behavioral Architecture</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Psychometric Trait Distribution</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Behavioural Profile</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Psychometric Trait Distribution</p>
                     </div>
-                    <div className="flex-1 flex flex-col justify-center gap-12">
-                        <div className="w-full">
-                            <ReportBarChart data={data.charts.barChart} isPrinting={isPrinting} />
-                        </div>
-                        <div className="bg-background/20 p-6 rounded-lg border border-foreground/10 mt-8">
-                            <p className="text-sm italic opacity-80 leading-relaxed">
-                                Unlike cognitive aptitude, which measures raw processing power, the behavioral architecture maps how that power is deployed in social, high-stress, and collaborative environments. The subject's distribution indicates their operational "comfort zone."
-                            </p>
-                        </div>
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
+                        <p className="dossier-body">
+                            While aptitude measures raw cognitive ability, the behavioural profile captures how that ability
+                            is expressed in real-world contexts — under pressure, in teams, and in unfamiliar situations.
+                        </p>
+
+                        {/* Polarity-style scales */}
+                        {Object.entries(data.careerDNA || {}).map(([key, val]) => {
+                            const opposite: Record<string, string> = {
+                                analytical: 'Intuitive', creative: 'Systematic', leadership: 'Collaborative',
+                                research: 'Applied', innovation: 'Conventional'
+                            };
+                            return (
+                                <div key={key} style={{ marginBottom: '0.5rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, color: '#666', marginBottom: '0.35rem' }}>
+                                        <span>{opposite[key] || 'Low'}</span>
+                                        <span style={{ fontWeight: 800, color: '#030712' }}>{key}</span>
+                                    </div>
+                                    <div style={{ position: 'relative', width: '100%', height: '8px', background: '#f0f0f0', borderRadius: '4px' }}>
+                                        <div style={{ position: 'absolute', left: `${val}%`, top: '-3px', width: '14px', height: '14px', borderRadius: '50%', background: '#1294DD', border: '2px solid white', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transform: 'translateX(-50%)' }} />
+                                        <div style={{ width: `${val}%`, height: '100%', background: 'linear-gradient(90deg, #e0e0e0, #1294DD)', borderRadius: '4px' }} />
+                                    </div>
+                                    <div style={{ textAlign: 'right', fontSize: '8pt', color: '#1294DD', fontWeight: 700, marginTop: '2px' }}>{val}%</div>
+                                </div>
+                            );
+                        })}
                     </div>
+                    <Footer page={5} />
                 </section>
 
-                {/* PAGE 6: BEHAVIORAL DETAILED ANALYSIS */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 6 — PSYCHOMETRIC DNA
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header border-secondary">
-                        <h2 className="text-2xl font-bold uppercase">Psychometric Deep-Dive</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Core Behavioral DNA Drivers</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Psychometric DNA</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Core Behavioural Drivers</p>
                     </div>
-                    <div className="flex-1 flex flex-col justify-center space-y-8">
-                        <div>
-                            <h3 className="text-sm font-bold border-b border-foreground/10 pb-2 mb-6 uppercase">Genetic Behavior Mapping</h3>
-                            <CareerDNA data={data.careerDNA || { analytical: 85, creative: 60, leadership: 75, research: 90, innovation: 70 }} isPrinting={isPrinting} />
-                        </div>
-                        <div className="grid grid-cols-2 gap-6 mt-8">
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        {/* Horizontal DNA bar visualisation */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
                             {Object.entries(data.careerDNA || {}).map(([key, val]) => (
-                                <div key={key} className="p-4 bg-foreground/5 rounded border border-foreground/5">
-                                    <div className="text-xs font-bold uppercase mb-1">{key} Drive</div>
-                                    <div className="text-xl font-black text-secondary mb-2">{val}% Intensity</div>
-                                    <p className="text-[10px] opacity-70">
-                                        Dictates the baseline requirement for {key}-oriented stimuli in their daily operational environment.
+                                <div key={key} style={{ padding: '1.25rem', background: '#fafafa', borderLeft: `4px solid ${Number(val) > 70 ? '#1294DD' : '#ddd'}` }}>
+                                    <div style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, color: '#888', marginBottom: '0.25rem' }}>
+                                        {key} Orientation
+                                    </div>
+                                    <div style={{ fontSize: '22pt', fontWeight: 900, color: Number(val) > 70 ? '#1294DD' : '#333' }}>{val}%</div>
+                                    <p className="dossier-body-sm" style={{ marginTop: '0.5rem', fontSize: '8pt' }}>
+                                        {Number(val) > 70
+                                            ? `The subject shows a strong natural inclination toward ${key}-oriented work and decision-making.`
+                                            : `This dimension is present but not dominant. It acts as a supporting trait rather than a leading driver.`}
                                     </p>
                                 </div>
                             ))}
                         </div>
                     </div>
+                    <Footer page={6} />
                 </section>
 
-                {/* PAGE 7: TRAIT OVERLAP + VENN SYSTEMS */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 7 — CORE COMPETENCY OVERLAP
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Synergistic Intersections</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Cognitive Venn Intelligence</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Core Competency Overlap</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Where Aptitude Meets Behaviour</p>
                     </div>
-                    <div className="flex-1 flex flex-col justify-center gap-12">
-                        <p className="text-sm opacity-80 mb-4">
-                            True capability is rarely derived from a single isolated trait. It is generated in the intersection of multiple highly-developed cognitive pathways.
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem' }}>
+                        <p className="dossier-body">
+                            The most reliable indicator of career success is found not in any single trait, but at the
+                            intersection of multiple well-developed abilities. The following analysis identifies where
+                            analytical thinking and behavioural tendencies converge, creating the subject&apos;s unique
+                            competitive advantage.
                         </p>
-                        <CognitiveVenn
-                            circles={[
-                                { label: 'Analytical Framework', description: 'Logic-driven', color: '#3b82f6' },
-                                { label: 'Behavioral Execution', description: 'Action-driven', color: '#fbbf24' }
-                            ]}
-                            intersection="Optimal Output State"
-                            isPrinting={isPrinting}
-                        />
-                        <div className="bg-primary/5 p-6 border-t border-b border-primary/20">
-                            <h3 className="text-md font-bold uppercase mb-2">Intersection Dynamics</h3>
-                            <p className="text-xs leading-relaxed opacity-80">
-                                The overlap between their logical frameworks and execution behaviors reveals a pragmatic optimizer. They do not just analyze systems; they are compelled to implement their analytical findings into actionable protocols.
-                            </p>
+
+                        {/* Clean SVG Venn — two overlapping circles */}
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <svg viewBox="0 0 400 220" width="400" height="220" style={{ maxWidth: '100%' }}>
+                                <circle cx="155" cy="110" r="85" fill="rgba(18,148,221,0.12)" stroke="#1294DD" strokeWidth="1.5" />
+                                <circle cx="245" cy="110" r="85" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" strokeWidth="1.5" />
+                                <text x="120" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#1294DD" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Analytical</text>
+                                <text x="120" y="120" textAnchor="middle" fontSize="8" fill="#888">Thinking</text>
+                                <text x="280" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Behavioural</text>
+                                <text x="280" y="120" textAnchor="middle" fontSize="8" fill="#888">Execution</text>
+                                <text x="200" y="105" textAnchor="middle" fontSize="8" fontWeight="800" fill="#030712" style={{ textTransform: 'uppercase' }}>Optimal</text>
+                                <text x="200" y="118" textAnchor="middle" fontSize="8" fontWeight="800" fill="#030712" style={{ textTransform: 'uppercase' }}>Zone</text>
+                            </svg>
+                        </div>
+
+                        <p className="dossier-body-sm" style={{ padding: '1rem', background: '#f8f8f8', borderLeft: '3px solid #1294DD' }}>
+                            The subject&apos;s overlap zone indicates a practical problem-solver — someone who analyses
+                            situations thoroughly and then acts on those findings with decisiveness. This combination
+                            is particularly valuable in consulting, engineering, and strategic management roles.
+                        </p>
+                    </div>
+                    <Footer page={7} />
+                </section>
+
+                {/* ═══════════════════════════════════════════════
+                    PAGE 8 — SUBJECT ARCHETYPE
+                ═══════════════════════════════════════════════ */}
+                <section className="dossier-page" style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                    <div style={{ maxWidth: '460px' }}>
+                        <div style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#999', marginBottom: '1.5rem' }}>
+                            Primary Classification
+                        </div>
+                        <h2 style={{ fontSize: '36pt', fontWeight: 900, textTransform: 'uppercase', color: '#030712', lineHeight: 1.1, marginBottom: '1.5rem', letterSpacing: '-0.03em' }}>
+                            {data.archetype.title}
+                        </h2>
+                        <div style={{ width: '60px', height: '3px', background: '#1294DD', margin: '0 auto 2rem auto' }} />
+                        <p className="dossier-body" style={{ fontStyle: 'italic', marginBottom: '2rem' }}>
+                            &ldquo;{data.archetype.description}&rdquo;
+                        </p>
+                        <p className="dossier-body-sm" style={{ color: '#555' }}>
+                            Individuals of this archetype exhibit a consistent pattern of structured thinking
+                            coupled with adaptive behaviour. They tend to thrive in environments that reward
+                            both analytical depth and practical execution.
+                        </p>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginTop: '2rem' }}>
+                            {data.archetype.traits.map((t, i) => (
+                                <span key={i} style={{
+                                    padding: '0.4rem 1rem', fontSize: '7.5pt', fontWeight: 700,
+                                    textTransform: 'uppercase', letterSpacing: '0.08em',
+                                    border: '1px solid #ddd', borderRadius: '2px', color: '#555'
+                                }}>
+                                    {t}
+                                </span>
+                            ))}
                         </div>
                     </div>
+                    <Footer page={8} />
                 </section>
 
-                {/* PAGE 8: ARCHETYPES */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 9 — BENCHMARK COMPARISON
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Subject Archetype</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Primary Classification Protocol</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Benchmark Comparison</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Subject Performance vs. Ideal Benchmarks</p>
                     </div>
-                    <div className="flex-1 flex flex-col justify-center items-center">
-                        <div className="dossier-label mb-6">Confirmed Designation</div>
-                        <div className="text-6xl font-black text-primary uppercase text-center mb-8 border-b-4 border-primary pb-4">{data.archetype.title}</div>
-                        <div className="text-center max-w-xl space-y-6">
-                            <p className="text-lg opacity-80 leading-relaxed font-serif italic">
-                                "{data.archetype.description}"
-                            </p>
-                            <p className="text-sm opacity-60 leading-relaxed mt-4">
-                                This archetype is characterized by an innate ability to navigate complexity. They thrive in environments where rules are defined but outcomes are highly variable, requiring constant strategic recalibration.
-                            </p>
-                            <div className="flex flex-wrap gap-3 justify-center mt-8">
-                                {data.archetype.traits.map((t, i) => (
-                                    <span key={i} className="px-4 py-2 bg-foreground/10 rounded-full text-xs font-bold uppercase tracking-widest">{t}</span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
-                {/* PAGE 9: BENCHMARK ANALYSIS */}
-                <section className="dossier-page">
-                    <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Benchmark Analysis</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Subject vs. Ideal Paradigms</p>
-                    </div>
-                    <div className="flex-1 flex flex-col justify-center">
-                        <p className="text-sm opacity-80 mb-12">
-                            Comparing the subject's raw indices against the theoretical ideals for high-performance operational roles.
-                        </p>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <ComparisonGraph data={data.charts.comparisonData} isPrinting={isPrinting} />
-                        
-                        <div className="grid grid-cols-3 gap-6 mt-16">
-                            {data.charts.comparisonData.map((cd, i) => (
-                                <div key={i} className="text-center p-4 border border-foreground/10 bg-foreground/5">
-                                    <div className="text-xs uppercase font-bold tracking-widest opacity-50 mb-2">{cd.label} Delta</div>
-                                    <div className={`text-2xl font-black ${cd.userScore >= cd.idealScore ? 'text-green-500' : 'text-orange-500'}`}>
-                                        {cd.userScore >= cd.idealScore ? '+' : ''}{(cd.userScore - cd.idealScore).toFixed(1)}
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '2.5rem' }}>
+                            {data.charts.comparisonData.map((cd, i) => {
+                                const delta = cd.userScore - cd.idealScore;
+                                return (
+                                    <div key={i} style={{ textAlign: 'center', padding: '1rem', background: '#fafafa' }}>
+                                        <div style={{ fontSize: '7pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginBottom: '0.35rem' }}>{cd.label}</div>
+                                        <div style={{ fontSize: '20pt', fontWeight: 900, color: delta >= 0 ? '#16a34a' : '#ea580c' }}>
+                                            {delta >= 0 ? '+' : ''}{delta.toFixed(1)}
+                                        </div>
+                                        <div style={{ fontSize: '7pt', color: '#aaa', marginTop: '2px' }}>vs. benchmark</div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
+                    <Footer page={9} />
                 </section>
 
-                {/* PAGE 10: CAREER GENOME */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 10 — CAREER ALIGNMENT
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Career Genome</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Genetic Alignment with Global Industries</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Career Alignment</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Top Recommended Career Paths</p>
                     </div>
-                    <div className="flex-1 flex flex-col justify-center space-y-6">
-                        <p className="text-sm opacity-80 mb-2">
-                            Based on the composite analysis of aptitude, psychometrics, and behavioral DNA, the following pathways represent the path of least resistance to maximal professional success:
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.75rem' }}>
+                        <p className="dossier-body" style={{ marginBottom: '1rem' }}>
+                            Based on the composite analysis of aptitude scores, psychometric traits, and behavioural DNA,
+                            the following career paths represent the strongest alignment with the subject&apos;s profile:
                         </p>
-                        <div className="space-y-4">
-                            {data.careerMatches.map((match, i) => (
-                                <div key={i} className="p-6 bg-primary/5 border-l-4 border-primary flex flex-col justify-center">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="font-bold text-lg uppercase tracking-wide">{match.career}</span>
-                                        <span className="text-xl font-mono font-black text-primary">{match.score}% MATCH</span>
-                                    </div>
-                                    <p className="text-xs opacity-70 leading-relaxed">{match.description}</p>
+                        {data.careerMatches.map((match, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', padding: '1rem 0', borderBottom: '1px solid #eee' }}>
+                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#1294DD', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12pt', fontWeight: 900, flexShrink: 0 }}>
+                                    {i + 1}
                                 </div>
-                            ))}
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontSize: '11pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.02em' }}>{match.career}</div>
+                                    <p className="dossier-body-sm" style={{ marginTop: '0.25rem', fontSize: '8pt' }}>{match.description}</p>
+                                </div>
+                                <div style={{ fontSize: '16pt', fontWeight: 900, color: '#1294DD', flexShrink: 0 }}>{match.score}%</div>
+                            </div>
+                        ))}
+                    </div>
+                    <Footer page={10} />
+                </section>
+
+                {/* ═══════════════════════════════════════════════
+                    PAGE 11 — IDEAL LEARNING ENVIRONMENT
+                ═══════════════════════════════════════════════ */}
+                <section className="dossier-page">
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Ideal Learning Environment</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>How the Subject Learns Best</p>
+                    </div>
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem' }}>
+                        <p className="dossier-body">
+                            Understanding what to pursue is only part of the equation. How the individual absorbs
+                            and processes new information is equally critical to long-term success. The following
+                            recommendations are based on the subject&apos;s cognitive and behavioural profile.
+                        </p>
+
+                        <div style={{ padding: '1.5rem', background: '#f8f8f8', borderLeft: '4px solid #1294DD' }}>
+                            <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
+                                Recommended Approaches
+                            </h3>
+                            <ul className="dossier-body-sm" style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #1294DD' }}>Project-based, hands-on problem solving</li>
+                                <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #1294DD' }}>Deep-focus individual study sessions</li>
+                                <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #1294DD' }}>Visual and diagrammatic learning materials</li>
+                                <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #1294DD' }}>Structured mentorship with clear milestones</li>
+                            </ul>
+                        </div>
+
+                        <div style={{ padding: '1.5rem', background: '#fef8f8', borderLeft: '4px solid #e74c3c' }}>
+                            <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
+                                Approaches to Avoid
+                            </h3>
+                            <ul className="dossier-body-sm" style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #e74c3c' }}>Rote memorisation without context</li>
+                                <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #e74c3c' }}>Passive lecture-only formats</li>
+                                <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #e74c3c' }}>Unstructured, open-ended group discussions</li>
+                            </ul>
                         </div>
                     </div>
+                    <Footer page={11} />
                 </section>
 
-                {/* PAGE 11: SKILL ACQUISITION PATHWAY */}
+                {/* ═══════════════════════════════════════════════
+                    PAGE 12 — STRATEGIC ROADMAP & CONCLUSION
+                ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Learning Pathway</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Optimal Data Ingestion Protocols</p>
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Strategic Roadmap</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Recommended Action Plan</p>
                     </div>
-                    <div className="flex-1 flex flex-col justify-center space-y-8">
-                        <p className="text-sm opacity-80">
-                            Understanding *what* the subject should do is secondary to understanding *how* they learn to do it. The following represents their optimal educational vector:
-                        </p>
-                        
-                        <div className="p-6 border border-foreground/10 bg-white/5 space-y-4">
-                            <h3 className="text-md font-bold uppercase text-primary">Primary Acquisition Modality</h3>
-                            <p className="text-sm leading-relaxed">
-                                The subject absorbs complex structures best through abstract deconstruction followed by applied repetition. They should avoid rote memorization environments and seek out project-based, conceptual frameworks.
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
+                        {/* Subway-style stepped path */}
+                        {[
+                            { phase: '01', title: 'Exploration', desc: 'Build foundational skills. Experiment broadly across interests to confirm natural inclinations identified in this report.' },
+                            { phase: '02', title: 'Specialisation', desc: 'Narrow focus to the top 2 career paths. Pursue targeted certifications, internships, or project work in those domains.' },
+                            { phase: '03', title: 'Mastery', desc: 'Commit to a primary professional track. Develop leadership and communication abilities alongside core technical expertise.' },
+                        ].map((step, i) => (
+                            <div key={i} style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
+                                {/* Vertical subway node */}
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+                                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#1294DD', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10pt', fontWeight: 900 }}>
+                                        {step.phase}
+                                    </div>
+                                    {i < 2 && <div style={{ width: '2px', height: '40px', background: '#ddd', marginTop: '4px' }} />}
+                                </div>
+                                <div style={{ paddingTop: '0.2rem' }}>
+                                    <div style={{ fontSize: '11pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em' }}>{step.title}</div>
+                                    <p className="dossier-body-sm" style={{ marginTop: '0.35rem' }}>{step.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Final conclusion box */}
+                        <div style={{ marginTop: '1.5rem', padding: '1.5rem', background: '#030712', color: 'white' }}>
+                            <h3 style={{ fontSize: '10pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: '0.5rem' }}>
+                                Conclusion
+                            </h3>
+                            <p style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '10pt', lineHeight: 1.7, color: 'rgba(255,255,255,0.85)' }}>
+                                {data.user.name} demonstrates strong potential, particularly in{' '}
+                                {topApt[0] ? String(topApt[0]).replace(/_/g, ' ').toLowerCase() : 'analytical reasoning'}{' '}
+                                ({topApt[1]}%). Classified as a <strong>{data.archetype.title}</strong>, the subject
+                                is well-suited for roles requiring both structured analysis and adaptive execution.
+                                The recommended path forward is to deepen expertise in the top-aligned career domains
+                                while actively developing supporting soft skills.
                             </p>
                         </div>
-
-                        <div className="grid grid-cols-2 gap-6">
-                            <div className="p-5 bg-foreground/5">
-                                <h4 className="font-bold text-xs uppercase mb-2">Recommended Formats</h4>
-                                <ul className="text-xs space-y-2 opacity-80">
-                                    <li>• Algorithmic problem solving</li>
-                                    <li>• Deep-work isolation sprints</li>
-                                    <li>• Systems architecture mapping</li>
-                                </ul>
-                            </div>
-                            <div className="p-5 bg-foreground/5">
-                                <h4 className="font-bold text-xs uppercase mb-2">Sub-Optimal Formats</h4>
-                                <ul className="text-xs space-y-2 opacity-80">
-                                    <li>• Heavy semantic reading</li>
-                                    <li>• Passive lecture consumption</li>
-                                    <li>• Highly subjective debate forums</li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
-                </section>
 
-                {/* PAGE 12: STRATEGIC ROADMAP */}
-                <section className="dossier-page">
-                    <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Strategic Roadmap</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Final Recommendations & Execution</p>
-                    </div>
-                    <div className="flex-1 flex flex-col justify-between pt-8">
-                        <div className="space-y-8">
-                            <div className="grid grid-cols-3 gap-6">
-                                <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-black mb-2 text-sm">PHASE 01: EXPLORATION</div>
-                                    <p className="text-[11px] opacity-70 leading-relaxed">Focus on foundational skill acquisition and broad mental model development. Identify core constraints.</p>
-                                </div>
-                                <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-black mb-2 text-sm">PHASE 02: SPECIALIZATION</div>
-                                    <p className="text-[11px] opacity-70 leading-relaxed">Deep-dive into preferred career DNA clusters. Begin eliminating extraneous vectors to focus energy.</p>
-                                </div>
-                                <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-black mb-2 text-sm">PHASE 03: MASTERY</div>
-                                    <p className="text-[11px] opacity-70 leading-relaxed">Professional placement and leadership trajectory initiation. Execute primary archetype strengths.</p>
-                                </div>
-                            </div>
-                            <div className="bg-primary text-primary-foreground p-10 rounded-lg shadow-xl mt-12">
-                                <h3 className="text-xl font-black mb-4 uppercase tracking-widest border-b border-primary-foreground/20 pb-4">Conclusion Directive</h3>
-                                <p className="text-md leading-relaxed font-serif">
-                                    The subject is highly recommended for high-complexity analytical environments. Their primary mandate should be to find roles that allow autonomy in problem-solving. By developing their secondary soft-skill communication layers, they can effectively bridge the gap between technical logic depth and organizational leadership, maximizing their overall global index impact.
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <div className="text-[10px] opacity-30 uppercase tracking-[0.5em] text-center mt-12 pb-4">
-                            End of Confidential Psychological Report // Maestro Career
-                        </div>
+                    <div style={{ textAlign: 'center', marginTop: 'auto', paddingTop: '1rem', fontSize: '7pt', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#bbb' }}>
+                        End of Report &middot; Maestro Career &copy; {new Date().getFullYear()}
                     </div>
                 </section>
 
