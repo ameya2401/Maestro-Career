@@ -9,14 +9,7 @@ export async function getReportData(resultId?: string): Promise<ReportData | nul
 
     let query = supabase
         .from('assessment_results')
-        .select(`
-            *,
-            profiles:user_id (
-                id,
-                email,
-                raw_user_meta_data
-            )
-        `);
+        .select(`*`);
 
     if (resultId && resultId !== 'latest') {
         query = query.eq('id', resultId);
@@ -26,37 +19,43 @@ export async function getReportData(resultId?: string): Promise<ReportData | nul
 
     const { data: result, error } = await query.maybeSingle();
 
-    if (error || !result) return null;
+    if (error || !result) {
+        console.error("Error fetching report data:", error);
+        return null;
+    }
 
-    // Map DB result to ReportData interface
-    const profileData = result.profiles as any;
+    const profileData = user.user_metadata;
 
     return {
         user: {
             id: user.id,
-            name: profileData?.raw_user_meta_data?.full_name || user.email?.split('@')[0] || "Subject",
+            name: profileData?.full_name || user.email?.split('@')[0] || "Subject",
             email: user.email || "",
-            age: profileData?.raw_user_meta_data?.age || 20,
-            class: profileData?.raw_user_meta_data?.class || "N/A",
-            stream: profileData?.raw_user_meta_data?.stream || "N/A",
+            age: profileData?.age || 20,
+            class: profileData?.class || "N/A",
+            stream: profileData?.stream || "N/A",
             interests: [],
             careerInterests: [],
             reportDate: new Date(result.created_at).toLocaleDateString()
         },
-        aptitudeScores: result.aptitude_scores,
-        psychometricScores: result.psychometric_scores,
-        careerDNA: result.career_dna,
-        archetype: result.archetype,
-        careerMatches: result.career_matches,
-        strengths: ["Analytical Thinking", "Strategic Planning", "Complex Problem Solving"],
-        improvementAreas: ["Public Speaking", "Iterative Design"],
+        aptitudeScores: result.aptitude_scores || {},
+        psychometricScores: result.psychometric_scores || {},
+        careerDNA: result.career_dna || { analytical: 80, creative: 60, leadership: 70, research: 85, innovation: 65 },
+        archetype: result.archetype || { title: 'Analytical Strategist', description: 'A highly logical thinker.', traits: ['Logic', 'Strategy'] },
+        careerMatches: (result.career_matches || []).map((m: any) => ({
+            career: m.title || m.career,
+            score: m.score,
+            description: m.bucket || "A strong match based on your cognitive profile."
+        })),
+        strengths: result.summary?.areasRequiringImprovement ? ["Analytical Thinking", "Strategic Planning"] : ["Logical Reasoning", "Problem Solving"],
+        improvementAreas: (result.summary?.areasRequiringImprovement || []).map((a: any) => a.dimension).slice(0, 3),
         charts: {
-            radarChart: Object.entries(result.aptitude_scores).map(([key, val]) => ({
+            radarChart: Object.entries(result.aptitude_scores || {}).map(([key, val]) => ({
                 subject: key.replace('_', ' '),
                 value: val as number,
                 fullMark: 100
             })),
-            barChart: Object.entries(result.psychometric_scores).map(([key, val]) => ({
+            barChart: Object.entries(result.psychometric_scores || {}).map(([key, val]) => ({
                 name: key.replace('_', ' '),
                 score: val as number
             })),
@@ -67,13 +66,13 @@ export async function getReportData(resultId?: string): Promise<ReportData | nul
             ],
             vennData: {},
             comparisonData: [
-                { label: 'Logic', userScore: result.aptitude_scores.logical || 0, idealScore: 85 },
-                { label: 'Leadership', userScore: result.psychometric_scores.leadership || 0, idealScore: 80 },
-                { label: 'Innovation', userScore: result.career_dna.innovation || 0, idealScore: 90 }
+                { label: 'Aptitude', userScore: result.aptitude_index || 0, idealScore: 85 },
+                { label: 'Psychometric', userScore: result.psychometric_index || 0, idealScore: 80 },
+                { label: 'Overall', userScore: result.overall_index || 0, idealScore: 90 }
             ]
         },
         recommendations: {
-            bestCareers: result.career_matches.slice(0, 2).map((m: any) => m.career),
+            bestCareers: (result.career_matches || []).slice(0, 2).map((m: any) => m.title || m.career),
             alternativeCareers: ["Systems Research", "Data Strategy"],
             growthAdvice: ["Focus on high-level cognitive synthesis."]
         }

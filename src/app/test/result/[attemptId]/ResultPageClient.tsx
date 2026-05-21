@@ -132,11 +132,49 @@ export default function ResultPageClient({ attemptId }: { attemptId: string }) {
                                 >
                                     Back to dashboard
                                 </Link>
+                                {result ? (
+                                    <>
+                                        <button
+                                            onClick={async () => {
+                                                try {
+                                                    const btn = document.getElementById("download-pdf-btn");
+                                                    if (btn) btn.textContent = "Generating...";
+                                                    const resp = await fetch(`/api/generate-report?resultId=${result.id}`);
+                                                    if (!resp.ok) throw new Error("Failed to generate PDF");
+                                                    const blob = await resp.blob();
+                                                    const url = window.URL.createObjectURL(blob);
+                                                    const a = document.createElement("a");
+                                                    a.href = url;
+                                                    a.download = `Maestro-Career-Intelligence-${result.id}.pdf`;
+                                                    document.body.appendChild(a);
+                                                    a.click();
+                                                    a.remove();
+                                                    window.URL.revokeObjectURL(url);
+                                                } catch (e) {
+                                                    alert("Error downloading PDF");
+                                                } finally {
+                                                    const btn = document.getElementById("download-pdf-btn");
+                                                    if (btn) btn.textContent = "Download PDF Report";
+                                                }
+                                            }}
+                                            id="download-pdf-btn"
+                                            className="inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 text-sm font-medium transition-colors"
+                                        >
+                                            Download PDF Report
+                                        </button>
+                                        <Link
+                                            href={`/report?resultId=${result.id}`}
+                                            className="inline-flex items-center justify-center rounded-xl bg-foreground text-background hover:bg-foreground/90 px-6 py-3 text-sm font-bold tracking-wide uppercase transition-colors shadow-lg"
+                                        >
+                                            View Full Dossier
+                                        </Link>
+                                    </>
+                                ) : null}
                                 <Link
                                     href="/test"
-                                    className="inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 text-sm font-medium transition-colors"
+                                    className="inline-flex items-center justify-center rounded-xl bg-background border border-border/20 hover:bg-muted/50 px-6 py-3 text-sm font-medium transition-colors"
                                 >
-                                    Go to assessment
+                                    Take test again
                                 </Link>
                             </div>
                         </div>

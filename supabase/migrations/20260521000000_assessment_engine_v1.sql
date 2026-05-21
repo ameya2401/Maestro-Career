@@ -20,9 +20,10 @@ CREATE TABLE IF NOT EXISTS assessment_attempts (
     expires_at TIMESTAMPTZ NOT NULL, -- started_at + 50 minutes
     last_activity_at TIMESTAMPTZ DEFAULT NOW(),
     status TEXT CHECK (status IN ('active', 'completed', 'expired')) DEFAULT 'active',
-    raw_responses JSONB DEFAULT '{}'::jsonb,
-    UNIQUE(user_id, status) WHERE (status = 'active')
+    raw_responses JSONB DEFAULT '{}'::jsonb
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS assessment_attempts_active_idx ON assessment_attempts (user_id) WHERE status = 'active';
 
 -- 3. Stored Results (The source for the Intelligence Report)
 CREATE TABLE IF NOT EXISTS assessment_results (

@@ -1,18 +1,31 @@
 const DEFAULT_APP_URL = "http://localhost:3000";
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
+function resolveAppUrl() {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() ?? "";
+
+    if (appUrl) {
+        return appUrl;
+    }
+
+    if (IS_PRODUCTION) {
+        return "";
+    }
+
+    return DEFAULT_APP_URL;
+}
 
 export function getSupabaseConfig() {
     return {
         url: process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ?? "",
         anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ?? "",
         serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? "",
-        appUrl:
-            process.env.NEXT_PUBLIC_APP_URL?.trim() ??
-            (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : DEFAULT_APP_URL),
+        appUrl: resolveAppUrl(),
     };
 }
 
 export function getSupabaseConfigError() {
-    const { url, anonKey, serviceRoleKey } = getSupabaseConfig();
+    const { url, anonKey, serviceRoleKey, appUrl } = getSupabaseConfig();
     const missing: string[] = [];
 
     if (!url) {
@@ -23,6 +36,9 @@ export function getSupabaseConfigError() {
     }
     if (!serviceRoleKey) {
         missing.push("SUPABASE_SERVICE_ROLE_KEY");
+    }
+    if (IS_PRODUCTION && !appUrl) {
+        missing.push("NEXT_PUBLIC_APP_URL");
     }
 
     if (missing.length === 0) {

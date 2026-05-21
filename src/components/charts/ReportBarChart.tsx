@@ -26,12 +26,12 @@ export default function ReportBarChart({ data, isPrinting = false }: ReportBarCh
             height={isPrinting ? 350 : undefined}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
-            <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#374151" />
+            <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke={isPrinting ? "#d1d5db" : "#374151"} />
             <XAxis type="number" domain={[0, 100]} hide />
             <YAxis
                 dataKey="name"
                 type="category"
-                tick={{ fill: "#9CA3AF", fontSize: 12 }}
+                tick={{ fill: isPrinting ? "#1f2937" : "#9CA3AF", fontSize: 12, fontWeight: isPrinting ? 'bold' : 'normal' }}
                 width={100}
             />
             <Tooltip

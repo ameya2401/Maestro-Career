@@ -38,72 +38,32 @@ interface AdminStats {
 interface AdminEditForm {
     fullName: string;
     mobile: string;
-    dateOfBirth: string;
-    userType: UserType;
-    city: string;
-    selectedPlanId: string;
-    paymentStatus: PaymentStatus;
-    paymentMethod: PaymentMethod;
-    paymentId: string;
-    transactionId: string;
-    paymentToken: string;
-    manualCashAmount: string;
-    manualPaymentNotes: string;
-    psychometricTestLink: string;
+    dateOfBirth?: string | null;
+    userType?: UserType | null;
+    city?: string;
+    selectedPlanId?: string;
+    paymentStatus?: PaymentStatus;
+    paymentMethod?: PaymentMethod;
+    paymentId?: string;
+    transactionId?: string;
+    paymentToken?: string;
+    manualCashAmount?: string;
+    manualPaymentNotes?: string;
+    psychometricTestLink?: string;
 }
 
-type InternalAssessmentAccess = {
-    paymentStatus: "paid" | "unpaid" | null;
-    grant: {
-        status: "active" | "revoked";
-        granted_at: string;
-        revoked_at: string | null;
-    } | null;
-    latestAttempt: {
-        id: string;
-        status: "in_progress" | "submitted" | "expired";
-        started_at: string;
-        expires_at: string;
-        submitted_at: string | null;
-    } | null;
-    latestResultId: string | null;
-};
+interface InternalAssessmentAccess {
+    paymentStatus?: string | null;
+    grant?: { status?: string } | null;
+    attempt?: { id?: string; status?: string } | null;
+    latestAttempt?: { id?: string; status?: string } | null;
+    latestResultId?: string | null;
+}
 
 function inferPaymentMethod(user: AdminUser): PaymentMethod {
-    if (user.payment_method === "razorpay" || user.payment_method === "cash" || user.payment_method === "manual_upi") {
-        return user.payment_method;
-    }
-
-    if (user.payment_id) {
-        return "razorpay";
-    }
-    if (user.manual_cash_amount !== null && user.manual_cash_amount !== undefined) {
-        return "cash";
-    }
-
+    if (user.payment_method === "manual_upi") return "manual_upi";
+    if (user.payment_method === "cash") return "cash";
     return "razorpay";
-}
-
-function createEditForm(user: AdminUser): AdminEditForm {
-    return {
-        fullName: user.full_name ?? "",
-        mobile: user.mobile ?? "",
-        dateOfBirth: user.date_of_birth ? user.date_of_birth.split("T")[0] : "",
-        userType: user.user_type ?? "student",
-        city: user.city ?? "",
-        selectedPlanId: user.selected_plan_id ?? "",
-        paymentStatus: user.payment_status === "paid" ? "paid" : "unpaid",
-        paymentMethod: inferPaymentMethod(user),
-        paymentId: user.payment_id ?? "",
-        transactionId: user.transaction_id ?? "",
-        paymentToken: user.payment_token ?? "",
-        manualCashAmount:
-            user.manual_cash_amount !== null && user.manual_cash_amount !== undefined
-                ? String(user.manual_cash_amount)
-                : "",
-        manualPaymentNotes: user.manual_payment_notes ?? "",
-        psychometricTestLink: user.psychometric_test_link ?? "",
-    };
 }
 
 function formatAge(dateOfBirth: string | null) {
@@ -182,8 +142,23 @@ export default function AdminDashboardPage() {
     }, []);
 
     const updateInternalAccess = useCallback(
-        async (userId: string, action: "grant" | "revoke") => {
+        async (userId: string, action: "grant" | "revoke", previousState?: InternalAssessmentAccess) => {
+            if (action === "grant") {
+                if (!window.confirm("Are you sure you want to GRANT internal assessment access to this user?")) return;
+            } else {
+                if (!window.confirm("Are you sure you want to REVOKE internal assessment access from this user?")) return;
+            }
+
             setInternalAccessLoading((current) => ({ ...current, [userId]: true }));
+
+            // Optimistic update
+            setInternalAccess((current) => ({
+                ...current,
+                [userId]: {
+                    ...(current[userId] || {}),
+                    grant: { status: action === "grant" ? "active" : "revoked" }
+                }
+            }));
 
             try {
                 const resp = await fetch(`/api/admin/users/${userId}/assessment-access`, {
@@ -199,6 +174,8 @@ export default function AdminDashboardPage() {
 
                 setInternalAccess((current) => ({ ...current, [userId]: data.data as InternalAssessmentAccess }));
             } catch (e) {
+                // Rollback on failure
+                setInternalAccess((current) => ({ ...current, [userId]: previousState }));
                 window.alert(e instanceof Error ? e.message : "Unable to update internal assessment access.");
             } finally {
                 setInternalAccessLoading((current) => ({ ...current, [userId]: false }));
@@ -789,65 +766,6 @@ export default function AdminDashboardPage() {
                                                             </div>
                                                         )}
                                                     </div>
-
-<<<<<<< HEAD
-                                                    {/* Distribute Assessment Link */}
-                                                    <div className="lg:col-span-4 flex flex-col gap-6">
-                                                        <div className="rounded-xl bg-background/30 p-4 border border-border/10">
-                                                            <h3 className="text-sm font-semibold text-foreground mb-4">Legacy Link Flow</h3>
-                                                            <div className="space-y-4">
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Paste URL here..."
-                                                                    value={linkInput[user.id] || ""}
-                                                                    onChange={(e) => setLinkInput({ ...linkInput, [user.id]: e.target.value })}
-                                                                    className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[14px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/40 focus:border-primary focus:ring-4 focus:ring-primary/20"
-                                                                />
-                                                                <button
-                                                                    onClick={() => handleSendLink(user.id)}
-                                                                    disabled={sendingLink[user.id] || !linkInput[user.id] || user.payment_status !== "paid"}
-                                                                    className="w-full relative flex items-center justify-center bg-background border border-border/40 hover:border-border/60 text-foreground px-6 py-3 rounded-xl text-[14px] font-medium transition-all disabled:opacity-50"
-                                                                >
-                                                                    {sendingLink[user.id] ? "Processing..." : "Issue Manual Link \u2192"}
-                                                                </button>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="space-y-3">
-                                                            <div className="rounded-xl bg-blue-500/5 p-4 border border-blue-500/20">
-                                                                <h3 className="text-sm font-semibold text-blue-400 mb-2">Internal Testing Unit</h3>
-                                                                <button
-                                                                    onClick={async () => {
-                                                                        const resp = await fetch(`/api/admin/users/${user.id}/grant-access?action=grant`, { method: 'POST' });
-                                                                        const d = await resp.json();
-                                                                        if (d.success) alert(d.message);
-                                                                    }}
-                                                                    disabled={user.payment_status !== "paid"}
-                                                                    className="w-full bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl text-[12px] font-bold transition-all disabled:opacity-50"
-                                                                >
-                                                                    Grant Test Access
-                                                                </button>
-                                                            </div>
-
-                                                            <div className="rounded-xl bg-emerald-500/5 p-4 border border-emerald-500/20">
-                                                                <h3 className="text-sm font-semibold text-emerald-400 mb-2">Analysis Hub</h3>
-                                                                <div className="flex gap-2">
-                                                                    <button
-                                                                        onClick={() => window.open(`/report?resultId=latest&userId=${user.id}`, '_blank')}
-                                                                        className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-[12px] font-bold transition-all"
-                                                                    >
-                                                                        View Dossier
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => window.open(`/api/generate-report?userId=${user.id}`, '_blank')}
-                                                                        className="flex-1 border border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 px-4 py-2 rounded-lg text-[12px] font-medium transition-all"
-                                                                    >
-                                                                        Fetch PDF
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-=======
                                                     <div className="lg:col-span-4 rounded-xl flex flex-col justify-between gap-4">
                                                         <div>
                                                             <h3 className="text-sm font-semibold text-foreground mb-4">Assessment Link</h3>
@@ -893,8 +811,7 @@ export default function AdminDashboardPage() {
                                                             )}
                                                         </div>
 
-                                                        {isEditing ? (
-                                                            <div className="mt-6 rounded-2xl border border-border/20 bg-background/50 p-6">
+                                                        <div className="mt-6 rounded-2xl border border-border/20 bg-background/50 p-6">
                                                                 <div className="flex items-center justify-between gap-3">
                                                                     <h4 className="text-sm font-semibold text-foreground">Internal Assessment Access</h4>
                                                                     <button
@@ -903,46 +820,54 @@ export default function AdminDashboardPage() {
                                                                         disabled={internalLoading}
                                                                         className="rounded-lg border border-border/20 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/30 disabled:opacity-60"
                                                                     >
-                                                                        {internalLoading ? "Loading..." : "Refresh"}
+                                                                        {internalLoading ? "Loading..." : "Refresh Status"}
                                                                     </button>
                                                                 </div>
 
-                                                                <div className="mt-4 space-y-2 text-sm">
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span className="text-foreground/60">Payment</span>
-                                                                        <span className="font-semibold text-foreground">
-                                                                            {internal?.paymentStatus ?? "unknown"}
-                                                                        </span>
-                                                                    </div>
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span className="text-foreground/60">Grant</span>
-                                                                        <span
-                                                                            className={`font-semibold ${internal?.grant?.status === "active"
-                                                                                    ? "text-emerald-600"
-                                                                                    : "text-foreground"
-                                                                                }`}
-                                                                        >
-                                                                            {internal?.grant?.status ?? "not granted"}
-                                                                        </span>
-                                                                    </div>
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span className="text-foreground/60">Latest attempt</span>
-                                                                        <span className="font-semibold text-foreground">
-                                                                            {internal?.latestAttempt?.status ?? "none"}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
+                                                                {internal ? (
+                                                                    <>
+                                                                        <div className="mt-4 space-y-2 text-sm">
+                                                                            <div className="flex items-center justify-between">
+                                                                                <span className="text-foreground/60">Payment</span>
+                                                                                <span className="font-semibold text-foreground">
+                                                                                    {internal.paymentStatus ?? "unknown"}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="flex items-center justify-between">
+                                                                                <span className="text-foreground/60">Grant</span>
+                                                                                <span
+                                                                                    className={`font-semibold ${internal.grant?.status === "active"
+                                                                                            ? "text-emerald-600"
+                                                                                            : "text-foreground"
+                                                                                        }`}
+                                                                                >
+                                                                                    {internal.grant?.status ?? "not granted"}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="flex items-center justify-between">
+                                                                                <span className="text-foreground/60">Latest attempt</span>
+                                                                                <span className="font-semibold text-foreground">
+                                                                                    {internal.latestAttempt?.status ?? "none"}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
 
-                                                                {internal?.latestAttempt?.id ? (
-                                                                    <div className="mt-4 rounded-xl border border-border/20 bg-card px-4 py-3 text-xs text-foreground/70">
-                                                                        Attempt: <span className="font-mono">{internal.latestAttempt.id}</span>
+                                                                        {internal.latestAttempt?.id ? (
+                                                                            <div className="mt-4 rounded-xl border border-border/20 bg-card px-4 py-3 text-xs text-foreground/70">
+                                                                                Attempt: <span className="font-mono">{internal.latestAttempt.id}</span>
+                                                                            </div>
+                                                                        ) : null}
+                                                                    </>
+                                                                ) : (
+                                                                    <div className="mt-4 text-xs text-foreground/60">
+                                                                        Status not loaded. Click refresh to view.
                                                                     </div>
-                                                                ) : null}
+                                                                )}
 
                                                                 <div className="mt-5 flex flex-col sm:flex-row gap-3">
                                                                     <button
                                                                         type="button"
-                                                                        onClick={() => void updateInternalAccess(user.id, "grant")}
+                                                                        onClick={() => void updateInternalAccess(user.id, "grant", internal)}
                                                                         disabled={internalLoading}
                                                                         className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
                                                                     >
@@ -950,7 +875,7 @@ export default function AdminDashboardPage() {
                                                                     </button>
                                                                     <button
                                                                         type="button"
-                                                                        onClick={() => void updateInternalAccess(user.id, "revoke")}
+                                                                        onClick={() => void updateInternalAccess(user.id, "revoke", internal)}
                                                                         disabled={internalLoading}
                                                                         className="inline-flex items-center justify-center rounded-xl border border-border/20 bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:border-border/50 disabled:opacity-60"
                                                                     >
@@ -959,7 +884,6 @@ export default function AdminDashboardPage() {
                                                                 </div>
 
                                                             </div>
-                                                        ) : null}
 
                                                         {currentPaymentStatus !== "paid" ? (
                                                             <p className="text-xs font-medium text-rose-500 border border-rose-500/20 bg-rose-500/10 px-3 py-2 rounded-lg text-center">
@@ -972,7 +896,6 @@ export default function AdminDashboardPage() {
                                                                 <span>Link Active</span>
                                                             </div>
                                                         ) : null}
->>>>>>> 859efa387dd4ad028b63e0a6f0699b8c2717116d
                                                     </div>
 
                                                 </div>

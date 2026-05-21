@@ -3,6 +3,7 @@ import puppeteer from 'puppeteer';
 import { createRouteHandlerClient } from '@/lib/supabase/route';
 
 export async function POST(req: NextRequest) {
+  let applyToResponse: ((response: NextResponse) => NextResponse) | null = null;
   try {
     const data = await req.json();
     const { attemptId } = data;
@@ -11,11 +12,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing attemptId' }, { status: 400 });
     }
 
-    const { supabase } = createRouteHandlerClient(req);
+    const { supabase, applyToResponse: applyCookiesToResponse } = createRouteHandlerClient(req);
+    applyToResponse = applyCookiesToResponse;
 
     const { data: userResp } = await supabase.auth.getUser();
     if (!userResp.user) {
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+      return applyToResponse(
+        NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+      );
     }
 
     const { data: resultData, error: dbError } = await supabase
@@ -26,7 +30,9 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (dbError || !resultData) {
-      return NextResponse.json({ error: 'Result not found' }, { status: 404 });
+      return applyToResponse(
+        NextResponse.json({ error: 'Result not found' }, { status: 404 })
+      );
     }
 
     const name = userResp.user.user_metadata?.name || 'User';
@@ -97,9 +103,19 @@ export async function POST(req: NextRequest) {
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
 
-        <!-- Page 3: Best Suited Career Path -->
+        <!-- Page 3: Trait Breakdown Chart -->
         <div class="page">
-          <div class="header">2. Primary Recommendation</div>
+          <div class="header">2. Trait Breakdown</div>
+          <p>A detailed view of your core cognitive and personality dimensions:</p>
+          <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+          </div>
+          <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
+        </div>
+
+        <!-- Page 4: Best Suited Career Path -->
+        <div class="page">
+          <div class="header">3. Primary Recommendation</div>
           <p style="font-size: 24px;">Your highest scoring career path is:</p>
           <h1 style="font-size: 56px; color: #1294DD; margin: 20px 0;">${primaryMatch.title}</h1>
           <p style="font-size: 24px; font-weight: bold; color: #555;">Compatibility Score: ${Math.round(primaryMatch.score)}%</p>
@@ -110,9 +126,9 @@ export async function POST(req: NextRequest) {
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
 
-        <!-- Page 4: Top Career Matches -->
+        <!-- Page 5: Top Career Matches -->
         <div class="page">
-          <div class="header">3. Top Career Matches</div>
+          <div class="header">4. Top Career Matches</div>
           <p>Here are the highest ranking career profiles based on your assessment results:</p>
           <div style="margin-top: 30px;">
             ${topMatches.map((m: { title: string, score: number }) => {
@@ -125,7 +141,7 @@ export async function POST(req: NextRequest) {
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
 
-        <!-- Page 5: Conclusion -->
+        <!-- Page 6: Conclusion -->
         <div class="page" style="text-align: center; justify-content: center; align-items: center;">
           <h2 style="color: #1294DD; font-size: 40px;">Professional Journey Ahead</h2>
           <p style="max-width: 600px; margin: 20px auto;">
@@ -137,6 +153,46 @@ export async function POST(req: NextRequest) {
           <div class="footer">Maestro Career &copy; ${new Date().getFullYear()}</div>
         </div>
 
+        <script>
+          const aptitude = ${JSON.stringify(resultData.aptitude_scores || {})};
+          const psychometric = ${JSON.stringify(resultData.psychometric_scores || {})};
+          
+          const labels = [...Object.keys(aptitude), ...Object.keys(psychometric)].map(s => s.replace(/_/g, ' ').toUpperCase());
+          const dataPoints = [...Object.values(aptitude), ...Object.values(psychometric)];
+
+          const ctx = document.getElementById('radarChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'radar',
+            data: {
+              labels: labels.length > 0 ? labels : ['Data1', 'Data2', 'Data3', 'Data4', 'Data5'],
+              datasets: [{
+                label: 'Score Mapping',
+                data: dataPoints.length > 0 ? dataPoints : [20, 50, 80, 40, 60],
+                backgroundColor: 'rgba(18, 148, 221, 0.2)',
+                borderColor: '#1294DD',
+                pointBackgroundColor: '#1294DD',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#1294DD',
+                borderWidth: 2,
+              }]
+            },
+            options: {
+              animation: false,
+              scales: {
+                r: {
+                  angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                  grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                  pointLabels: { font: { size: 10, family: 'Inter' } },
+                  ticks: { display: false, min: 0, max: 100 }
+                }
+              },
+              plugins: {
+                legend: { display: false }
+              }
+            }
+          });
+        </script>
       </body>
       </html>
     `;
@@ -158,16 +214,17 @@ export async function POST(req: NextRequest) {
     await browser.close();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return new NextResponse(pdfBuffer as any, {
+    return applyToResponse(new NextResponse(pdfBuffer as any, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'attachment; filename="Maestro-Career-Report-' + attemptId + '.pdf"',
       },
-    });
+    }));
 
   } catch (error) {
     console.error('PDF Generation Error:', error);
-    return NextResponse.json({ error: 'Failed to generate PDF' }, { status: 500 });
+    const response = NextResponse.json({ error: 'Failed to generate PDF' }, { status: 500 });
+    return applyToResponse ? applyToResponse(response) : response;
   }
 }
