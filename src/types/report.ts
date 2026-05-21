@@ -7,6 +7,7 @@ export interface UserProfile {
     stream: string;
     interests: string[];
     careerInterests: string[];
+    careerGoals?: string;
     reportDate: string;
 }
 

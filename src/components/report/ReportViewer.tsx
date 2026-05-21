@@ -49,7 +49,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             Maestro Career &middot; Psychometric &amp; Aptitude Division
                         </div>
                         <h1 className="dossier-title" style={{ fontSize: '54pt', color: '#030712', lineHeight: 1 }}>
-                            Intelligence<br />Dossier
+                            Your Career<br />Report
                         </h1>
                     </div>
 
@@ -124,7 +124,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
 
                         <p className="dossier-body-sm" style={{ marginTop: '1.5rem', padding: '1rem', background: '#f8f8f8', borderLeft: '3px solid #1294DD' }}>
                             The subject demonstrates strong capacity across multiple cognitive dimensions.
-                            The following pages present detailed aptitude metrics, behavioural mapping,
+                            The following pages present detailed aptitude metrics, personality traits,
                             career alignment data, and a personalised strategic roadmap.
                         </p>
                     </div>
@@ -189,13 +189,13 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Behavioural Profile</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Psychometric Trait Distribution</p>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Personality Profile</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>How You Work & Think</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
                         <p className="dossier-body">
-                            While aptitude measures raw cognitive ability, the behavioural profile captures how that ability
+                            While aptitude measures raw cognitive ability, the personality profile captures how that ability
                             is expressed in real-world contexts — under pressure, in teams, and in unfamiliar situations.
                         </p>
 
@@ -224,12 +224,12 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 </section>
 
                 {/* ═══════════════════════════════════════════════
-                    PAGE 6 — PSYCHOMETRIC DNA
+                    PAGE 6 — PERSONALITY TRAITS
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Psychometric DNA</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Core Behavioural Drivers</p>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Personality Traits</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Core Drivers</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -254,20 +254,19 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 </section>
 
                 {/* ═══════════════════════════════════════════════
-                    PAGE 7 — CORE COMPETENCY OVERLAP
+                    PAGE 7 — SKILLS MATCH
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Core Competency Overlap</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Where Aptitude Meets Behaviour</p>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Your Skills Match</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Where Aptitude Meets Personality</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem' }}>
                         <p className="dossier-body">
                             The most reliable indicator of career success is found not in any single trait, but at the
                             intersection of multiple well-developed abilities. The following analysis identifies where
-                            analytical thinking and behavioural tendencies converge, creating the subject&apos;s unique
-                            competitive advantage.
+                            analytical thinking and personality tendencies converge, creating your unique advantage.
                         </p>
 
                         {/* Clean SVG Venn — two overlapping circles */}
@@ -277,7 +276,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                                 <circle cx="245" cy="110" r="85" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" strokeWidth="1.5" />
                                 <text x="120" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#1294DD" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Analytical</text>
                                 <text x="120" y="120" textAnchor="middle" fontSize="8" fill="#888">Thinking</text>
-                                <text x="280" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Behavioural</text>
+                                <text x="280" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Personality</text>
                                 <text x="280" y="120" textAnchor="middle" fontSize="8" fill="#888">Execution</text>
                                 <text x="200" y="105" textAnchor="middle" fontSize="8" fontWeight="800" fill="#030712" style={{ textTransform: 'uppercase' }}>Optimal</text>
                                 <text x="200" y="118" textAnchor="middle" fontSize="8" fontWeight="800" fill="#030712" style={{ textTransform: 'uppercase' }}>Zone</text>
@@ -310,7 +309,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         </p>
                         <p className="dossier-body-sm" style={{ color: '#555' }}>
                             Individuals of this archetype exhibit a consistent pattern of structured thinking
-                            coupled with adaptive behaviour. They tend to thrive in environments that reward
+                            coupled with adaptive characteristics. They tend to thrive in environments that reward
                             both analytical depth and practical execution.
                         </p>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginTop: '2rem' }}>
@@ -369,8 +368,8 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.75rem' }}>
                         <p className="dossier-body" style={{ marginBottom: '1rem' }}>
-                            Based on the composite analysis of aptitude scores, psychometric traits, and behavioural DNA,
-                            the following career paths represent the strongest alignment with the subject&apos;s profile:
+                            Based on the composite analysis of aptitude scores and personality traits,
+                            the following career paths represent the strongest alignment with your profile:
                         </p>
                         {data.careerMatches.map((match, i) => (
                             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', padding: '1rem 0', borderBottom: '1px solid #eee' }}>
@@ -439,7 +438,49 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Recommended Action Plan</p>
                     </div>
 
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                        {(() => {
+                            let goalParsed = null;
+                            if (data.user.careerGoals) {
+                                try {
+                                    goalParsed = JSON.parse(data.user.careerGoals);
+                                } catch (e) {
+                                    goalParsed = { dream: data.user.careerGoals }; // fallback to flat string
+                                }
+                            }
+                            return goalParsed && (goalParsed.dream || goalParsed.profession) ? (
+                                <div style={{ padding: '1.5rem', background: '#f0f9ff', borderLeft: '4px solid #0284c7', marginBottom: '0.5rem' }}>
+                                    <h3 style={{ fontSize: '9pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#0369a1', marginBottom: '1rem' }}>
+                                        Goal Alignment Analysis
+                                    </h3>
+
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                                        <div>
+                                            <div style={{ fontSize: '7.5pt', textTransform: 'uppercase', color: '#666', fontWeight: 600 }}>My Dream</div>
+                                            <div style={{ fontSize: '10pt', fontWeight: 700, color: '#000', marginTop: '0.2rem' }}>{goalParsed.dream || "Not specified"}</div>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: '7.5pt', textTransform: 'uppercase', color: '#666', fontWeight: 600 }}>Target Profession</div>
+                                            <div style={{ fontSize: '10pt', fontWeight: 700, color: '#000', marginTop: '0.2rem' }}>{goalParsed.profession || "Not specified"}</div>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: '7.5pt', textTransform: 'uppercase', color: '#666', fontWeight: 600 }}>Education Route</div>
+                                            <div style={{ fontSize: '10pt', fontWeight: 700, color: '#000', marginTop: '0.2rem' }}>{goalParsed.education || "Not specified"}</div>
+                                        </div>
+                                    </div>
+
+                                    <p style={{ marginTop: '1.25rem', fontSize: '9pt', color: '#333', lineHeight: 1.5, borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '0.75rem' }}>
+                                        <strong>Verdict:</strong> Based on your natural proficiency in {topApt[0] ? String(topApt[0]).replace(/_/g, ' ').toLowerCase() : 'reasoning'}, your personality archetype ({data.archetype.title}), and your selected dreams, you have a solid foundation to pursue this track.
+                                    </p>
+                                </div>
+                            ) : null;
+                        })()}
+
+                        <p className="dossier-body-sm" style={{ color: '#555' }}>
+                            Here is a simple roadmap of the critical next steps you should take to start moving towards your best matching careers.
+                        </p>
+
                         {/* Subway-style stepped path */}
                         {[
                             { phase: '01', title: 'Exploration', desc: 'Build foundational skills. Experiment broadly across interests to confirm natural inclinations identified in this report.' },
@@ -462,18 +503,16 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         ))}
 
                         {/* Final conclusion box */}
-                        <div style={{ marginTop: '1.5rem', padding: '1.5rem', background: '#030712', color: 'white' }}>
+                        <div style={{ marginTop: 'auto', padding: '1.5rem', background: '#030712', color: 'white' }}>
                             <h3 style={{ fontSize: '10pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: '0.5rem' }}>
-                                Conclusion
+                                Final Conclusion
                             </h3>
-                            <p style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '10pt', lineHeight: 1.7, color: 'rgba(255,255,255,0.85)' }}>
-                                {data.user.name} demonstrates strong potential, particularly in{' '}
-                                {topApt[0] ? String(topApt[0]).replace(/_/g, ' ').toLowerCase() : 'analytical reasoning'}{' '}
-                                ({topApt[1]}%). Classified as a <strong>{data.archetype.title}</strong>, the subject
-                                is well-suited for roles requiring both structured analysis and adaptive execution.
-                                The recommended path forward is to deepen expertise in the top-aligned career domains
-                                while actively developing supporting soft skills.
-                            </p>
+                            <ul style={{ paddingLeft: '1.25rem', fontSize: '10pt', lineHeight: 1.6, color: 'rgba(255,255,255,0.9)' }}>
+                                <li style={{ marginBottom: '0.5rem' }}>Your strongest aptitude is <strong>{topApt[0] ? String(topApt[0]).replace(/_/g, ' ').toLowerCase() : 'analytical reasoning'}</strong>.</li>
+                                <li style={{ marginBottom: '0.5rem' }}>Your personality makes you a natural <strong>{data.archetype.title}</strong>.</li>
+                                <li style={{ marginBottom: '0.5rem' }}>Focus first on your top recommended career: <strong>{data.careerMatches[0]?.career || "Consulting"}</strong>.</li>
+                                <li>Use the recommended learning style to tackle your weak spots and don&apos;t get discouraged. Progress takes time.</li>
+                            </ul>
                         </div>
                     </div>
 
