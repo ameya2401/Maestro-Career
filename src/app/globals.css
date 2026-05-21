@@ -129,8 +129,14 @@
 }
 
 @media print {
-  body {
+
+  body,
+  html,
+  main,
+  #__next,
+  .bg-\[\#030712\] {
     background: white !important;
+    background-color: white !important;
     color: black !important;
   }
 
@@ -139,12 +145,16 @@
     border: none !important;
     box-shadow: none !important;
     background: white !important;
+    background-color: white !important;
     color: black !important;
     width: 210mm !important;
     height: 297mm !important;
     padding: 15mm !important;
     page-break-after: always !important;
     break-after: page !important;
+    position: relative !important;
+    display: flex !important;
+    visibility: visible !important;
   }
 
   .no-print {
@@ -156,6 +166,13 @@
     print-color-adjust: exact !important;
     animation: none !important;
     transition: none !important;
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+
+  svg {
+    display: block !important;
+    visibility: visible !important;
   }
 }
 

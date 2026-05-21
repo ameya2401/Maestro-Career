@@ -42,10 +42,10 @@ export default async function ReportPage({
     if (!data) return <div className="p-20 text-white">No intelligence data found.</div>;
 
     return (
-        <div className="bg-[#030712] min-h-screen">
+        <div className="bg-[#030712] print:bg-white min-h-screen">
             <ReportHeader isPrinting={isPrinting} />
             <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white font-mono tracking-widest text-xs uppercase opacity-50">Decoding Dossier Persistence...</div>}>
-                <div className={isPrinting ? '' : 'pt-20'}>
+                <div className={isPrinting ? '' : 'pt-20 print:pt-0'}>
                     <ReportViewer data={data} isPrinting={isPrinting} />
                 </div>
             </Suspense>
