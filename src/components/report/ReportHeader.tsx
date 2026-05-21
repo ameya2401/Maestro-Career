@@ -11,7 +11,9 @@ export default function ReportHeader({ isPrinting = false, resultId }: ReportHea
     if (isPrinting) return null;
 
     const handleDownload = () => {
-        window.print();
+        // Redirect to the specialized print view which will auto-trigger window.print()
+        const currentId = resultId || new URLSearchParams(window.location.search).get('resultId') || 'latest';
+        window.location.href = `/report?resultId=${currentId}&print=true`;
     };
 
     return (

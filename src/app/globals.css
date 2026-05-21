@@ -145,6 +145,11 @@
     width: 0 !important;
   }
 
+  @page {
+    margin: 0;
+    size: A4 portrait;
+  }
+
   body,
   html,
   main {
@@ -153,9 +158,8 @@
     color: black !important;
     margin: 0 !important;
     padding: 0 !important;
-    width: 100% !important;
+    width: 210mm !important;
     height: auto !important;
-    overflow: visible !important;
   }
 
   /* Force framer-motion and other wrappers to stay out of the way */
@@ -180,9 +184,10 @@
     background-color: white !important;
     color: black !important;
     width: 210mm !important;
-    height: 297mm !important;
-    min-height: 297mm !important;
-    max-height: 297mm !important;
+    height: 296mm !important;
+    /* Slightly under 297 to avoid phantom pages */
+    min-height: 296mm !important;
+    max-height: 296mm !important;
     overflow: hidden !important;
     /* STRICT CLIPPING */
     padding: 20mm !important;
