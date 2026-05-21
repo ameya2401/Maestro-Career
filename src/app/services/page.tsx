@@ -115,7 +115,7 @@ export default function ServicesPage() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter leading-none mb-8 uppercase text-foreground"
+            className="text-5xl md:text-7xl font-bold tracking-tighter leading-none mb-8 uppercase text-foreground"
           >
             Our <span className="text-primary">Services</span>
           </motion.h1>
@@ -123,7 +123,7 @@ export default function ServicesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-foreground/40 font-bold max-w-2xl mx-auto uppercase tracking-tight leading-relaxed"
+            className="text-lg md:text-xl text-foreground/70 font-bold max-w-2xl mx-auto uppercase tracking-tight leading-relaxed"
           >
             Tailored career solutions designed to navigate the complexities of the modern workforce with scientific precision and human-centric coaching.
           </motion.p>
@@ -135,9 +135,9 @@ export default function ServicesPage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] transition-all border ${activeTab === tab
+              className={`px-8 py-4 rounded-2xl text-xs font-semibold tracking-wider transition-all border ${activeTab === tab
                 ? "bg-primary text-primary-foreground border-transparent shadow-xl shadow-primary/20 scale-105"
-                : "bg-card/50 text-foreground/40 border-foreground/5 hover:border-primary/40"
+                : "bg-card/50 text-foreground/70 border-foreground/5 hover:border-primary/40"
                 }`}
             >
               {tab === "all" ? "All Offerings" : tab}
@@ -164,7 +164,7 @@ export default function ServicesPage() {
                     <div className="w-20 h-20 bg-primary/10 flex items-center justify-center mb-10 rounded-[2rem] border border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
                       <s.icon size={32} strokeWidth={2.5} />
                     </div>
-                    <h3 className="text-3xl font-black mb-6 text-foreground uppercase tracking-tightest leading-none">
+                    <h3 className="text-3xl font-bold mb-6 text-foreground uppercase tracking-tightest leading-none">
                       {s.title}
                     </h3>
                     <p className="text-sm text-foreground/50 font-medium leading-relaxed">
@@ -174,7 +174,7 @@ export default function ServicesPage() {
 
                   <Link
                     href="#contact"
-                    className="mt-12 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-primary hover:gap-6 transition-all"
+                    className="mt-12 flex items-center gap-4 text-xs font-semibold tracking-wider text-primary hover:gap-6 transition-all"
                   >
                     Learn More
                     <ArrowRight size={14} />
@@ -195,13 +195,13 @@ export default function ServicesPage() {
           <div className="absolute inset-0 bg-primary/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-1000 ease-in-out -z-10" />
 
           <div className="space-y-4 text-center md:text-left relative z-10">
-            <h4 className="text-4xl md:text-6xl font-black uppercase tracking-tightest leading-none">Not sure where <br /> <span className="text-primary italic">to start?</span></h4>
-            <p className="text-xs md:text-sm font-bold uppercase tracking-widest opacity-40">Let our experts design a custom career roadmap for you.</p>
+            <h4 className="text-4xl md:text-6xl font-bold tracking-tight tracking-tightest leading-none">Not sure where <br /> <span className="text-primary italic">to start?</span></h4>
+            <p className="text-xs md:text-sm font-semibold tracking-wide opacity-70">Let our experts design a custom career roadmap for you.</p>
           </div>
 
           <Link
             href="/register"
-            className="px-12 py-6 bg-background text-foreground font-black text-xs uppercase tracking-[0.5em] rounded-full hover:bg-primary hover:text-white transition-all shadow-2xl relative z-10"
+            className="px-12 py-6 bg-background text-foreground font-bold text-xs uppercase tracking-[0.5em] rounded-full hover:bg-primary hover:text-white transition-all shadow-2xl relative z-10"
           >
             Start Assessment
           </Link>

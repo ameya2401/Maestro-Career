@@ -44,13 +44,13 @@ export default function AnalyticsCard({
                 <div className={`p-4 rounded-2xl border ${getColorClasses(color)} transition-transform duration-300 group-hover:scale-110 shadow-inner`}>
                     <Icon className="w-5 h-5" />
                 </div>
-                <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${isPositive ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
+                <div className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider ${isPositive ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
                     {isPositive ? '+' : ''}{trend}
                 </div>
             </div>
 
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 mb-2">{title}</h3>
-            <p className="text-4xl font-black tracking-tightest text-foreground uppercase italic">{value}</p>
+            <h3 className="text-xs font-semibold tracking-wider text-foreground/70 mb-2">{title}</h3>
+            <p className="text-4xl font-bold tracking-tightest text-foreground uppercase italic">{value}</p>
 
             <div className="mt-6 h-1 w-full bg-foreground/5 rounded-full overflow-hidden">
                 <motion.div

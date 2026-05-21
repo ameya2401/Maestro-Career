@@ -47,7 +47,7 @@ export default function ProfileCard({ user }: ProfileCardProps) {
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                 <div className="p-4 bg-gray-800/40 rounded-xl border border-gray-700/50">
-                    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <h4 className="text-xs font-bold text-gray-500 tracking-wider mb-3 flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
                         Core Interests
                     </h4>
@@ -61,7 +61,7 @@ export default function ProfileCard({ user }: ProfileCardProps) {
                 </div>
 
                 <div className="p-4 bg-gray-800/40 rounded-xl border border-gray-700/50">
-                    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <h4 className="text-xs font-bold text-gray-500 tracking-wider mb-3 flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
                         Stated Career Goals
                     </h4>

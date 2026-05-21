@@ -27,7 +27,7 @@ export default function FinalCTA() {
               Find your path with precision. Get in touch with our career experts today and start your journey with confidence. Join the elite who stopped guessing.
             </p>
             <div className="pt-4 border-t border-border/10">
-              <p className="text-sm font-medium text-foreground/40 uppercase tracking-widest">
+              <p className="text-sm font-medium text-foreground/70 tracking-wider">
                 Trusted by 15,000+ professionals
               </p>
             </div>
@@ -55,21 +55,21 @@ export default function FinalCTA() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground/80">Full Name</label>
+                      <label className="text-sm font-medium text-foreground">Full Name</label>
                       <input
                         required
                         type="text"
                         placeholder="Enter your Name"
-                        className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/30"
+                        className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/60"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground/80">Email Address</label>
+                      <label className="text-sm font-medium text-foreground">Email Address</label>
                       <input
                         required
                         type="email"
                         placeholder="Enter your email"
-                        className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/30"
+                        className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/60"
                       />
                     </div>
                   </div>
@@ -81,7 +81,7 @@ export default function FinalCTA() {
                     {formState === "submitting" ? "Sending..." : "Submit Inquiry"}
                   </button>
 
-                  <p className="text-center text-[11px] text-foreground/40 font-medium mt-6 uppercase tracking-widest">
+                  <p className="text-center text-sm text-foreground/70 font-medium mt-6 tracking-wider">
                     Absolute Confidentiality Guaranteed
                   </p>
                 </form>

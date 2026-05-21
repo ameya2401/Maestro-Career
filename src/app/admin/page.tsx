@@ -61,7 +61,7 @@ export default function AdminLoginPage() {
                                     type="text"
                                     value={userId}
                                     onChange={(e) => setUserId(e.target.value)}
-                                    className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/40"
+                                    className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/70"
                                     placeholder="Enter username"
                                     required
                                 />
@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
                                         type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 pr-12 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/40"
+                                        className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 pr-12 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/70"
                                         placeholder="Enter password"
                                         required
                                     />

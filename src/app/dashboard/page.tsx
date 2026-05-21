@@ -337,7 +337,7 @@ export default function DashboardPage() {
                                 <button
                                     type="button"
                                     onClick={handleLogout}
-                                    className="relative z-10 rounded-xl bg-background border border-border/20 hover:border-border/40 text-foreground px-6 py-2.5 text-sm font-medium transition-colors flex items-center gap-2"
+                                    className="relative z-10 rounded-xl bg-background border border-border/20 hover:border-border/20 text-foreground px-6 py-2.5 text-sm font-medium transition-colors flex items-center gap-2"
                                 >
                                     Logout
                                 </button>
@@ -426,8 +426,8 @@ export default function DashboardPage() {
                                                 <h2 className="text-lg font-bold text-foreground">Intelligence Analysis</h2>
                                             </div>
                                             <div className="space-y-1 mb-6">
-                                                <div className="text-xs uppercase font-bold tracking-widest opacity-40">Your Archetype</div>
-                                                <div className="text-xl font-black text-emerald-600 uppercase tracking-tighter">{(internalTestAccess as any)?.archetypeTitle ?? 'N/A'}</div>
+                                                <div className="text-xs uppercase font-bold tracking-widest opacity-70">Your Archetype</div>
+                                                <div className="text-xl font-bold text-emerald-600 tracking-tight">{(internalTestAccess as any)?.archetypeTitle ?? 'N/A'}</div>
                                             </div>
                                             <p className="text-sm text-foreground/60 leading-relaxed mb-8">
                                                 Your comprehensive psychometric dossier is ready. Review your multi-dimensional career DNA and strategic roadmap.
@@ -443,7 +443,7 @@ export default function DashboardPage() {
                                             <a
                                                 href={`/api/generate-report?resultId=${latestResult}`}
                                                 target="_blank"
-                                                className="text-center text-[11px] font-bold uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity py-2"
+                                                className="text-center text-sm font-semibold tracking-wide opacity-70 hover:opacity-100 transition-opacity py-2"
                                             >
                                                 Download PDF (High Fidelity)
                                             </a>
@@ -480,7 +480,7 @@ export default function DashboardPage() {
                                                     href={dashboard.profile.psychometricTestLink}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className={`w-full inline-flex items-center justify-center rounded-xl border border-border/40 hover:border-border/60 text-foreground font-medium text-[14px] py-4 transition-all ${internalTestAccess?.grant?.status === 'active' ? 'opacity-80 scale-95' : 'bg-primary text-primary-foreground border-transparent'}`}
+                                                    className={`w-full inline-flex items-center justify-center rounded-xl border border-border/20 hover:border-border/60 text-foreground font-medium text-[14px] py-4 transition-all ${internalTestAccess?.grant?.status === 'active' ? 'opacity-80 scale-95' : 'bg-primary text-primary-foreground border-transparent'}`}
                                                 >
                                                     {internalTestAccess?.grant?.status === 'active' ? "Manual External Link" : "Start Assessment \u2192"}
                                                 </a>
@@ -490,7 +490,7 @@ export default function DashboardPage() {
                                 ) : (
                                     <div className="rounded-3xl border border-border/20 bg-card p-10 flex flex-col items-center justify-center text-center shadow-sm">
                                         <div className="w-12 h-12 rounded-full bg-foreground/5 flex items-center justify-center mb-6">
-                                            <span className="text-foreground/30 text-xl">🔒</span>
+                                            <span className="text-foreground/60 text-xl">🔒</span>
                                         </div>
                                         <h3 className="text-xl font-bold text-foreground mb-2">Assessment Locked</h3>
                                         <p className="text-sm text-foreground/50 max-w-sm mb-6">

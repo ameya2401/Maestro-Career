@@ -84,9 +84,9 @@ export default function OutcomeSection() {
                                     <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
                                         <TrendingUp className="w-4 h-4 text-primary" />
                                     </div>
-                                    <p className="text-xs font-black uppercase tracking-widest text-foreground/70">Probability</p>
+                                    <p className="text-xs font-bold tracking-wider text-foreground/70">Probability</p>
                                 </div>
-                                <p className="text-4xl font-black text-foreground">94.8%</p>
+                                <p className="text-4xl font-bold text-foreground">94.8%</p>
                                 <p className="text-xs font-bold text-muted-foreground mt-2">Career Match Accuracy</p>
                             </motion.div>
 
@@ -98,7 +98,7 @@ export default function OutcomeSection() {
                     {/* Right: Counters & Narrative */}
                     <div className="space-y-12">
                         <div className="space-y-6">
-                            <h2 className="text-5xl md:text-6xl font-black text-foreground tracking-tighter leading-none">
+                            <h2 className="text-5xl md:text-6xl font-bold text-foreground tracking-tighter leading-none">
                                 Numbers that <br />
                                 <span className="text-primary italic">Drive Change.</span>
                             </h2>
@@ -121,10 +121,10 @@ export default function OutcomeSection() {
                                         <stat.icon className="w-8 h-8 text-primary-foreground" />
                                     </div>
                                     <div>
-                                        <div className="text-4xl md:text-5xl font-black text-foreground tracking-tighter">
+                                        <div className="text-4xl md:text-5xl font-bold text-foreground tracking-tighter">
                                             <Counter value={stat.value} />
                                         </div>
-                                        <p className="text-sm font-black uppercase tracking-[0.2em] text-muted-foreground mt-1">{stat.name}</p>
+                                        <p className="text-sm font-bold tracking-tight tracking-[0.2em] text-muted-foreground mt-1">{stat.name}</p>
                                     </div>
                                 </motion.div>
                             ))}
@@ -135,7 +135,7 @@ export default function OutcomeSection() {
 
             {/* Background Story Label Case-study style */}
             <div className="absolute bottom-0 right-0 p-24 opacity-5 pointer-events-none -rotate-12 select-none">
-                <span className="text-[180px] font-black uppercase tracking-tighter leading-none text-primary">IMPACT</span>
+                <span className="text-[180px] font-bold tracking-tight tracking-tighter leading-none text-primary">IMPACT</span>
             </div>
         </section>
     );

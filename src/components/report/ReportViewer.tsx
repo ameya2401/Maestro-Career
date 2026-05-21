@@ -55,8 +55,8 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             </div>
                             <div>
                                 <div className="dossier-label">Global Index</div>
-                                <div className="text-4xl font-black text-primary italic">{(data.charts?.comparisonData?.find(d => d.label === 'Overall')?.userScore || 85)} / 100</div>
-                                <div className="text-[10px] opacity-50 uppercase font-black mt-1">Intelligence Quotient</div>
+                                <div className="text-4xl font-bold text-primary italic">{(data.charts?.comparisonData?.find(d => d.label === 'Overall')?.userScore || 85)} / 100</div>
+                                <div className="text-xs opacity-50 uppercase font-bold mt-1">Intelligence Quotient</div>
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header border-primary">
                         <h2 className="text-2xl font-bold uppercase">Executive Summary</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">High-Level Architectural Overview</p>
+                        <p className="text-xs opacity-50 tracking-wider">High-Level Architectural Overview</p>
                     </div>
                     <div className="flex-1 space-y-8 flex flex-col justify-center">
                         <p className="text-sm leading-relaxed opacity-80">
@@ -103,7 +103,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header border-primary">
                         <h2 className="text-2xl font-bold uppercase">Cognitive Foundation</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Multi-dimensional Aptitude Mapping</p>
+                        <p className="text-xs opacity-50 tracking-wider">Multi-dimensional Aptitude Mapping</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center">
                         <div className="w-full max-w-2xl mx-auto mb-8">
@@ -122,15 +122,15 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header border-primary">
                         <h2 className="text-2xl font-bold uppercase">Cognitive Deep-Dive</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Aptitude Vector Breakdown</p>
+                        <p className="text-xs opacity-50 tracking-wider">Aptitude Vector Breakdown</p>
                     </div>
                     <div className="flex-1 space-y-6 flex flex-col justify-center">
                         <p className="text-sm mb-4">A granular analysis of the specific logical structures utilized by the subject:</p>
                         {Object.entries(data.aptitudeScores).map(([key, value]) => (
                             <div key={key} className="border-b border-foreground/10 pb-4">
                                 <div className="flex justify-between items-end mb-2">
-                                    <h3 className="text-sm font-bold uppercase tracking-widest">{key.replace(/_/g, ' ')}</h3>
-                                    <span className="text-2xl font-black text-primary">{value}%</span>
+                                    <h3 className="text-sm font-semibold tracking-wide">{key.replace(/_/g, ' ')}</h3>
+                                    <span className="text-2xl font-bold text-primary">{value}%</span>
                                 </div>
                                 <div className="w-full bg-foreground/10 h-2 rounded-full overflow-hidden mb-3">
                                     <div className="bg-primary h-full" style={{ width: `${value}%` }}></div>
@@ -149,7 +149,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header border-secondary">
                         <h2 className="text-2xl font-bold uppercase">Behavioral Architecture</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Psychometric Trait Distribution</p>
+                        <p className="text-xs opacity-50 tracking-wider">Psychometric Trait Distribution</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center gap-12">
                         <div className="w-full">
@@ -167,7 +167,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header border-secondary">
                         <h2 className="text-2xl font-bold uppercase">Psychometric Deep-Dive</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Core Behavioral DNA Drivers</p>
+                        <p className="text-xs opacity-50 tracking-wider">Core Behavioral DNA Drivers</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center space-y-8">
                         <div>
@@ -177,9 +177,9 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         <div className="grid grid-cols-2 gap-6 mt-8">
                             {Object.entries(data.careerDNA || {}).map(([key, val]) => (
                                 <div key={key} className="p-4 bg-foreground/5 rounded border border-foreground/5">
-                                    <div className="text-xs font-bold uppercase mb-1">{key} Drive</div>
-                                    <div className="text-xl font-black text-secondary mb-2">{val}% Intensity</div>
-                                    <p className="text-[10px] opacity-70">
+                                    <div className="text-sm font-semibold mb-1">{key} Drive</div>
+                                    <div className="text-xl font-bold text-secondary mb-2">{val}% Intensity</div>
+                                    <p className="text-xs opacity-70">
                                         Dictates the baseline requirement for {key}-oriented stimuli in their daily operational environment.
                                     </p>
                                 </div>
@@ -192,7 +192,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header">
                         <h2 className="text-2xl font-bold uppercase">Synergistic Intersections</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Cognitive Venn Intelligence</p>
+                        <p className="text-xs opacity-50 tracking-wider">Cognitive Venn Intelligence</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center gap-12">
                         <p className="text-sm opacity-80 mb-4">
@@ -219,11 +219,11 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header">
                         <h2 className="text-2xl font-bold uppercase">Subject Archetype</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Primary Classification Protocol</p>
+                        <p className="text-xs opacity-50 tracking-wider">Primary Classification Protocol</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center items-center">
                         <div className="dossier-label mb-6">Confirmed Designation</div>
-                        <div className="text-6xl font-black text-primary uppercase text-center mb-8 border-b-4 border-primary pb-4">{data.archetype.title}</div>
+                        <div className="text-6xl font-bold text-primary uppercase text-center mb-8 border-b-4 border-primary pb-4">{data.archetype.title}</div>
                         <div className="text-center max-w-xl space-y-6">
                             <p className="text-lg opacity-80 leading-relaxed font-serif italic">
                                 "{data.archetype.description}"
@@ -233,7 +233,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             </p>
                             <div className="flex flex-wrap gap-3 justify-center mt-8">
                                 {data.archetype.traits.map((t, i) => (
-                                    <span key={i} className="px-4 py-2 bg-foreground/10 rounded-full text-xs font-bold uppercase tracking-widest">{t}</span>
+                                    <span key={i} className="px-4 py-2 bg-foreground/10 rounded-full text-xs font-bold tracking-wider">{t}</span>
                                 ))}
                             </div>
                         </div>
@@ -244,7 +244,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header">
                         <h2 className="text-2xl font-bold uppercase">Benchmark Analysis</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Subject vs. Ideal Paradigms</p>
+                        <p className="text-xs opacity-50 tracking-wider">Subject vs. Ideal Paradigms</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center">
                         <p className="text-sm opacity-80 mb-12">
@@ -256,7 +256,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             {data.charts.comparisonData.map((cd, i) => (
                                 <div key={i} className="text-center p-4 border border-foreground/10 bg-foreground/5">
                                     <div className="text-xs uppercase font-bold tracking-widest opacity-50 mb-2">{cd.label} Delta</div>
-                                    <div className={`text-2xl font-black ${cd.userScore >= cd.idealScore ? 'text-green-500' : 'text-orange-500'}`}>
+                                    <div className={`text-2xl font-bold ${cd.userScore >= cd.idealScore ? 'text-green-500' : 'text-orange-500'}`}>
                                         {cd.userScore >= cd.idealScore ? '+' : ''}{(cd.userScore - cd.idealScore).toFixed(1)}
                                     </div>
                                 </div>
@@ -269,7 +269,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header">
                         <h2 className="text-2xl font-bold uppercase">Career Genome</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Genetic Alignment with Global Industries</p>
+                        <p className="text-xs opacity-50 tracking-wider">Genetic Alignment with Global Industries</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center space-y-6">
                         <p className="text-sm opacity-80 mb-2">
@@ -280,7 +280,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                                 <div key={i} className="p-6 bg-primary/5 border-l-4 border-primary flex flex-col justify-center">
                                     <div className="flex justify-between items-center mb-2">
                                         <span className="font-bold text-lg uppercase tracking-wide">{match.career}</span>
-                                        <span className="text-xl font-mono font-black text-primary">{match.score}% MATCH</span>
+                                        <span className="text-xl font-mono font-bold text-primary">{match.score}% MATCH</span>
                                     </div>
                                     <p className="text-xs opacity-70 leading-relaxed">{match.description}</p>
                                 </div>
@@ -293,7 +293,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header">
                         <h2 className="text-2xl font-bold uppercase">Learning Pathway</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Optimal Data Ingestion Protocols</p>
+                        <p className="text-xs opacity-50 tracking-wider">Optimal Data Ingestion Protocols</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center space-y-8">
                         <p className="text-sm opacity-80">
@@ -332,33 +332,33 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header">
                         <h2 className="text-2xl font-bold uppercase">Strategic Roadmap</h2>
-                        <p className="text-xs opacity-50 uppercase tracking-widest">Final Recommendations & Execution</p>
+                        <p className="text-xs opacity-50 tracking-wider">Final Recommendations & Execution</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-between pt-8">
                         <div className="space-y-8">
                             <div className="grid grid-cols-3 gap-6">
                                 <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-black mb-2 text-sm">PHASE 01: EXPLORATION</div>
-                                    <p className="text-[11px] opacity-70 leading-relaxed">Focus on foundational skill acquisition and broad mental model development. Identify core constraints.</p>
+                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 01: EXPLORATION</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Focus on foundational skill acquisition and broad mental model development. Identify core constraints.</p>
                                 </div>
                                 <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-black mb-2 text-sm">PHASE 02: SPECIALIZATION</div>
-                                    <p className="text-[11px] opacity-70 leading-relaxed">Deep-dive into preferred career DNA clusters. Begin eliminating extraneous vectors to focus energy.</p>
+                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 02: SPECIALIZATION</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Deep-dive into preferred career DNA clusters. Begin eliminating extraneous vectors to focus energy.</p>
                                 </div>
                                 <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-black mb-2 text-sm">PHASE 03: MASTERY</div>
-                                    <p className="text-[11px] opacity-70 leading-relaxed">Professional placement and leadership trajectory initiation. Execute primary archetype strengths.</p>
+                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 03: MASTERY</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Professional placement and leadership trajectory initiation. Execute primary archetype strengths.</p>
                                 </div>
                             </div>
                             <div className="bg-primary text-primary-foreground p-10 rounded-lg shadow-xl mt-12">
-                                <h3 className="text-xl font-black mb-4 uppercase tracking-widest border-b border-primary-foreground/20 pb-4">Conclusion Directive</h3>
+                                <h3 className="text-xl font-bold mb-4 tracking-wider border-b border-primary-foreground/20 pb-4">Conclusion Directive</h3>
                                 <p className="text-md leading-relaxed font-serif">
                                     The subject is highly recommended for high-complexity analytical environments. Their primary mandate should be to find roles that allow autonomy in problem-solving. By developing their secondary soft-skill communication layers, they can effectively bridge the gap between technical logic depth and organizational leadership, maximizing their overall global index impact.
                                 </p>
                             </div>
                         </div>
                         
-                        <div className="text-[10px] opacity-30 uppercase tracking-[0.5em] text-center mt-12 pb-4">
+                        <div className="text-xs opacity-30 uppercase tracking-[0.5em] text-center mt-12 pb-4">
                             End of Confidential Psychological Report // Maestro Career
                         </div>
                     </div>

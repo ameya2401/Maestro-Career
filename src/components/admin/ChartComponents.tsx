@@ -23,7 +23,7 @@ interface LineChartProps {
 export function PremiumLineChart({ data }: LineChartProps) {
     return (
         <div className="h-[400px] w-full p-8 rounded-[2.5rem] bg-secondary/10 border border-foreground/5 backdrop-blur-md">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-foreground/40 mb-8">Traffic.Analysis</h2>
+            <h2 className="text-xs font-bold tracking-tight tracking-[0.5em] text-foreground/70 mb-8">Traffic.Analysis</h2>
             <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data}>
                     <defs>
@@ -68,7 +68,7 @@ export function PremiumLineChart({ data }: LineChartProps) {
 export function PremiumBarChart({ data }: { data: ChartDataItem[] }) {
     return (
         <div className="h-[400px] w-full p-8 rounded-[2.5rem] bg-secondary/10 border border-foreground/5 backdrop-blur-md">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-foreground/40 mb-8">User.Registrations</h2>
+            <h2 className="text-xs font-bold tracking-tight tracking-[0.5em] text-foreground/70 mb-8">User.Registrations</h2>
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} barSize={40}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--foreground) / 0.05)" />

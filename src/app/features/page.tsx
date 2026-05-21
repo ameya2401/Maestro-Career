@@ -40,7 +40,7 @@ const FeatureCard = ({ title, desc, icon: Icon, color }: FeatureCardProps) => {
                     <Icon className="w-10 h-10 text-white" />
                 </div>
                 <div className="space-y-6">
-                    <h3 className="text-4xl font-black text-foreground leading-none">{title}</h3>
+                    <h3 className="text-4xl font-bold text-foreground leading-none">{title}</h3>
                     <p className="text-xl text-muted-foreground font-medium pr-8">{desc}</p>
                 </div>
                 <div className="absolute top-1/2 right-12 opacity-5 group-hover:opacity-20 transition-opacity">
@@ -64,10 +64,10 @@ export default function FeaturesPage() {
                         className="inline-flex items-center px-4 py-2 space-x-2 rounded-full bg-primary/5 text-primary border border-primary/10 mb-8"
                     >
                         <Layers className="w-4 h-4" />
-                        <span className="text-sm font-black uppercase tracking-widest">Platform DNA</span>
+                        <span className="text-sm font-bold tracking-wider">Platform DNA</span>
                     </motion.div>
 
-                    <h1 className="text-6xl md:text-9xl font-black text-foreground tracking-tightest leading-[0.8] mb-12">
+                    <h1 className="text-6xl md:text-9xl font-bold text-foreground tracking-tightest leading-[0.8] mb-12">
                         Next-Gen <br />
                         <span className="text-gradient">Capabilities.</span>
                     </h1>
@@ -105,7 +105,7 @@ export default function FeaturesPage() {
 
                 {/* Technical Specs Summary */}
                 <div className="mt-48 text-center bg-card/30 p-12 md:p-24 rounded-[4rem] border border-border/50 backdrop-blur-2xl">
-                    <h3 className="text-4xl md:text-6xl font-black text-foreground mb-16 tracking-tighter uppercase">Technical <span className="text-muted-foreground/20">Specs</span></h3>
+                    <h3 className="text-4xl md:text-6xl font-bold text-foreground mb-16 tracking-tighter uppercase">Technical <span className="text-muted-foreground/20">Specs</span></h3>
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-16">
                         {[
                             { label: "Rendering", value: "60 FPS" },
@@ -114,8 +114,8 @@ export default function FeaturesPage() {
                             { label: "Platform", value: "Cloud-Native" }
                         ].map((spec, idx) => (
                             <div key={idx} className="space-y-2 border-l border-border/50 pl-8 text-left">
-                                <p className="text-sm font-black uppercase tracking-widest text-primary">{spec.label}</p>
-                                <p className="text-4xl font-black text-foreground tracking-tighter">{spec.value}</p>
+                                <p className="text-sm font-bold tracking-wider text-primary">{spec.label}</p>
+                                <p className="text-4xl font-bold text-foreground tracking-tighter">{spec.value}</p>
                             </div>
                         ))}
                     </div>

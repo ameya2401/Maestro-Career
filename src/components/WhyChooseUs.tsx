@@ -65,11 +65,11 @@ export default function WhyChooseUs() {
                     <motion.span
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        className="text-primary font-black uppercase tracking-[0.3em] text-sm mb-4 block"
+                        className="text-primary font-semibold tracking-wider text-sm mb-4 block"
                     >
                         Why We Excel
                     </motion.span>
-                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 text-foreground leading-tight">
+                    <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-foreground leading-tight">
                         Revolutionizing <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary-light to-accent-purple">Career Discovery</span>
                     </h2>
@@ -100,7 +100,7 @@ export default function WhyChooseUs() {
                                 <div className="inline-flex items-center justify-center p-4 bg-primary/10 rounded-2xl mb-8 text-primary shadow-2xl group-hover:scale-110 transition-transform duration-500">
                                     <feature.icon className="h-8 w-8" />
                                 </div>
-                                <h3 className="text-2xl font-black mb-4 text-foreground group-hover:text-primary transition-colors">{feature.name}</h3>
+                                <h3 className="text-2xl font-bold mb-4 text-foreground group-hover:text-primary transition-colors">{feature.name}</h3>
                                 <p className="text-muted-foreground text-lg leading-relaxed mb-6">
                                     {feature.description}
                                 </p>

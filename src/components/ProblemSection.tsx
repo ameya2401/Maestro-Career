@@ -40,12 +40,12 @@ export default function ProblemSection() {
           {/* Left Side: Emotional Narrative */}
           <motion.div style={{ opacity, x: xLeft }} className="space-y-16">
             <div className="space-y-8">
-              <h2 className="text-6xl md:text-8xl font-black tracking-tightest leading-[0.85] text-foreground uppercase">
+              <h2 className="text-6xl md:text-8xl font-bold tracking-tightest leading-[0.85] text-foreground uppercase">
                 The <span className="opacity-20 italic">Weight</span> <br />
                 of Every <br />
                 Decision.
               </h2>
-              <p className="text-xl md:text-2xl text-foreground/40 font-bold max-w-lg leading-relaxed uppercase tracking-tight">
+              <p className="text-xl md:text-2xl text-foreground/70 font-bold max-w-lg leading-relaxed uppercase tracking-tight">
                 For many, the future isn&apos;t a roadmap; it&apos;s a heavy silence.
                 The pressure to decide your entire life by 18 is real, and often leads to the wrong path.
               </p>
@@ -62,7 +62,7 @@ export default function ProblemSection() {
                   className="flex items-center space-x-6 p-6 bg-secondary/50 border border-foreground/5 hover:border-foreground/10 transition-all"
                 >
                   <div className="w-1.5 h-1.5 bg-foreground" />
-                  <span className="text-sm font-black uppercase tracking-widest text-foreground/60">
+                  <span className="text-sm font-bold tracking-wider text-foreground/60">
                     {struggle}
                   </span>
                 </motion.div>
@@ -90,12 +90,12 @@ export default function ProblemSection() {
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute bottom-12 left-12 right-12 bg-foreground text-background p-10 shadow-3xl"
               >
-                <p className="text-2xl font-black italic tracking-tightest leading-tight">
+                <p className="text-2xl font-bold italic tracking-tightest leading-tight">
                   &quot;I just want to know if I&apos;m making the right decision for my life, not just for a degree.&quot;
                 </p>
                 <div className="mt-8 flex items-center space-x-4">
                   <div className="h-px w-12 bg-background/20" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-50 text-background">Grade 12 Student</span>
+                  <span className="text-xs font-semibold tracking-wider opacity-50 text-background">Grade 12 Student</span>
                 </div>
               </motion.div>
             </div>
@@ -106,7 +106,7 @@ export default function ProblemSection() {
 
       {/* Background Story Label */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 -rotate-90 origin-left opacity-5 pointer-events-none">
-        <span className="text-[150px] font-black uppercase tracking-tighter select-none">STRESSES</span>
+        <span className="text-[150px] font-bold tracking-tight tracking-tighter select-none">STRESSES</span>
       </div>
     </section>
   );
