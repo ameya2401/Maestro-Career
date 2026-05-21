@@ -76,8 +76,8 @@ export default function Chatbot() {
                                     <Sparkles className="w-6 h-6 text-background" />
                                 </div>
                                 <div className="space-y-0.5">
-                                    <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-background/50">Career Oracle</h4>
-                                    <h3 className="text-lg font-black tracking-tight text-background">Maestro Guide</h3>
+                                    <h4 className="font-bold text-xs uppercase tracking-[0.3em] text-background/50">Career Oracle</h4>
+                                    <h3 className="text-lg font-bold tracking-tight text-background">Maestro Guide</h3>
                                 </div>
                             </div>
                             <motion.button
@@ -135,7 +135,7 @@ export default function Chatbot() {
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => handleSend(q)}
-                                        className="whitespace-nowrap px-4 py-2 bg-background border border-border/40 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all text-muted-foreground hover:bg-primary hover:text-white hover:border-primary shadow-sm"
+                                        className="whitespace-nowrap px-4 py-2 bg-background border border-border/20 text-[9px] font-bold tracking-wider rounded-xl transition-all text-muted-foreground hover:bg-primary hover:text-white hover:border-primary shadow-sm"
                                     >
                                         {q}
                                     </motion.button>

@@ -413,7 +413,7 @@ export default function AdminDashboardPage() {
                             <button
                                 type="button"
                                 onClick={handleLogout}
-                                className="relative z-10 rounded-xl bg-background border border-border/20 hover:border-border/40 text-foreground px-6 py-2.5 text-sm font-medium transition-colors"
+                                className="relative z-10 rounded-xl bg-background border border-border/20 hover:border-border/20 text-foreground px-6 py-2.5 text-sm font-medium transition-colors"
                             >
                                 Logout
                             </button>
@@ -444,7 +444,7 @@ export default function AdminDashboardPage() {
                                 placeholder={`Search ${viewMode === "users" ? "leads" : "inquiries"} by name or email...`}
                                 value={searchTerm}
                                 onChange={(event) => setSearchTerm(event.target.value)}
-                                className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[15px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/40 focus:border-primary focus:ring-4 focus:ring-primary/20"
+                                className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[15px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/70 focus:border-primary focus:ring-4 focus:ring-primary/20"
                             />
                         </div>
                         <button
@@ -827,7 +827,7 @@ export default function AdminDashboardPage() {
                                                                         value={editForm.psychometricTestLink}
                                                                         onChange={(event) => handleEditFieldChange("psychometricTestLink", event.target.value)}
                                                                         placeholder="Paste URL here..."
-                                                                        className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[14px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/40 focus:border-primary focus:ring-4 focus:ring-primary/20"
+                                                                        className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[14px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/70 focus:border-primary focus:ring-4 focus:ring-primary/20"
                                                                     />
                                                                 </div>
                                                             ) : (
@@ -842,7 +842,7 @@ export default function AdminDashboardPage() {
                                                                                 [user.id]: event.target.value,
                                                                             }))
                                                                         }
-                                                                        className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[14px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/40 focus:border-primary focus:ring-4 focus:ring-primary/20"
+                                                                        className="block w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-[14px] text-foreground shadow-sm outline-none transition placeholder:text-foreground/70 focus:border-primary focus:ring-4 focus:ring-primary/20"
                                                                     />
                                                                     <button
                                                                         type="button"

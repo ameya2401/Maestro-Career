@@ -16,11 +16,11 @@ export default function Pricing() {
             <div className="container mx-auto px-6 lg:px-12 relative z-10">
                 <div className="max-w-4xl mx-auto text-center mb-24">
 
-                    <h2 className="text-3xl md:text-8xl font-black text-foreground tracking-tightest leading-[0.85] mb-10 uppercase">
+                    <h2 className="text-3xl md:text-8xl font-bold text-foreground tracking-tightest leading-[0.85] mb-10 uppercase">
                         Simple <br />
-                        <span className="text-primary italic text-4xl md:text-9xl">Pricing.</span>
+                        <span className="text-primary text-4xl md:text-9xl">Pricing.</span>
                     </h2>
-                    <p className="text-lg md:text-xl text-foreground/40 font-bold max-w-2xl mx-auto uppercase tracking-tighter leading-tight">
+                    <p className="text-lg md:text-xl text-foreground/70 font-bold max-w-2xl mx-auto tracking-tight leading-tight">
                         Choose the right plan for your career journey. Clear paths, zero hidden costs, and dedicated expert guidance.
                     </p>
                 </div>
@@ -80,7 +80,7 @@ function PricingCard({ plan, index }: { plan: Plan; index: number }) {
     };
 
     const getSelectedStyle = () => {
-        if (!isSelected) return 'border-border/40';
+        if (!isSelected) return 'border-border/20';
         return 'border-primary shadow-[0_0_40px_hsla(var(--primary),0.1)] bg-primary/5 ring-2 ring-primary/20';
     };
 
@@ -92,21 +92,21 @@ function PricingCard({ plan, index }: { plan: Plan; index: number }) {
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
             onClick={() => setIsSelected(!isSelected)}
-            className={`group relative rounded-[3rem] p-6 md:p-10 xl:p-14 border transition-all duration-500 flex flex-col bg-card/10 backdrop-blur-xl cursor-pointer min-h-[600px] md:min-h-[800px] lg:min-h-[950px] ${getAuraColor()} ${getSelectedStyle()} ${plan.mostPopular && !isSelected ? 'ring-1 ring-primary/10' : ''}`}
+            className={`group relative rounded-[3rem] p-6 md:p-10 xl:p-14 border transition-all duration-500 flex flex-col bg-card shadow-sm cursor-pointer min-h-[600px] md:min-h-[800px] lg:min-h-[950px] ${getAuraColor()} ${getSelectedStyle()} ${plan.mostPopular && !isSelected ? 'ring-1 ring-primary/10' : ''}`}
         >
             {plan.mostPopular && (
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 bg-primary text-primary-foreground rounded-full shadow-2xl z-30 ring-4 ring-background animate-bounce-subtle">
-                    <p className="text-[10px] font-black uppercase tracking-widest leading-none whitespace-nowrap">
+                    <p className="text-xs font-bold tracking-wider leading-none whitespace-nowrap">
                         ⭐ Most Popular
                     </p>
                 </div>
             )}
 
             <div className="flex items-center justify-between mb-10">
-                <h3 className="text-3xl font-black uppercase tracking-tight italic text-foreground leading-none">{plan.name}</h3>
+                <h3 className="text-3xl font-bold tracking-tight text-foreground leading-none">{plan.name}</h3>
             </div>
 
-            <p className="text-xs font-bold text-foreground/40 uppercase tracking-widest leading-relaxed mb-10 min-h-[3rem]">
+            <p className="text-sm font-medium text-foreground/70 leading-relaxed mb-10 min-h-[3rem]">
                 {plan.description}
             </p>
 
@@ -138,21 +138,21 @@ function PricingCard({ plan, index }: { plan: Plan; index: number }) {
                         e.stopPropagation();
                         setIsExpanded(!isExpanded);
                     }}
-                    className="flex items-center justify-center gap-3 w-full py-5 rounded-2xl border border-border/50 bg-foreground/[0.02] hover:bg-foreground/[0.05] transition-all group/btn"
+                    className="flex items-center justify-center gap-3 w-full py-5 rounded-2xl border border-border/50 bg-foreground/5 hover:bg-foreground/[0.05] transition-all group/btn"
                     aria-expanded={isExpanded}
                 >
-                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-foreground/40 group-hover/btn:text-foreground transition-colors">
+                    <span className="text-sm font-semibold tracking-wider text-foreground/70 group-hover/btn:text-foreground transition-colors">
                         {isExpanded ? "Collapse Features" : "View All Features"}
                     </span>
                     <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : 'rotate-0'}`}>
-                        <ChevronDown className="w-4 h-4 text-foreground/40 group-hover/btn:text-foreground" />
+                        <ChevronDown className="w-4 h-4 text-foreground/70 group-hover/btn:text-foreground" />
                     </div>
                 </button>
 
                 <button
                     disabled={isLoading}
                     onClick={handleGetStarted}
-                    className={`w-full py-6 rounded-2xl flex items-center justify-center text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-300 border disabled:opacity-50 ${plan.mostPopular
+                    className={`w-full py-6 rounded-2xl flex items-center justify-center text-sm font-semibold tracking-wider transition-all duration-300 border disabled:opacity-50 ${plan.mostPopular
                         ? 'bg-primary text-primary-foreground border-transparent hover:scale-[1.02] shadow-xl shadow-primary/30'
                         : 'bg-foreground text-background border-transparent hover:scale-[1.02] hover:bg-primary hover:text-primary-foreground'
                         }`}
@@ -163,7 +163,7 @@ function PricingCard({ plan, index }: { plan: Plan; index: number }) {
 
             {/* Kinetic Decoration */}
             <div className={`absolute bottom-6 right-10 opacity-[0.03] transition-all duration-700 pointer-events-none ${plan.mostPopular ? 'opacity-[0.07] scale-110' : ''}`}>
-                <h4 className="text-9xl font-black leading-none select-none text-primary">0{index + 1}</h4>
+                <h4 className="text-9xl font-bold leading-none select-none text-primary">0{index + 1}</h4>
             </div>
         </motion.div>
     );
@@ -184,7 +184,7 @@ function FeatureList({ features }: { features: string[] }) {
                                 <Check className="h-3 w-3" strokeWidth={4} aria-hidden="true" />
                             )}
                         </div>
-                        <span className={`text-[10px] font-bold uppercase tracking-widest leading-relaxed ${isNotIncluded ? "text-foreground/30" : "text-foreground/60"}`}>
+                        <span className={`text-sm font-medium leading-relaxed ${isNotIncluded ? "text-foreground/60" : "text-foreground/80"}`}>
                             {feature}
                         </span>
                     </li>

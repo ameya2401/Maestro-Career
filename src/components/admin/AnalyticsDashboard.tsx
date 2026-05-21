@@ -47,11 +47,11 @@ export default function AnalyticsDashboard() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                     >
-                        <div className="inline-flex items-center px-4 py-1.5 bg-foreground/5 text-foreground/40 mb-6 text-[10px] font-black uppercase tracking-[0.4em] rounded-lg">
+                        <div className="inline-flex items-center px-4 py-1.5 bg-foreground/5 text-foreground/70 mb-6 text-xs font-semibold tracking-wider rounded-lg">
                             <Sparkles className="w-3.5 h-3.5 mr-2 text-primary" />
                             <span>System.Analytic</span>
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-black text-foreground uppercase italic tracking-tightest leading-none">
+                        <h1 className="text-4xl md:text-6xl font-bold text-foreground uppercase italic tracking-tightest leading-none">
                             Platform <br /><span className="text-primary italic">Intelligence.</span>
                         </h1>
                         <p className="text-xs font-bold text-foreground/20 mt-4 uppercase tracking-[0.2em] flex items-center gap-3">
@@ -72,7 +72,7 @@ export default function AnalyticsDashboard() {
                             <select
                                 value={dateRange}
                                 onChange={(e) => setDateRange(e.target.value)}
-                                className="appearance-none bg-secondary/20 border border-foreground/5 text-[11px] font-black uppercase tracking-widest text-foreground/60 py-4 pl-6 pr-14 rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-primary/50 hover:bg-secondary/30 transition-all cursor-pointer"
+                                className="appearance-none bg-secondary/20 border border-foreground/5 text-sm font-bold tracking-wider text-foreground/60 py-4 pl-6 pr-14 rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-primary/50 hover:bg-secondary/30 transition-all cursor-pointer"
                             >
                                 <option>Last 7 Days</option>
                                 <option>Last 30 Days</option>
@@ -108,7 +108,7 @@ export default function AnalyticsDashboard() {
                     className="flex items-center gap-4 p-8 rounded-[2rem] bg-primary/5 border border-primary/10 text-primary/60"
                 >
                     <ShieldAlert className="w-6 h-6 flex-shrink-0" />
-                    <div className="text-[10px] font-bold uppercase tracking-widest leading-relaxed">
+                    <div className="text-xs font-bold tracking-wider leading-relaxed">
                         <p className="opacity-100 mb-1">Architecture Information Notice</p>
                         <p className="opacity-50">This interface represents the high-fidelity structural visualization developed for GA4 telemetry streams. Direct data-source hooks are supported via the standard platform API layer.</p>
                     </div>

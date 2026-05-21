@@ -17,7 +17,7 @@ export default function InquiryForm() {
                         <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-2xl mb-6 text-primary">
                             <MessageSquare className="w-6 h-6" />
                         </div>
-                        <h2 className="text-5xl font-black text-foreground tracking-tighter mb-6">
+                        <h2 className="text-5xl font-bold text-foreground tracking-tighter mb-6">
                             Start Your <span className="text-gradient">Evolution</span>
                         </h2>
                         <p className="text-xl text-muted-foreground font-medium">
@@ -34,7 +34,7 @@ export default function InquiryForm() {
                         <form action="#" method="POST" className="space-y-8 relative z-10">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-2">
-                                    <label htmlFor="first-name" className="block text-sm font-black text-foreground/70 uppercase tracking-widest ml-1">First name</label>
+                                    <label htmlFor="first-name" className="block text-sm font-bold text-foreground/70 tracking-wider ml-1">First name</label>
                                     <motion.input
                                         whileFocus={{ scale: 1.01 }}
                                         type="text"
@@ -45,7 +45,7 @@ export default function InquiryForm() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label htmlFor="last-name" className="block text-sm font-black text-foreground/70 uppercase tracking-widest ml-1">Last name</label>
+                                    <label htmlFor="last-name" className="block text-sm font-bold text-foreground/70 tracking-wider ml-1">Last name</label>
                                     <motion.input
                                         whileFocus={{ scale: 1.01 }}
                                         type="text"
@@ -58,7 +58,7 @@ export default function InquiryForm() {
                             </div>
 
                             <div className="space-y-2">
-                                <label htmlFor="email" className="block text-sm font-black text-foreground/70 uppercase tracking-widest ml-1">Email address</label>
+                                <label htmlFor="email" className="block text-sm font-bold text-foreground/70 tracking-wider ml-1">Email address</label>
                                 <motion.input
                                     whileFocus={{ scale: 1.01 }}
                                     type="email"
@@ -70,7 +70,7 @@ export default function InquiryForm() {
                             </div>
 
                             <div className="space-y-2">
-                                <label htmlFor="inquiry-type" className="block text-sm font-black text-foreground/70 uppercase tracking-widest ml-1">Inquiry Category</label>
+                                <label htmlFor="inquiry-type" className="block text-sm font-bold text-foreground/70 tracking-wider ml-1">Inquiry Category</label>
                                 <select
                                     id="inquiry-type"
                                     name="inquiry-type"
@@ -86,7 +86,7 @@ export default function InquiryForm() {
                             </div>
 
                             <div className="space-y-2">
-                                <label htmlFor="message" className="block text-sm font-black text-foreground/70 uppercase tracking-widest ml-1">Message</label>
+                                <label htmlFor="message" className="block text-sm font-bold text-foreground/70 tracking-wider ml-1">Message</label>
                                 <motion.textarea
                                     whileFocus={{ scale: 1.01 }}
                                     id="message"
@@ -101,7 +101,7 @@ export default function InquiryForm() {
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
                                     type="submit"
-                                    className="w-full flex justify-center items-center px-8 py-5 bg-primary text-primary-foreground text-lg font-black rounded-2xl shadow-xl shadow-primary/10 hover:shadow-primary/20 transition-all group"
+                                    className="w-full flex justify-center items-center px-8 py-5 bg-primary text-primary-foreground text-lg font-bold rounded-2xl shadow-xl shadow-primary/10 hover:shadow-primary/20 transition-all group"
                                 >
                                 Send Inquiry
                                 <Send className="ml-3 h-5 w-5 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" />

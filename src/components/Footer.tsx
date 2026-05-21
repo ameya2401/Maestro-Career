@@ -14,12 +14,12 @@ export default function Footer() {
                     {/* Column 1: Identity */}
                     <div className="space-y-6 group">
                         <Link href="/" className="inline-block">
-                            <h3 className="text-3xl font-black tracking-tightest uppercase text-foreground leading-none">
+                            <h3 className="text-3xl font-bold tracking-tightest uppercase text-foreground leading-none">
                                 Maestro <br />
                                 <span className="text-xs font-bold text-primary transition-colors">Career</span>
                             </h3>
                         </Link>
-                        <p className="text-xs text-foreground/40 font-bold leading-relaxed uppercase tracking-widest max-w-xs">
+                        <p className="text-xs text-foreground/70 font-bold leading-relaxed tracking-wider max-w-xs">
                             Empowering the next generation with high-fidelity psychometric intelligence. Find your <span className="text-foreground/80">North Star.</span>
                         </p>
 
@@ -34,8 +34,8 @@ export default function Footer() {
 
                     {/* Column 2: System */}
                     <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] mb-6 text-primary/60">System.Architecture</h4>
-                        <ul className="space-y-3 text-xs font-black uppercase tracking-widest text-foreground/50">
+                        <h4 className="text-xs font-semibold tracking-wider mb-6 text-primary">System.Architecture</h4>
+                        <ul className="space-y-3 text-xs font-bold tracking-wider text-foreground/70">
                             <li><Link href="/" className="hover:text-foreground transition-all flex items-center">/ Home</Link></li>
                             <li><Link href="/services" className="hover:text-foreground transition-all flex items-center">/ Services</Link></li>
                             <li><Link href="/about-us" className="hover:text-foreground transition-all flex items-center">/ About Us</Link></li>
@@ -45,8 +45,8 @@ export default function Footer() {
 
                     {/* Column 3: Discovery */}
                     <div>
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] mb-6 text-secondary/60">Professional.Mapping</h4>
-                        <ul className="space-y-3 text-xs font-black uppercase tracking-widest text-foreground/50">
+                        <h4 className="text-xs font-semibold tracking-wider mb-6 text-primary">Professional.Mapping</h4>
+                        <ul className="space-y-3 text-xs font-bold tracking-wider text-foreground/70">
                             <li><a href="#" className="hover:text-foreground transition-all">Career Strategy</a></li>
                             <li><a href="#" className="hover:text-foreground transition-all">Resume Lab</a></li>
                             <li><a href="#" className="hover:text-foreground transition-all">Interview Coaching</a></li>
@@ -56,21 +56,21 @@ export default function Footer() {
 
                     {/* Column 4: Identification */}
                     <div className="space-y-5">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/60">Contact Us</h4>
+                        <h4 className="text-xs font-semibold tracking-wider text-primary">Contact Us</h4>
 
                         <div className="space-y-3">
                             <div className="flex items-center justify-between">
-                                <h4 className="text-[9px] font-black uppercase text-foreground/40">Email:</h4>
+                                <h4 className="text-[9px] font-bold tracking-tight text-foreground/70">Email:</h4>
                                 <p className="text-sm font-bold text-foreground">info@maestrocareer.com</p>
                             </div>
                             <div className="flex items-center justify-between">
-                                <h4 className="text-[9px] font-black uppercase text-foreground/40">Phone:</h4>
+                                <h4 className="text-[9px] font-bold tracking-tight text-foreground/70">Phone:</h4>
                                 <p className="text-sm font-bold text-foreground">+91 98222 28484</p>
                             </div>
                         </div>
 
                         <div>
-                            <p className="text-[9px] font-bold leading-relaxed uppercase tracking-widest text-foreground/50 mb-2">
+                            <p className="text-[9px] font-bold leading-relaxed tracking-wider text-foreground/70 mb-2">
                                 Maharashtra State Co-operative Bank, Khamla Rd, Nagpur 440015
                             </p>
                             <div className="w-full h-24 rounded-xl overflow-hidden border border-foreground/5 shadow-sm relative group">
@@ -100,7 +100,7 @@ export default function Footer() {
                 <div className="pt-6 border-t border-border flex flex-col md:flex-row items-center relative space-y-6 md:space-y-0">
 
                     {/* Left: Policy Links */}
-                    <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4 text-[10px] sm:text-xs font-black uppercase tracking-widest text-foreground/40 md:w-1/3">
+                    <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4 text-xs sm:text-xs font-bold tracking-wider text-foreground/70 md:w-1/3">
                         <Link href="/privacy-policy" className="hover:text-foreground transition-colors px-2 py-1">Privacy</Link>
                         <Link href="/terms-conditions" className="hover:text-foreground transition-colors px-2 py-1">Terms</Link>
                         <Link href="/refund-cancellation" className="hover:text-foreground transition-colors px-2 py-1">Refunds</Link>
@@ -109,7 +109,7 @@ export default function Footer() {
 
                     {/* Center: Copyright */}
                     <div className="flex items-center justify-center space-x-4 md:w-1/3">
-                        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-foreground/40 text-center">
+                        <p className="text-[9px] font-semibold tracking-wider text-foreground/70 text-center">
                             &copy; {new Date().getFullYear()} Maestro Career. All Rights Reserved.
                         </p>
                     </div>

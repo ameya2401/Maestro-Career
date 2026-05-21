@@ -74,7 +74,7 @@ export default function Hero() {
                 >
 
                     {/* Centered Heading */}
-                    <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-4 font-black text-foreground tracking-tightest leading-none uppercase">
+                    <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center gap-4 font-bold text-foreground tracking-tightest leading-none uppercase">
                         <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl">
                             <Typewriter text="Crafting Careers," />
                         </h1>
@@ -89,13 +89,13 @@ export default function Hero() {
                         transition={{ delay: 3.5 }}
                         className="flex flex-col items-center gap-10"
                     >
-                        <p className="text-lg md:text-xl text-foreground/40 font-bold max-w-2xl text-center uppercase tracking-tight">
+                        <p className="text-lg md:text-xl text-foreground/70 font-bold max-w-2xl text-center uppercase tracking-tight">
                             High-precision career intelligence tailored for the next generation of industry leaders.
                         </p>
 
                         <Link
                             href="/register"
-                            className="group relative inline-flex items-center gap-6 px-12 py-6 bg-primary text-white text-[10px] font-black uppercase tracking-[0.6em] hover:scale-105 transition-all shadow-3xl active:scale-95"
+                            className="group relative inline-flex items-center gap-6 px-12 py-6 bg-primary text-white text-xs font-bold tracking-tight tracking-[0.6em] hover:scale-105 transition-all shadow-3xl active:scale-95"
                         >
                             Get Started
                             <ArrowRight size={14} className="group-hover:translate-x-3 transition-transform" />
@@ -113,7 +113,7 @@ export default function Hero() {
                 className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer group"
                 onClick={() => document.getElementById('interactive')?.scrollIntoView({ behavior: 'smooth' })}
             >
-                <span className="text-[7px] font-black uppercase tracking-[0.8em] vertical-text group-hover:text-primary transition-colors">Begin Experience</span>
+                <span className="text-[7px] font-bold tracking-tight tracking-[0.8em] vertical-text group-hover:text-primary transition-colors">Begin Experience</span>
                 <motion.div
                     animate={{ y: [0, 6, 0] }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}

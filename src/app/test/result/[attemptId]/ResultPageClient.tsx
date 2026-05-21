@@ -128,7 +128,7 @@ export default function ResultPageClient({ attemptId }: { attemptId: string }) {
                             <div className="mt-10 flex flex-col sm:flex-row gap-3">
                                 <Link
                                     href="/dashboard"
-                                    className="inline-flex items-center justify-center rounded-xl bg-background border border-border/20 hover:border-border/40 px-6 py-3 text-sm font-medium transition-colors"
+                                    className="inline-flex items-center justify-center rounded-xl bg-background border border-border/20 hover:border-border/20 px-6 py-3 text-sm font-medium transition-colors"
                                 >
                                     Back to dashboard
                                 </Link>

@@ -53,22 +53,24 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         </h1>
                     </div>
 
-                    {/* Subject bio block */}
-                    <div style={{ borderTop: '2px solid #030712', borderBottom: '2px solid #030712', padding: '1.5rem 0', maxWidth: '420px', width: '100%' }}>
-                        <div style={{ fontSize: '22pt', fontWeight: 800, marginBottom: '0.25rem' }}>{data.user.name}</div>
-                        <div style={{ fontSize: '9pt', color: '#666' }}>{data.user.email}</div>
-                        <div style={{ fontSize: '9pt', color: '#666', marginTop: '0.25rem' }}>Age {data.user.age} &middot; Class {data.user.class}</div>
-                    </div>
-
-                    {/* Date & Reference */}
-                    <div style={{ marginTop: '2.5rem', display: 'flex', gap: '3rem', justifyContent: 'center' }}>
-                        <div>
-                            <div className="dossier-label">Report Date</div>
-                            <div style={{ fontSize: '13pt', fontWeight: 700, marginTop: '4px' }}>{data.user.reportDate}</div>
-                        </div>
-                        <div>
-                            <div className="dossier-label">Reference</div>
-                            <div style={{ fontSize: '13pt', fontWeight: 700, marginTop: '4px' }}>MC-{data.user.id.slice(0, 8).toUpperCase()}</div>
+                        <div className="grid grid-cols-3 gap-12 border-t border-foreground/10 pt-12">
+                            <div>
+                                <div className="dossier-label">Subject ID</div>
+                                <div className="text-xl font-bold">{data.user.name}</div>
+                                <div className="text-xs opacity-50">{data.user.email}</div>
+                                <div className="text-xs opacity-50 mt-1">Age: {data.user.age} | Class: {data.user.class}</div>
+                            </div>
+                            <div>
+                                <div className="dossier-label">Analysis Date</div>
+                                <div className="text-xl font-bold">{data.user.reportDate}</div>
+                                <div className="text-xs opacity-50">Reference: MC-PR1-{data.user.id.slice(0, 8)}</div>
+                                <div className="text-xs opacity-50 mt-1">Classification: Level 1 Analysis</div>
+                            </div>
+                            <div>
+                                <div className="dossier-label">Global Index</div>
+                                <div className="text-4xl font-bold text-primary italic">{(data.charts?.comparisonData?.find(d => d.label === 'Overall')?.userScore || 85)} / 100</div>
+                                <div className="text-xs opacity-50 uppercase font-bold mt-1">Intelligence Quotient</div>
+                            </div>
                         </div>
                         <div>
                             <div className="dossier-label">Overall Index</div>
@@ -86,8 +88,9 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 2 — EXECUTIVE SUMMARY
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '2rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Executive Summary</h2>
+                    <div className="dossier-section-header border-primary">
+                        <h2 className="text-2xl font-bold uppercase">Executive Summary</h2>
+                        <p className="text-xs opacity-50 tracking-wider">High-Level Architectural Overview</p>
                     </div>
 
                     <div className="dossier-body" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
@@ -135,9 +138,9 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 3 — APTITUDE RADAR (Full-width chart)
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Cognitive Profile</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Multi-dimensional Aptitude Mapping</p>
+                    <div className="dossier-section-header border-primary">
+                        <h2 className="text-2xl font-bold uppercase">Cognitive Foundation</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Multi-dimensional Aptitude Mapping</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -156,19 +159,17 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 4 — APTITUDE SCORE BREAKDOWN
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Aptitude Breakdown</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Individual Score Analysis</p>
+                    <div className="dossier-section-header border-primary">
+                        <h2 className="text-2xl font-bold uppercase">Cognitive Deep-Dive</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Aptitude Vector Breakdown</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.25rem' }}>
                         {Object.entries(data.aptitudeScores).map(([key, value]) => (
-                            <div key={key} style={{ paddingBottom: '1rem', borderBottom: '1px solid #eee' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.5rem' }}>
-                                    <span style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                        {key.replace(/_/g, ' ')}
-                                    </span>
-                                    <span style={{ fontSize: '18pt', fontWeight: 900, color: '#1294DD' }}>{value}%</span>
+                            <div key={key} className="border-b border-foreground/10 pb-4">
+                                <div className="flex justify-between items-end mb-2">
+                                    <h3 className="text-sm font-semibold tracking-wide">{key.replace(/_/g, ' ')}</h3>
+                                    <span className="text-2xl font-bold text-primary">{value}%</span>
                                 </div>
                                 <div style={{ width: '100%', background: '#f0f0f0', height: '6px', borderRadius: '3px', overflow: 'hidden' }}>
                                     <div style={{ width: `${value}%`, background: '#1294DD', height: '100%', borderRadius: '3px' }} />
@@ -188,9 +189,9 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 5 — PSYCHOMETRIC PROFILE (Polarity Scales)
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Personality Profile</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>How You Work & Think</p>
+                    <div className="dossier-section-header border-secondary">
+                        <h2 className="text-2xl font-bold uppercase">Behavioral Architecture</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Psychometric Trait Distribution</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
@@ -227,24 +228,20 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 6 — PERSONALITY TRAITS
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Personality Traits</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Core Drivers</p>
+                    <div className="dossier-section-header border-secondary">
+                        <h2 className="text-2xl font-bold uppercase">Psychometric Deep-Dive</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Core Behavioral DNA Drivers</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         {/* Horizontal DNA bar visualisation */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
                             {Object.entries(data.careerDNA || {}).map(([key, val]) => (
-                                <div key={key} style={{ padding: '1.25rem', background: '#fafafa', borderLeft: `4px solid ${Number(val) > 70 ? '#1294DD' : '#ddd'}` }}>
-                                    <div style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, color: '#888', marginBottom: '0.25rem' }}>
-                                        {key} Orientation
-                                    </div>
-                                    <div style={{ fontSize: '22pt', fontWeight: 900, color: Number(val) > 70 ? '#1294DD' : '#333' }}>{val}%</div>
-                                    <p className="dossier-body-sm" style={{ marginTop: '0.5rem', fontSize: '8pt' }}>
-                                        {Number(val) > 70
-                                            ? `The subject shows a strong natural inclination toward ${key}-oriented work and decision-making.`
-                                            : `This dimension is present but not dominant. It acts as a supporting trait rather than a leading driver.`}
+                                <div key={key} className="p-4 bg-foreground/5 rounded border border-foreground/5">
+                                    <div className="text-sm font-semibold mb-1">{key} Drive</div>
+                                    <div className="text-xl font-bold text-secondary mb-2">{val}% Intensity</div>
+                                    <p className="text-xs opacity-70">
+                                        Dictates the baseline requirement for {key}-oriented stimuli in their daily operational environment.
                                     </p>
                                 </div>
                             ))}
@@ -257,9 +254,9 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 7 — SKILLS MATCH
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Your Skills Match</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Where Aptitude Meets Personality</p>
+                    <div className="dossier-section-header">
+                        <h2 className="text-2xl font-bold uppercase">Synergistic Intersections</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Cognitive Venn Intelligence</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem' }}>
@@ -292,36 +289,27 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     <Footer page={7} />
                 </section>
 
-                {/* ═══════════════════════════════════════════════
-                    PAGE 8 — SUBJECT ARCHETYPE
-                ═══════════════════════════════════════════════ */}
-                <section className="dossier-page" style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-                    <div style={{ maxWidth: '460px' }}>
-                        <div style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#999', marginBottom: '1.5rem' }}>
-                            Primary Classification
-                        </div>
-                        <h2 style={{ fontSize: '36pt', fontWeight: 900, textTransform: 'uppercase', color: '#030712', lineHeight: 1.1, marginBottom: '1.5rem', letterSpacing: '-0.03em' }}>
-                            {data.archetype.title}
-                        </h2>
-                        <div style={{ width: '60px', height: '3px', background: '#1294DD', margin: '0 auto 2rem auto' }} />
-                        <p className="dossier-body" style={{ fontStyle: 'italic', marginBottom: '2rem' }}>
-                            &ldquo;{data.archetype.description}&rdquo;
-                        </p>
-                        <p className="dossier-body-sm" style={{ color: '#555' }}>
-                            Individuals of this archetype exhibit a consistent pattern of structured thinking
-                            coupled with adaptive characteristics. They tend to thrive in environments that reward
-                            both analytical depth and practical execution.
-                        </p>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginTop: '2rem' }}>
-                            {data.archetype.traits.map((t, i) => (
-                                <span key={i} style={{
-                                    padding: '0.4rem 1rem', fontSize: '7.5pt', fontWeight: 700,
-                                    textTransform: 'uppercase', letterSpacing: '0.08em',
-                                    border: '1px solid #ddd', borderRadius: '2px', color: '#555'
-                                }}>
-                                    {t}
-                                </span>
-                            ))}
+                {/* PAGE 8: ARCHETYPES */}
+                <section className="dossier-page">
+                    <div className="dossier-section-header">
+                        <h2 className="text-2xl font-bold uppercase">Subject Archetype</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Primary Classification Protocol</p>
+                    </div>
+                    <div className="flex-1 flex flex-col justify-center items-center">
+                        <div className="dossier-label mb-6">Confirmed Designation</div>
+                        <div className="text-6xl font-bold text-primary uppercase text-center mb-8 border-b-4 border-primary pb-4">{data.archetype.title}</div>
+                        <div className="text-center max-w-xl space-y-6">
+                            <p className="text-lg opacity-80 leading-relaxed font-serif italic">
+                                "{data.archetype.description}"
+                            </p>
+                            <p className="text-sm opacity-60 leading-relaxed mt-4">
+                                This archetype is characterized by an innate ability to navigate complexity. They thrive in environments where rules are defined but outcomes are highly variable, requiring constant strategic recalibration.
+                            </p>
+                            <div className="flex flex-wrap gap-3 justify-center mt-8">
+                                {data.archetype.traits.map((t, i) => (
+                                    <span key={i} className="px-4 py-2 bg-foreground/10 rounded-full text-xs font-bold tracking-wider">{t}</span>
+                                ))}
+                            </div>
                         </div>
                     </div>
                     <Footer page={8} />
@@ -331,24 +319,20 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 9 — BENCHMARK COMPARISON
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Benchmark Comparison</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Subject Performance vs. Ideal Benchmarks</p>
+                    <div className="dossier-section-header">
+                        <h2 className="text-2xl font-bold uppercase">Benchmark Analysis</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Subject vs. Ideal Paradigms</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <ComparisonGraph data={data.charts.comparisonData} isPrinting={isPrinting} />
-
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '2.5rem' }}>
-                            {data.charts.comparisonData.map((cd, i) => {
-                                const delta = cd.userScore - cd.idealScore;
-                                return (
-                                    <div key={i} style={{ textAlign: 'center', padding: '1rem', background: '#fafafa' }}>
-                                        <div style={{ fontSize: '7pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginBottom: '0.35rem' }}>{cd.label}</div>
-                                        <div style={{ fontSize: '20pt', fontWeight: 900, color: delta >= 0 ? '#16a34a' : '#ea580c' }}>
-                                            {delta >= 0 ? '+' : ''}{delta.toFixed(1)}
-                                        </div>
-                                        <div style={{ fontSize: '7pt', color: '#aaa', marginTop: '2px' }}>vs. benchmark</div>
+                        
+                        <div className="grid grid-cols-3 gap-6 mt-16">
+                            {data.charts.comparisonData.map((cd, i) => (
+                                <div key={i} className="text-center p-4 border border-foreground/10 bg-foreground/5">
+                                    <div className="text-xs uppercase font-bold tracking-widest opacity-50 mb-2">{cd.label} Delta</div>
+                                    <div className={`text-2xl font-bold ${cd.userScore >= cd.idealScore ? 'text-green-500' : 'text-orange-500'}`}>
+                                        {cd.userScore >= cd.idealScore ? '+' : ''}{(cd.userScore - cd.idealScore).toFixed(1)}
                                     </div>
                                 );
                             })}
@@ -361,9 +345,9 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 10 — CAREER ALIGNMENT
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Career Alignment</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Top Recommended Career Paths</p>
+                    <div className="dossier-section-header">
+                        <h2 className="text-2xl font-bold uppercase">Career Genome</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Genetic Alignment with Global Industries</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.75rem' }}>
@@ -371,10 +355,14 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             Based on the composite analysis of aptitude scores and personality traits,
                             the following career paths represent the strongest alignment with your profile:
                         </p>
-                        {data.careerMatches.map((match, i) => (
-                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', padding: '1rem 0', borderBottom: '1px solid #eee' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#1294DD', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12pt', fontWeight: 900, flexShrink: 0 }}>
-                                    {i + 1}
+                        <div className="space-y-4">
+                            {data.careerMatches.map((match, i) => (
+                                <div key={i} className="p-6 bg-primary/5 border-l-4 border-primary flex flex-col justify-center">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <span className="font-bold text-lg uppercase tracking-wide">{match.career}</span>
+                                        <span className="text-xl font-mono font-bold text-primary">{match.score}% MATCH</span>
+                                    </div>
+                                    <p className="text-xs opacity-70 leading-relaxed">{match.description}</p>
                                 </div>
                                 <div style={{ flex: 1 }}>
                                     <div style={{ fontSize: '11pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.02em' }}>{match.career}</div>
@@ -391,9 +379,9 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 11 — CAREER COMPARISON (5-Circle Venn)
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Career Comparison</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Best, Good &amp; Poor Career Fit</p>
+                    <div className="dossier-section-header">
+                        <h2 className="text-2xl font-bold uppercase">Learning Pathway</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Optimal Data Ingestion Protocols</p>
                     </div>
 
                     <p className="dossier-body-sm" style={{ marginBottom: '1rem', color: '#555' }}>
@@ -550,86 +538,36 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 13 — STRATEGIC ROADMAP & CONCLUSION
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Strategic Roadmap</h2>
-                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Recommended Action Plan</p>
+                    <div className="dossier-section-header">
+                        <h2 className="text-2xl font-bold uppercase">Strategic Roadmap</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Final Recommendations & Execution</p>
                     </div>
-
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-
-                        {(() => {
-                            let goalParsed = null;
-                            if (data.user.careerGoals) {
-                                try {
-                                    goalParsed = JSON.parse(data.user.careerGoals);
-                                } catch (e) {
-                                    goalParsed = { dream: data.user.careerGoals }; // fallback to flat string
-                                }
-                            }
-                            return goalParsed && (goalParsed.dream || goalParsed.profession) ? (
-                                <div style={{ padding: '1.5rem', background: '#f0f9ff', borderLeft: '4px solid #0284c7', marginBottom: '0.5rem' }}>
-                                    <h3 style={{ fontSize: '9pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#0369a1', marginBottom: '1rem' }}>
-                                        Goal Alignment Analysis
-                                    </h3>
-
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
-                                        <div>
-                                            <div style={{ fontSize: '7.5pt', textTransform: 'uppercase', color: '#666', fontWeight: 600 }}>My Dream</div>
-                                            <div style={{ fontSize: '10pt', fontWeight: 700, color: '#000', marginTop: '0.2rem' }}>{goalParsed.dream || "Not specified"}</div>
-                                        </div>
-                                        <div>
-                                            <div style={{ fontSize: '7.5pt', textTransform: 'uppercase', color: '#666', fontWeight: 600 }}>Target Profession</div>
-                                            <div style={{ fontSize: '10pt', fontWeight: 700, color: '#000', marginTop: '0.2rem' }}>{goalParsed.profession || "Not specified"}</div>
-                                        </div>
-                                        <div>
-                                            <div style={{ fontSize: '7.5pt', textTransform: 'uppercase', color: '#666', fontWeight: 600 }}>Education Route</div>
-                                            <div style={{ fontSize: '10pt', fontWeight: 700, color: '#000', marginTop: '0.2rem' }}>{goalParsed.education || "Not specified"}</div>
-                                        </div>
-                                    </div>
-
-                                    <p style={{ marginTop: '1.25rem', fontSize: '9pt', color: '#333', lineHeight: 1.5, borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '0.75rem' }}>
-                                        <strong>Verdict:</strong> Based on your natural proficiency in {topApt[0] ? String(topApt[0]).replace(/_/g, ' ').toLowerCase() : 'reasoning'}, your personality archetype ({data.archetype.title}), and your selected dreams, you have a solid foundation to pursue this track.
-                                    </p>
+                    <div className="flex-1 flex flex-col justify-between pt-8">
+                        <div className="space-y-8">
+                            <div className="grid grid-cols-3 gap-6">
+                                <div className="p-6 border border-foreground/10 rounded-sm">
+                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 01: EXPLORATION</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Focus on foundational skill acquisition and broad mental model development. Identify core constraints.</p>
                                 </div>
-                            ) : null;
-                        })()}
-
-                        <p className="dossier-body-sm" style={{ color: '#555' }}>
-                            Here is a simple roadmap of the critical next steps you should take to start moving towards your best matching careers.
-                        </p>
-
-                        {/* Subway-style stepped path */}
-                        {[
-                            { phase: '01', title: 'Exploration', desc: 'Build foundational skills. Experiment broadly across interests to confirm natural inclinations identified in this report.' },
-                            { phase: '02', title: 'Specialisation', desc: 'Narrow focus to the top 2 career paths. Pursue targeted certifications, internships, or project work in those domains.' },
-                            { phase: '03', title: 'Mastery', desc: 'Commit to a primary professional track. Develop leadership and communication abilities alongside core technical expertise.' },
-                        ].map((step, i) => (
-                            <div key={i} style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
-                                {/* Vertical subway node */}
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-                                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#1294DD', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10pt', fontWeight: 900 }}>
-                                        {step.phase}
-                                    </div>
-                                    {i < 2 && <div style={{ width: '2px', height: '40px', background: '#ddd', marginTop: '4px' }} />}
+                                <div className="p-6 border border-foreground/10 rounded-sm">
+                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 02: SPECIALIZATION</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Deep-dive into preferred career DNA clusters. Begin eliminating extraneous vectors to focus energy.</p>
                                 </div>
-                                <div style={{ paddingTop: '0.2rem' }}>
-                                    <div style={{ fontSize: '11pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em' }}>{step.title}</div>
-                                    <p className="dossier-body-sm" style={{ marginTop: '0.35rem' }}>{step.desc}</p>
+                                <div className="p-6 border border-foreground/10 rounded-sm">
+                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 03: MASTERY</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Professional placement and leadership trajectory initiation. Execute primary archetype strengths.</p>
                                 </div>
                             </div>
-                        ))}
-
-                        {/* Final conclusion box */}
-                        <div style={{ marginTop: 'auto', padding: '1.5rem', background: '#030712', color: 'white' }}>
-                            <h3 style={{ fontSize: '10pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: '0.5rem' }}>
-                                Final Conclusion
-                            </h3>
-                            <ul style={{ paddingLeft: '1.25rem', fontSize: '10pt', lineHeight: 1.6, color: 'rgba(255,255,255,0.9)' }}>
-                                <li style={{ marginBottom: '0.5rem' }}>Your strongest aptitude is <strong>{topApt[0] ? String(topApt[0]).replace(/_/g, ' ').toLowerCase() : 'analytical reasoning'}</strong>.</li>
-                                <li style={{ marginBottom: '0.5rem' }}>Your personality makes you a natural <strong>{data.archetype.title}</strong>.</li>
-                                <li style={{ marginBottom: '0.5rem' }}>Focus first on your top recommended career: <strong>{data.careerMatches[0]?.career || "Consulting"}</strong>.</li>
-                                <li>Use the recommended learning style to tackle your weak spots and don&apos;t get discouraged. Progress takes time.</li>
-                            </ul>
+                            <div className="bg-primary text-primary-foreground p-10 rounded-lg shadow-xl mt-12">
+                                <h3 className="text-xl font-bold mb-4 tracking-wider border-b border-primary-foreground/20 pb-4">Conclusion Directive</h3>
+                                <p className="text-md leading-relaxed font-serif">
+                                    The subject is highly recommended for high-complexity analytical environments. Their primary mandate should be to find roles that allow autonomy in problem-solving. By developing their secondary soft-skill communication layers, they can effectively bridge the gap between technical logic depth and organizational leadership, maximizing their overall global index impact.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div className="text-xs opacity-30 uppercase tracking-[0.5em] text-center mt-12 pb-4">
+                            End of Confidential Psychological Report // Maestro Career
                         </div>
                     </div>
 
