@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
-import { createPublicServerClient } from "@/lib/supabase/public";
+import { NextRequest, NextResponse } from "next/server";
+import { createRouteHandlerClient } from "@/lib/supabase/route";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
-        const supabase = createPublicServerClient();
-        const { data: { session } } = await supabase.auth.getSession();
+        const { supabase, applyToResponse } = createRouteHandlerClient(req);
+        const { data: { user } } = await supabase.auth.getUser();
 
-        if (!session?.user) {
+        if (!user) {
             return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
         }
 
@@ -15,14 +15,14 @@ export async function POST(req: Request) {
         const { error } = await supabase
             .from("profiles")
             .update({ career_goals })
-            .eq("id", session.user.id);
+            .eq("id", user.id);
 
         if (error) {
             console.error(error);
             return NextResponse.json({ success: false, message: "Failed to update aspirations" }, { status: 500 });
         }
 
-        return NextResponse.json({ success: true, message: "Aspirations updated" });
+        return applyToResponse(NextResponse.json({ success: true, message: "Aspirations updated" }));
     } catch (e) {
         return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
     }
