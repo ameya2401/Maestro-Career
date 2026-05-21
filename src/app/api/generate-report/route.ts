@@ -23,13 +23,23 @@ export async function GET(req: Request) {
         try {
             console.log(`[PDF] Launching browser (Local: ${isLocal})`);
             browser = await puppeteer.launch({
-                args: isLocal ? [] : [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+                args: isLocal ? [] : [
+                    ...chromium.args,
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-gpu',
+                    '--no-first-run',
+                    '--no-zygote',
+                    '--single-process'
+                ],
                 executablePath: isLocal ?
                     (process.platform === 'win32'
                         ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
                         : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
                     : await chromium.executablePath(),
                 headless: true,
+                ignoreHTTPSErrors: true,
             });
             console.log(`[PDF] Browser launched successfully`);
         } catch (launchError) {
