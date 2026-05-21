@@ -1,13 +1,15 @@
-import { NextResponse } from "next/server";
-import { createPublicServerClient } from "@/lib/supabase/public";
+import { NextRequest, NextResponse } from "next/server";
+import { createRouteHandlerClient } from "@/lib/supabase/route";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+    let applyToResponse: ((response: NextResponse) => NextResponse) | null = null;
     try {
-        const supabase = createPublicServerClient();
-        const { data: { session } } = await supabase.auth.getSession();
+        const { supabase, applyToResponse: applyCookies } = createRouteHandlerClient(req);
+        applyToResponse = applyCookies;
+        const { data: { user } } = await supabase.auth.getUser();
 
-        if (!session?.user) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+        if (!user) {
+            return applyToResponse(NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 }));
         }
 
         const { career_goals } = await req.json();
@@ -15,15 +17,17 @@ export async function POST(req: Request) {
         const { error } = await supabase
             .from("profiles")
             .update({ career_goals })
-            .eq("id", session.user.id);
+            .eq("id", user.id);
 
         if (error) {
-            console.error(error);
-            return NextResponse.json({ success: false, message: "Failed to update aspirations" }, { status: 500 });
+            console.error("Aspirations update error:", error);
+            return applyToResponse(NextResponse.json({ success: false, message: "Failed to update aspirations" }, { status: 500 }));
         }
 
-        return NextResponse.json({ success: true, message: "Aspirations updated" });
+        return applyToResponse(NextResponse.json({ success: true, message: "Aspirations updated" }));
     } catch (e) {
-        return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+        console.error("Aspirations server error:", e);
+        const response = NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
+        return applyToResponse ? applyToResponse(response) : response;
     }
 }

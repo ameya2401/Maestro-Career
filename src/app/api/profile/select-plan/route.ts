@@ -6,24 +6,28 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
+    let applyToResponse: ((response: NextResponse) => NextResponse) | null = null;
     try {
         const { planId } = await req.json();
         if (!planId) {
             return NextResponse.json({ success: false, message: "Plan ID is required." }, { status: 400 });
         }
 
-        const { supabase, applyToResponse } = createRouteHandlerClient(req);
+        const { supabase, applyToResponse: applyCookies } = createRouteHandlerClient(req);
+        applyToResponse = applyCookies;
         const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+            return applyToResponse(NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 }));
         }
 
         const updatedUser = await selectPlanFromSession(supabase, planId);
 
         return applyToResponse(NextResponse.json({ success: true, data: updatedUser }));
     } catch (error) {
+        console.error("Select plan error:", error);
         const message = error instanceof Error ? error.message : "Unable to select plan.";
-        return NextResponse.json({ success: false, message }, { status: 400 });
+        const response = NextResponse.json({ success: false, message }, { status: 400 });
+        return applyToResponse ? applyToResponse(response) : response;
     }
 }
