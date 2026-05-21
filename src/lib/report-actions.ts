@@ -26,6 +26,20 @@ export async function getReportData(resultId?: string): Promise<ReportData | nul
 
     const profileData = user.user_metadata;
 
+    // Extract and format career matches
+    const allMatches = result.career_matches || [];
+    const formattedMatches = allMatches.map((m: any) => ({
+        career: m.title || m.career || "Unknown Career",
+        score: m.score || 0,
+        compatibilityLevel: m.bucket || (m.score > 80 ? "Best" : m.score > 60 ? "Good" : "Poor"),
+        description: m.reason || "A match based on your cognitive profile."
+    }));
+
+    // Filter into buckets for the 5-Circle Venn
+    const bestMatches = formattedMatches.filter((m: any) => m.score >= 85);
+    const goodMatches = formattedMatches.filter((m: any) => m.score >= 65 && m.score < 85);
+    const poorMatches = formattedMatches.filter((m: any) => m.score < 65);
+
     return {
         user: {
             id: user.id,
@@ -42,13 +56,9 @@ export async function getReportData(resultId?: string): Promise<ReportData | nul
         psychometricScores: result.psychometric_scores || {},
         careerDNA: result.career_dna || { analytical: 80, creative: 60, leadership: 70, research: 85, innovation: 65 },
         archetype: result.archetype || { title: 'Analytical Strategist', description: 'A highly logical thinker.', traits: ['Logic', 'Strategy'] },
-        careerMatches: (result.career_matches || []).map((m: any) => ({
-            career: m.title || m.career,
-            score: m.score,
-            description: m.bucket || "A strong match based on your cognitive profile."
-        })),
-        strengths: result.summary?.areasRequiringImprovement ? ["Analytical Thinking", "Strategic Planning"] : ["Logical Reasoning", "Problem Solving"],
-        improvementAreas: (result.summary?.areasRequiringImprovement || []).map((a: any) => a.dimension).slice(0, 3),
+        careerMatches: formattedMatches.slice(0, 5),
+        strengths: result.summary?.strengths || ["Analytical Thinking", "Strategic Planning"],
+        improvementAreas: (result.summary?.areasRequiringImprovement || []).map((a: any) => a.dimension || a).slice(0, 3),
         charts: {
             radarChart: Object.entries(result.aptitude_scores || {}).map(([key, val]) => ({
                 subject: key.replace('_', ' '),
@@ -72,9 +82,14 @@ export async function getReportData(resultId?: string): Promise<ReportData | nul
             ]
         },
         recommendations: {
-            bestCareers: (result.career_matches || []).slice(0, 2).map((m: any) => m.title || m.career),
-            alternativeCareers: ["Systems Research", "Data Strategy"],
-            growthAdvice: ["Focus on high-level cognitive synthesis."]
+            bestCareers: bestMatches.map((m: any) => m.career).slice(0, 2),
+            alternativeCareers: goodMatches.map((m: any) => m.career).slice(0, 2),
+            badCareers: poorMatches.map((m: any) => ({
+                career: m.career,
+                score: m.score,
+                reason: m.description
+            })).slice(0, 4),
+            growthAdvice: result.summary?.growthAdvice || ["Focus on high-level cognitive synthesis."]
         }
     };
 }
