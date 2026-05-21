@@ -80,8 +80,8 @@ export default function LoadingScreen() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                     >
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-foreground/40 mb-2">Systems.Initialize</h2>
-                        <h3 className="text-xl font-black tracking-tightest uppercase text-foreground">
+                        <h2 className="text-xs font-bold tracking-tight tracking-[0.5em] text-foreground/70 mb-2">Systems.Initialize</h2>
+                        <h3 className="text-xl font-bold tracking-tightest uppercase text-foreground">
                             Decoding Your <span className="text-primary italic">Professional DNA</span>
                         </h3>
                     </motion.div>
@@ -97,14 +97,14 @@ export default function LoadingScreen() {
                     </div>
 
                     <div className="flex justify-center">
-                        <span className="text-[8px] font-black uppercase tracking-widest text-foreground/20">{progress}% Completed</span>
+                        <span className="text-[8px] font-bold tracking-wider text-foreground/20">{progress}% Completed</span>
                     </div>
                 </div>
             </div>
 
             {/* Bottom Status Label */}
             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 opacity-20">
-                <span className="text-[10px] font-black uppercase tracking-[0.8em] select-none">MAESTRO CAREER 2026</span>
+                <span className="text-xs font-bold tracking-tight tracking-[0.8em] select-none">MAESTRO CAREER 2026</span>
             </div>
         </motion.div>
     );

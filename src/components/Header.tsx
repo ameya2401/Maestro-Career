@@ -180,7 +180,7 @@ export default function Header() {
                                     className="object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
                                 />
                             </div>
-                            <span className="text-xl md:text-3xl font-black tracking-tightest uppercase text-primary leading-none">
+                            <span className="text-xl md:text-3xl font-bold tracking-tightest uppercase text-primary leading-none">
                                 Maestro <br />
                                 <span className="text-sm md:text-lg font-bold text-secondary-foreground">Career</span>
                             </span>
@@ -194,16 +194,17 @@ export default function Header() {
                                 key={item.name}
                                 href={item.href}
                                 onClick={(e) => handleNavClick(e, item.href)}
-                                className="text-base font-black uppercase tracking-widest text-foreground/70 hover:text-primary transition-all hover:-translate-y-1"
+                                className="text-base font-bold tracking-wider text-foreground/70 hover:text-primary transition-all hover:-translate-y-1"
                             >
                                 {item.name}
                             </Link>
                         ))}
 
+                        {/* Hiding Theme Changer as requested
                         <div className="relative" ref={moreMenuRef}>
                             <button
                                 onClick={() => setIsMoreMenuOpen((prev) => !prev)}
-                                className="text-base font-black uppercase tracking-widest text-foreground/70 hover:text-primary transition-all hover:-translate-y-1 flex items-center gap-1"
+                                className="text-base font-bold tracking-wider text-foreground/70 hover:text-primary transition-all hover:-translate-y-1 flex items-center gap-1"
                             >
                                 More <span className="text-xs">▼</span>
                             </button>
@@ -220,15 +221,15 @@ export default function Header() {
                                                 setIsMoreMenuOpen(false);
                                                 setIsThemeChangerOpen(true);
                                             }}
-                                            className="w-full text-left px-4 py-3 rounded-xl hover:bg-primary hover:text-white transition-colors text-sm font-black uppercase tracking-widest"
+                                            className="w-full text-left px-4 py-3 rounded-xl hover:bg-primary hover:text-white transition-colors text-sm font-bold tracking-wider"
                                         >
                                             Theme Changer 🎨
                                         </button>
-                                        {/* Other potential links here */}
                                     </motion.div>
                                 )}
                             </AnimatePresence>
                         </div>
+                        */}
 
                         <div className="h-8 w-[3px] rounded-full bg-primary/20 mx-2" />
 
@@ -245,13 +246,13 @@ export default function Header() {
                             <div className="flex items-center gap-3">
                                 <Link
                                     href="/login"
-                                    className="px-6 py-4 text-sm font-black uppercase tracking-widest rounded-full border-2 border-primary/20 text-foreground hover:border-primary hover:text-primary transition-all"
+                                    className="px-6 py-4 text-sm font-bold tracking-wider rounded-full border-2 border-primary/20 text-foreground hover:border-primary hover:text-primary transition-all"
                                 >
                                     Login
                                 </Link>
                                 <Link
                                     href="/register"
-                                    className="flex items-center gap-2 px-8 py-4 bg-accent text-white text-sm font-black uppercase tracking-widest rounded-full hover:scale-105 hover:shadow-lg hover:shadow-accent/40 transition-all border-b-4 border-black/20 active:border-b-0 active:translate-y-1"
+                                    className="flex items-center gap-2 px-8 py-4 bg-primary text-white text-sm font-bold tracking-wider rounded-full hover:scale-105 hover:shadow-lg hover:shadow-primary/40 transition-all border-b-4 border-black/20 active:border-b-0 active:translate-y-1"
                                 >
                                     Register
                                     <ArrowRight size={18} />
@@ -263,7 +264,7 @@ export default function Header() {
                             <div className="flex items-center gap-4" ref={profileMenuRef}>
                                 <Link
                                     href="/dashboard"
-                                    className="px-6 py-4 bg-primary text-white text-sm font-black uppercase tracking-widest rounded-full hover:scale-105 hover:shadow-lg transition-all border-b-4 border-black/20 active:border-b-0 active:translate-y-1"
+                                    className="px-6 py-4 bg-primary text-white text-sm font-bold tracking-wider rounded-full hover:scale-105 hover:shadow-lg transition-all border-b-4 border-black/20 active:border-b-0 active:translate-y-1"
                                 >
                                     Dashboard
                                 </Link>
@@ -272,7 +273,7 @@ export default function Header() {
                                     aria-label="Open profile"
                                     title="Open profile"
                                     onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-                                    className="h-14 w-14 rounded-full bg-accent text-white border-b-4 border-black/20 flex items-center justify-center text-xl font-black hover:scale-105 transition-transform active:border-b-0 active:translate-y-1"
+                                    className="h-14 w-14 rounded-full bg-primary text-white border-b-4 border-black/20 flex items-center justify-center text-xl font-bold hover:scale-105 transition-transform active:border-b-0 active:translate-y-1"
                                 >
                                     {profileInitial}
                                 </button>
@@ -285,27 +286,27 @@ export default function Header() {
                                             exit={{ opacity: 0, y: 8, scale: 0.98 }}
                                             className="absolute right-12 top-[90px] w-72 rounded-[2rem] border-4 border-primary/20 bg-background p-5 shadow-2xl"
                                         >
-                                            <p className="text-lg font-black text-foreground">{profileName || "User"}</p>
+                                            <p className="text-lg font-bold text-foreground">{profileName || "User"}</p>
                                             <p className="mt-1 text-sm text-foreground/60 font-bold">{profileEmail}</p>
 
                                             <div className="mt-5 space-y-3 rounded-2xl border-2 border-primary/10 bg-white/50 p-4 text-sm text-foreground/80">
-                                                <p><span className="font-black text-primary">Mobile:</span> {profileMobile}</p>
-                                                <p><span className="font-black text-primary">Type:</span> {profileType}</p>
-                                                <p><span className="font-black text-primary">City:</span> {profileCity}</p>
+                                                <p><span className="font-bold text-primary">Mobile:</span> {profileMobile}</p>
+                                                <p><span className="font-bold text-primary">Type:</span> {profileType}</p>
+                                                <p><span className="font-bold text-primary">City:</span> {profileCity}</p>
                                             </div>
 
                                             <div className="mt-5 grid gap-3">
                                                 <Link
                                                     href="/dashboard"
                                                     onClick={() => setIsProfileMenuOpen(false)}
-                                                    className="w-full rounded-xl border-2 border-primary/20 px-4 py-3 text-center text-sm font-black uppercase tracking-widest text-primary hover:bg-primary/10 transition-colors"
+                                                    className="w-full rounded-xl border-2 border-primary/20 px-4 py-3 text-center text-sm font-bold tracking-wider text-primary hover:bg-primary/10 transition-colors"
                                                 >
                                                     Open Profile
                                                 </Link>
                                                 <button
                                                     type="button"
                                                     onClick={handleLogout}
-                                                    className="w-full rounded-xl bg-accent px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-red-500 hover:scale-105 transition-all border-b-4 border-black/20 active:border-b-0 active:translate-y-1"
+                                                    className="w-full rounded-xl bg-red-600 px-4 py-3 text-sm font-bold tracking-wider text-white hover:bg-red-700 hover:scale-105 transition-all border-b-4 border-black/20 active:border-b-0 active:translate-y-1"
                                                 >
                                                     Logout
                                                 </button>
@@ -350,7 +351,7 @@ export default function Header() {
                                     key={item.name}
                                     href={item.href}
                                     onClick={() => setIsOpen(false)}
-                                    className="block text-2xl font-black uppercase tracking-tightest text-foreground hover:opacity-50 transition-opacity"
+                                    className="block text-2xl font-bold tracking-tight tracking-tightest text-foreground hover:opacity-50 transition-opacity"
                                 >
                                     {item.name}
                                 </Link>
@@ -360,14 +361,14 @@ export default function Header() {
                                     <div className="grid gap-3">
                                         <Link
                                             href="/login"
-                                            className="block w-full py-5 text-center font-black uppercase tracking-widest text-foreground border border-foreground/10 text-sm"
+                                            className="block w-full py-5 text-center font-bold tracking-wider text-foreground border border-foreground/10 text-sm"
                                             onClick={() => setIsOpen(false)}
                                         >
                                             Login
                                         </Link>
                                         <Link
                                             href="/register"
-                                            className="block w-full py-5 text-center font-black uppercase tracking-widest text-background bg-foreground text-sm"
+                                            className="block w-full py-5 text-center font-bold tracking-wider text-background bg-foreground text-sm"
                                             onClick={() => setIsOpen(false)}
                                         >
                                             Register
@@ -378,21 +379,21 @@ export default function Header() {
                                     <>
                                         <Link
                                             href="/dashboard"
-                                            className="block w-full py-5 text-center font-black uppercase tracking-widest text-background bg-foreground text-sm"
+                                            className="block w-full py-5 text-center font-bold tracking-wider text-background bg-foreground text-sm"
                                             onClick={() => setIsOpen(false)}
                                         >
                                             Dashboard
                                         </Link>
                                         <Link
                                             href="/dashboard"
-                                            className="block w-full py-5 text-center font-black uppercase tracking-widest text-foreground border border-foreground/10 text-sm"
+                                            className="block w-full py-5 text-center font-bold tracking-wider text-foreground border border-foreground/10 text-sm"
                                             onClick={() => setIsOpen(false)}
                                         >
                                             Profile
                                         </Link>
                                         <button
                                             type="button"
-                                            className="block w-full py-5 text-center font-black uppercase tracking-widest text-white bg-red-600 text-sm"
+                                            className="block w-full py-5 text-center font-bold tracking-wider text-white bg-red-600 text-sm"
                                             onClick={async () => {
                                                 await handleLogout();
                                                 setIsOpen(false);

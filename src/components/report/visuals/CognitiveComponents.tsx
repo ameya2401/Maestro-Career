@@ -75,7 +75,7 @@ export const CognitiveVenn: React.FC<CognitiveVennProps> = ({ circles, intersect
                     y={height / 2 - 10}
                     textAnchor="middle"
                     fill={isPrinting ? "#000" : "#fff"}
-                    className="text-[10px] font-bold uppercase tracking-wider"
+                    className="text-sm font-semibold tracking-wider"
                 >
                     {circles[0].label.split(' ')[0]}
                 </text>
@@ -84,7 +84,7 @@ export const CognitiveVenn: React.FC<CognitiveVennProps> = ({ circles, intersect
                     y={height / 2 + 5}
                     textAnchor="middle"
                     fill={isPrinting ? "#000" : "#fff"}
-                    className="text-[10px] font-bold uppercase tracking-wider"
+                    className="text-sm font-semibold tracking-wider"
                 >
                     {circles[0].label.split(' ')[1] || ''}
                 </text>
@@ -94,7 +94,7 @@ export const CognitiveVenn: React.FC<CognitiveVennProps> = ({ circles, intersect
                     y={height / 2 - 10}
                     textAnchor="middle"
                     fill={isPrinting ? "#000" : "#fff"}
-                    className="text-[10px] font-bold uppercase tracking-wider"
+                    className="text-sm font-semibold tracking-wider"
                 >
                     {circles[1].label.split(' ')[0]}
                 </text>
@@ -103,7 +103,7 @@ export const CognitiveVenn: React.FC<CognitiveVennProps> = ({ circles, intersect
                     y={height / 2 + 5}
                     textAnchor="middle"
                     fill={isPrinting ? "#000" : "#fff"}
-                    className="text-[10px] font-bold uppercase tracking-wider"
+                    className="text-sm font-semibold tracking-wider"
                 >
                     {circles[1].label.split(' ')[1] || ''}
                 </text>
@@ -111,8 +111,8 @@ export const CognitiveVenn: React.FC<CognitiveVennProps> = ({ circles, intersect
 
             {/* Floating Intersection Label */}
             <div className="mt-[-40px] z-20 bg-white border-2 border-primary px-6 py-2 rounded-full shadow-xl">
-                <span className="block text-[8px] uppercase font-black text-primary text-center tracking-widest">Master Archetype</span>
-                <p className={`text-sm font-black uppercase text-center ${isPrinting ? 'text-black' : 'text-[#030712]'}`}>{intersection}</p>
+                <span className="block text-[8px] uppercase font-bold text-primary text-center tracking-widest">Master Archetype</span>
+                <p className={`text-sm font-bold tracking-tight text-center ${isPrinting ? 'text-black' : 'text-[#030712]'}`}>{intersection}</p>
             </div>
         </div>
     );
@@ -132,7 +132,7 @@ export const CareerDNA: React.FC<{ data: any, isPrinting?: boolean }> = ({ data,
             {bars.map((bar) => (
                 <div key={bar.label} className="space-y-1">
                     <div className="flex justify-between items-end">
-                        <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">{bar.label}</span>
+                        <span className="text-xs font-bold tracking-wider opacity-70">{bar.label}</span>
                         <span className="text-xs font-mono font-bold">{bar.value}%</span>
                     </div>
                     <div className="h-1.5 w-full bg-foreground/10 rounded-full overflow-hidden">

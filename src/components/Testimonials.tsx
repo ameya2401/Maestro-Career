@@ -41,8 +41,8 @@ export default function Testimonials() {
         <section className="bg-background py-32 relative overflow-hidden transition-colors duration-500">
             <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
                 <div className="mx-auto max-w-2xl text-center mb-20">
-                    <h2 className="text-primary font-black uppercase tracking-[0.3em] text-sm mb-4">Success Stories</h2>
-                    <p className="text-5xl font-black tracking-tighter text-foreground sm:text-6xl leading-[1.1]">
+                    <h2 className="text-primary font-semibold tracking-wider text-sm mb-4">Success Stories</h2>
+                    <p className="text-5xl font-bold tracking-tighter text-foreground sm:text-6xl leading-[1.1]">
                         Trusted by the <br />
                         <span className="text-gradient">Next Generation</span>
                     </p>

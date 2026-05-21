@@ -48,11 +48,11 @@ export default function AboutPage() {
       <section className="pt-48 pb-32">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h1 className="text-6xl md:text-8xl font-black text-foreground tracking-tightest uppercase leading-none">
+            <h1 className="text-6xl md:text-8xl font-bold text-foreground tracking-tightest uppercase leading-none">
               The Visionaries <br />
               <span className="text-primary italic">Behind Maestro.</span>
             </h1>
-            <p className="text-xl text-foreground/40 font-bold max-w-2xl mx-auto uppercase tracking-tighter leading-snug">
+            <p className="text-xl text-foreground/70 font-bold max-w-2xl mx-auto tracking-tight leading-snug">
               Combining decades of deep-tier industry wisdom with the next generation of career intelligence.
             </p>
           </div>
@@ -76,10 +76,10 @@ export default function AboutPage() {
                 {/* Text Column */}
                 <div className="flex-1 space-y-10">
                   <div className="space-y-4">
-                    <h3 className="text-4xl md:text-5xl font-black text-foreground tracking-tightest uppercase">
+                    <h3 className="text-4xl md:text-5xl font-bold text-foreground tracking-tightest uppercase">
                       {founder.name}
                     </h3>
-                    <p className="text-sm font-black text-primary uppercase tracking-[0.3em] italic">
+                    <p className="text-sm font-bold text-primary uppercase tracking-[0.3em] italic">
                       {founder.role}
                     </p>
                   </div>
@@ -92,7 +92,7 @@ export default function AboutPage() {
 
                   <ul className="space-y-5">
                     {founder.details.map((detail, i) => (
-                      <li key={i} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-foreground/40 group">
+                      <li key={i} className="flex items-center gap-4 text-sm font-bold tracking-wider text-foreground/70 group">
                         <div className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
                         <span>{detail}</span>
                       </li>
@@ -104,7 +104,7 @@ export default function AboutPage() {
                       href={founder.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-4 px-8 py-4 bg-foreground text-background font-black text-[10px] uppercase tracking-[0.4em] hover:bg-primary hover:text-white transition-all transform hover:-translate-y-1 hover:shadow-xl"
+                      className="inline-flex items-center gap-4 px-8 py-4 bg-foreground text-background font-bold text-xs uppercase tracking-[0.4em] hover:bg-primary hover:text-white transition-all transform hover:-translate-y-1 hover:shadow-xl"
                     >
                       Connect on LinkedIn
                       <ArrowUpRight size={14} />
@@ -130,7 +130,7 @@ export default function AboutPage() {
 
                   {/* Numbering */}
                   <div className="absolute -bottom-10 -right-10 opacity-[0.03] select-none pointer-events-none">
-                    <span className="text-[200px] font-black leading-none">0{index + 1}</span>
+                    <span className="text-[200px] font-bold leading-none">0{index + 1}</span>
                   </div>
                 </div>
               </motion.div>
@@ -142,13 +142,13 @@ export default function AboutPage() {
       {/* Simple Final CTA to close the narrative */}
       <section className="py-24 border-t border-border/50 bg-secondary/5">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-6xl font-black text-foreground uppercase tracking-tightest mb-10">
+          <h2 className="text-4xl md:text-6xl font-bold text-foreground uppercase tracking-tightest mb-10">
             Join the <span className="text-primary">Maestro Force.</span>
           </h2>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
               href="/explore"
-              className="inline-block px-12 py-6 bg-primary text-white font-black text-xs uppercase tracking-[0.5em] shadow-lg shadow-primary/20"
+              className="inline-block px-12 py-6 bg-primary text-white font-bold text-xs uppercase tracking-[0.5em] shadow-lg shadow-primary/20"
             >
               Initialize Transformation
             </Link>

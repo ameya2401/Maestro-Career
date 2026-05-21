@@ -80,7 +80,7 @@ export default function ThemeChanger({ isOpen, onClose }: ThemeChangerProps) {
                     >
                         <div className="p-6 border-b-2 border-primary/10 flex items-center justify-between bg-secondary/10">
                             <div>
-                                <h2 className="text-2xl font-black text-foreground uppercase tracking-widest">Theme Selector</h2>
+                                <h2 className="text-2xl font-bold text-foreground tracking-wider">Theme Selector</h2>
                                 <p className="text-sm font-bold text-foreground/50">Personalize your platform aesthetic</p>
                             </div>
                             <button
@@ -111,12 +111,12 @@ export default function ThemeChanger({ isOpen, onClose }: ThemeChangerProps) {
                                                 className="w-16 h-16 rounded-xl shadow-lg border-2 border-black/10 flex items-center justify-center text-white"
                                                 style={{ backgroundColor: t.primary }}
                                             >
-                                                <span className="font-black text-2xl uppercase">{t.name.charAt(0)}</span>
+                                                <span className="font-bold text-2xl uppercase">{t.name.charAt(0)}</span>
                                             </div>
                                         </div>
                                         <div className="p-5 bg-card flex-1">
                                             <div className="flex items-center justify-between mb-2">
-                                                <h3 className="font-black text-lg text-foreground uppercase tracking-wide">{t.name}</h3>
+                                                <h3 className="font-bold text-lg text-foreground uppercase tracking-wide">{t.name}</h3>
                                                 {colorTheme === t.id && (
                                                     <div className="bg-primary text-white p-1 rounded-full">
                                                         <Check size={14} strokeWidth={4} />

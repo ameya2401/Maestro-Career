@@ -24,10 +24,10 @@ export default function ContactPage() {
                 className="inline-flex items-center px-4 py-2 space-x-2 rounded-full bg-primary/5 text-primary border border-primary/10"
               >
                 <Headphones className="w-4 h-4" />
-                <span className="text-sm font-black uppercase tracking-widest">Support Portal</span>
+                <span className="text-sm font-bold tracking-wider">Support Portal</span>
               </motion.div>
 
-              <h1 className="text-6xl md:text-8xl font-black text-foreground tracking-tightest leading-[0.8] mb-8">
+              <h1 className="text-6xl md:text-8xl font-bold text-foreground tracking-tightest leading-[0.8] mb-8">
                 Let&apos;s <br />
                 <span className="text-gradient">Connect.</span>
               </h1>
@@ -53,7 +53,7 @@ export default function ContactPage() {
                       <item.icon className={`w-6 h-6 ${item.color}`} />
                     </div>
                     <div>
-                      <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{item.label}</p>
+                      <p className="text-xs font-bold tracking-wider text-muted-foreground">{item.label}</p>
                       <p className="text-xl font-bold text-foreground">{item.value}</p>
                     </div>
                   </motion.div>
@@ -74,14 +74,14 @@ export default function ContactPage() {
 
           {/* Bottom FAQ Preview */}
           <div className="text-center bg-card/30 p-12 md:p-24 rounded-[4rem] border border-border/50 backdrop-blur-2xl">
-            <h3 className="text-4xl md:text-5xl font-black text-foreground mb-12 tracking-tighter">Frequently Asked <span className="text-muted-foreground/20">Questions.</span></h3>
+            <h3 className="text-4xl md:text-5xl font-bold text-foreground mb-12 tracking-tighter">Frequently Asked <span className="text-muted-foreground/20">Questions.</span></h3>
             <div className="grid md:grid-cols-2 gap-8 text-left max-w-4xl mx-auto">
               <div>
-                <h4 className="text-lg font-black text-primary mb-2 italic">How long does the assessment take?</h4>
+                <h4 className="text-lg font-bold text-primary mb-2 italic">How long does the assessment take?</h4>
                 <p className="text-muted-foreground font-medium">Most students complete our 3D interactive journey in 45-60 minutes.</p>
               </div>
               <div>
-                <h4 className="text-lg font-black text-primary mb-2 italic">Is there a free version available?</h4>
+                <h4 className="text-lg font-bold text-primary mb-2 italic">Is there a free version available?</h4>
                 <p className="text-muted-foreground font-medium">Yes, our Basic Discovery module is 100% free for first-time explorers.</p>
               </div>
             </div>

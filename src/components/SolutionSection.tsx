@@ -48,14 +48,14 @@ export default function SolutionSection() {
                         viewport={{ once: true }}
                         className="inline-flex items-center px-6 py-2 bg-foreground text-background mb-10"
                     >
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em]">SYSTEM.DECODE</span>
+                        <span className="text-xs font-semibold tracking-wider">SYSTEM.DECODE</span>
                     </motion.div>
 
-                    <h2 className="text-6xl md:text-8xl font-black text-foreground tracking-tightest leading-[0.85] mb-10 uppercase">
+                    <h2 className="text-6xl md:text-8xl font-bold text-foreground tracking-tightest leading-[0.85] mb-10 uppercase">
                         The Engine <br />
                         Inside You.
                     </h2>
-                    <p className="text-xl md:text-2xl text-foreground/40 font-bold max-w-2xl mx-auto uppercase tracking-tighter">
+                    <p className="text-xl md:text-2xl text-foreground/70 font-bold max-w-2xl mx-auto tracking-tight">
                         Maestro isn&apos;t a test. It&apos;s a high-precision engine that decodes your professional DNA and maps it to a future that fits.
                     </p>
                 </div>
@@ -84,7 +84,7 @@ export default function SolutionSection() {
                         >
                             <div className="flex items-center space-x-4">
                                 <Zap className="w-5 h-5" />
-                                <span className="font-black text-[10px] uppercase tracking-widest leading-none">Status: Active</span>
+                                <span className="font-bold text-xs tracking-wider leading-none">Status: Active</span>
                             </div>
                         </motion.div>
                     </motion.div>
@@ -105,10 +105,10 @@ export default function SolutionSection() {
                                         <sol.icon className="w-6 h-6 text-foreground" />
                                     </div>
                                     <div className="space-y-4">
-                                        <h3 className="text-2xl font-black text-foreground uppercase tracking-tight">
+                                        <h3 className="text-2xl font-bold text-foreground uppercase tracking-tight">
                                             {sol.title}
                                         </h3>
-                                        <p className="text-sm text-foreground/40 font-bold uppercase tracking-widest leading-relaxed">
+                                        <p className="text-sm text-foreground/70 font-bold tracking-wider leading-relaxed">
                                             {sol.desc}
                                         </p>
                                     </div>

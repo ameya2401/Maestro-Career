@@ -350,7 +350,7 @@ export default function TestPageClient() {
                                         <button
                                             type="button"
                                             onClick={() => router.push(`/test/result/${latestAttempt.id}`)}
-                                            className="rounded-xl bg-background border border-border/20 hover:border-border/40 px-6 py-3 text-sm font-medium transition-colors"
+                                            className="rounded-xl bg-background border border-border/20 hover:border-border/20 px-6 py-3 text-sm font-medium transition-colors"
                                         >
                                             View latest result
                                         </button>
@@ -431,7 +431,7 @@ export default function TestPageClient() {
                                                     onClick={() => handleSelect(activeQuestion.id, opt.id)}
                                                     className={`text-left rounded-2xl border px-5 py-4 transition-colors ${selected
                                                             ? "border-primary bg-primary/10"
-                                                            : "border-border/20 bg-background hover:border-border/40"
+                                                            : "border-border/20 bg-background hover:border-border/20"
                                                         }`}
                                                 >
                                                     <div className="flex items-start gap-3">
@@ -452,7 +452,7 @@ export default function TestPageClient() {
                                             type="button"
                                             onClick={() => setActiveIndex((i) => Math.max(0, i - 1))}
                                             disabled={activeIndex === 0}
-                                            className="rounded-xl bg-background border border-border/20 hover:border-border/40 px-5 py-2.5 text-sm font-medium transition-colors disabled:opacity-60"
+                                            className="rounded-xl bg-background border border-border/20 hover:border-border/20 px-5 py-2.5 text-sm font-medium transition-colors disabled:opacity-60"
                                         >
                                             Previous
                                         </button>
@@ -460,7 +460,7 @@ export default function TestPageClient() {
                                             type="button"
                                             onClick={() => setActiveIndex((i) => Math.min(questions.length - 1, i + 1))}
                                             disabled={activeIndex >= questions.length - 1}
-                                            className="rounded-xl bg-background border border-border/20 hover:border-border/40 px-5 py-2.5 text-sm font-medium transition-colors disabled:opacity-60"
+                                            className="rounded-xl bg-background border border-border/20 hover:border-border/20 px-5 py-2.5 text-sm font-medium transition-colors disabled:opacity-60"
                                         >
                                             Next
                                         </button>

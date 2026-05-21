@@ -25,8 +25,8 @@ export default function SpectrumSlider({ label, leftLabel, rightLabel, value }: 
                 />
             </div>
             <div className="flex justify-between mt-1">
-                <span className="text-[10px] text-gray-500 uppercase tracking-wider">{leftLabel}</span>
-                <span className="text-[10px] text-gray-500 uppercase tracking-wider">{rightLabel}</span>
+                <span className="text-xs text-gray-500 uppercase tracking-wider">{leftLabel}</span>
+                <span className="text-xs text-gray-500 uppercase tracking-wider">{rightLabel}</span>
             </div>
         </div>
     );

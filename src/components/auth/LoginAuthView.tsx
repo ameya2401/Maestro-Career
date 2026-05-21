@@ -160,7 +160,7 @@ export function LoginAuthView({
                         {loading ? "Updating password..." : "Reset password"}
                     </PrimaryButton>
 
-                    <p className="text-sm text-foreground/60">
+                    <p className="text-sm text-foreground/80">
                         Return to{" "}
                         <Link href="/login" className="font-medium text-primary hover:text-primary/80 transition-colors">
                             login
@@ -185,7 +185,7 @@ export function LoginAuthView({
                             className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                                 loginMode === "password"
                                     ? "bg-primary text-primary-foreground shadow-sm"
-                                    : "text-foreground/60 hover:text-foreground hover:bg-background/80"
+                                    : "text-foreground/80 hover:text-foreground hover:bg-background/80"
                             }`}
                         >
                             Password
@@ -196,7 +196,7 @@ export function LoginAuthView({
                             className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                                 loginMode === "otp"
                                     ? "bg-primary text-primary-foreground shadow-sm"
-                                    : "text-foreground/60 hover:text-foreground hover:bg-background/80"
+                                    : "text-foreground/80 hover:text-foreground hover:bg-background/80"
                             }`}
                         >
                             Email OTP
@@ -284,7 +284,7 @@ export function LoginAuthView({
                                         type="button"
                                         onClick={() => void onLoginRequestOtp()}
                                         disabled={loading || otpCooldown > 0}
-                                        className="text-left text-sm font-medium text-foreground/60 transition hover:text-primary disabled:text-foreground/40"
+                                        className="text-left text-sm font-medium text-foreground/80 transition hover:text-primary disabled:text-foreground/60"
                                     >
                                         {otpCooldown > 0 ? `Resend available in ${otpCooldown}s` : "Resend OTP"}
                                     </button>
@@ -317,7 +317,7 @@ export function LoginAuthView({
                                 <div className="space-y-4">
                                     <div className="space-y-1">
                                         <h3 className="text-base font-semibold text-foreground">Reset password</h3>
-                                        <p className="text-sm leading-6 text-foreground/60">
+                                        <p className="text-sm leading-6 text-foreground/80">
                                             We&apos;ll email a secure recovery link to this address.
                                         </p>
                                     </div>
@@ -353,7 +353,7 @@ export function LoginAuthView({
                         ) : null}
                     </AnimatePresence>
 
-                    <p className="text-sm text-foreground/60">
+                    <p className="text-sm text-foreground/80">
                         New here?{" "}
                         <Link href="/register" className="font-medium text-primary hover:text-primary/80 transition-colors">
                             Create an account

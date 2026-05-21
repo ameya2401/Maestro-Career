@@ -111,7 +111,7 @@ const CONTENT: Record<
                                         <h1 className="text-3xl font-semibold leading-tight text-foreground">
                                             {content.heading}
                                         </h1>
-                                        <p className="max-w-2xl text-sm leading-6 text-foreground/60">
+                                        <p className="max-w-2xl text-sm leading-6 text-foreground/80">
                                             {content.description}
                                         </p>
                                     </div>
@@ -123,7 +123,7 @@ const CONTENT: Record<
                                                 className={`flex-1 rounded-full px-4 py-2.5 text-center text-sm font-medium transition ${
                                                     mode === "login"
                                                         ? "bg-primary text-primary-foreground shadow-sm"
-                                                        : "text-foreground/60 hover:text-foreground hover:bg-background/80"
+                                                        : "text-foreground/80 hover:text-foreground hover:bg-background/80"
                                                 }`}
                                             >
                                                 Login
@@ -133,7 +133,7 @@ const CONTENT: Record<
                                                 className={`flex-1 rounded-full px-4 py-2.5 text-center text-sm font-medium transition ${
                                                     mode === "register"
                                                         ? "bg-primary text-primary-foreground shadow-sm"
-                                                        : "text-foreground/60 hover:text-foreground hover:bg-background/80"
+                                                        : "text-foreground/80 hover:text-foreground hover:bg-background/80"
                                                 }`}
                                             >
                                                 Register
@@ -144,7 +144,7 @@ const CONTENT: Record<
                                             <h2 className="text-2xl font-semibold tracking-tight text-foreground">
                                                 {cardTitle}
                                             </h2>
-                                            <p className="text-sm leading-6 text-foreground/60">
+                                            <p className="text-sm leading-6 text-foreground/80">
                                                 {cardDescription}
                                             </p>
                                         </div>

@@ -53,7 +53,7 @@ export default function HowItWorks() {
         <div className="max-w-5xl mx-auto">
           <div className="mb-24 text-center">
 
-            <h2 className="text-4xl md:text-8xl font-black text-foreground tracking-tighter leading-none mb-8">
+            <h2 className="text-4xl md:text-8xl font-bold text-foreground tracking-tighter leading-none mb-8">
               How It <span className="text-gradient">Flows.</span>
             </h2>
           </div>
@@ -91,10 +91,10 @@ export default function HowItWorks() {
                       viewport={{ margin: "-100px" }}
                       className={`w-full lg:w-[42%] ${isEven ? 'lg:text-right' : 'lg:text-left'}`}
                     >
-                      <span className={`text-sm font-black uppercase tracking-[0.3em] mb-4 block bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
+                      <span className={`text-sm font-semibold tracking-wider mb-4 block bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
                         {step.detail}
                       </span>
-                      <h3 className="text-4xl md:text-5xl font-black text-foreground mb-6 leading-none">
+                      <h3 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-none">
                         {step.title}
                       </h3>
                       <p className="text-xl text-muted-foreground font-medium leading-relaxed">
@@ -130,7 +130,7 @@ export default function HowItWorks() {
 
       {/* Dynamic Background label */}
       <div className="absolute top-1/4 right-0 opacity-5 pointer-events-none rotate-90 select-none">
-        <span className="text-[120px] font-black uppercase tracking-tighter">PROGRESSION</span>
+        <span className="text-[120px] font-bold tracking-tight tracking-tighter">PROGRESSION</span>
       </div>
     </section>
   );

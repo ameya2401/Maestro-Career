@@ -60,9 +60,9 @@ export default function Services() {
                         >
                             <div className="flex items-center space-x-2 text-primary font-bold mb-4">
                                 <Zap className="w-5 h-5 fill-primary" />
-                                <span className="uppercase tracking-widest text-sm">Advanced Solutions</span>
+                                <span className="tracking-wider text-sm">Advanced Solutions</span>
                             </div>
-                            <h2 className="text-5xl md:text-6xl font-black text-foreground tracking-tighter mb-8 leading-[1.1]">
+                            <h2 className="text-5xl md:text-6xl font-bold text-foreground tracking-tighter mb-8 leading-[1.1]">
                                 Comprehensive <br />
                                 <span className="text-gradient">Career Intelligence</span>
                             </h2>

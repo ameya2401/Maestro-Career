@@ -57,7 +57,7 @@ export default function InteractiveSection() {
     <section id="interactive" className="relative py-32 bg-background overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-24 max-w-4xl mx-auto">
-          <h2 className="text-6xl md:text-8xl font-black text-foreground tracking-tighter leading-none mb-8">
+          <h2 className="text-6xl md:text-8xl font-bold text-foreground tracking-tighter leading-none mb-8">
             Experience <br />
             <span className="text-primary">The Un-Test.</span>
           </h2>
@@ -71,19 +71,16 @@ export default function InteractiveSection() {
           {/* Card 1: Our Objective */}
           <TiltCard className="h-[450px] bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 group">
             <div className="h-full w-full p-10 flex flex-col justify-between bg-card/50 backdrop-blur-md rounded-[3rem]">
-              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
-                <Gamepad2 className="w-8 h-8 text-primary" />
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
+                <span className="text-xl font-black text-primary">01</span>
               </div>
               <div className="space-y-3">
-                <span className="text-xs font-black uppercase tracking-widest text-primary">What we do</span>
-                <h3 className="text-3xl font-black text-foreground">Our Objective</h3>
+                <span className="text-xs font-bold tracking-wider text-primary">What we do</span>
+                <h3 className="text-3xl font-bold text-foreground">Our Objective</h3>
                 <div className="text-base text-muted-foreground font-medium space-y-3 pt-2">
                   <p>• Finalize your career with self-assessment</p>
                   <p>• Subject matter expertise in career coaching</p>
                 </div>
-              </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                <MousePointer2 className="w-20 h-20 text-primary/30 rotate-12" />
               </div>
             </div>
           </TiltCard>
@@ -91,12 +88,12 @@ export default function InteractiveSection() {
           {/* Card 2: Our Schedule */}
           <TiltCard className="h-[450px] bg-gradient-to-br from-secondary/20 to-transparent border border-secondary/30">
             <div className="h-full w-full p-10 flex flex-col justify-between bg-card/50 backdrop-blur-md rounded-[3rem]">
-              <div className="w-16 h-16 rounded-2xl bg-secondary/30 flex items-center justify-center">
-                <Brain className="w-8 h-8 text-secondary-foreground" />
+              <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                <span className="text-xl font-black text-secondary-foreground">02</span>
               </div>
               <div className="space-y-3">
-                <span className="text-xs font-black uppercase tracking-widest text-secondary-foreground">When we do</span>
-                <h3 className="text-3xl font-black text-foreground">Our Schedule</h3>
+                <span className="text-xs font-bold tracking-wider text-secondary-foreground">When we do</span>
+                <h3 className="text-3xl font-bold text-foreground">Our Schedule</h3>
                 <div className="text-base text-muted-foreground font-medium space-y-3 pt-2">
                   <p>• As soon as you become our subscriber</p>
                   <p>• We identify your gaps and help in skill development</p>
@@ -109,12 +106,12 @@ export default function InteractiveSection() {
           {/* Card 3: Our Activity */}
           <TiltCard className="h-[450px] bg-gradient-to-br from-accent/10 to-transparent border border-accent/20">
             <div className="h-full w-full p-10 flex flex-col justify-between bg-card/50 backdrop-blur-md rounded-[3rem]">
-              <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-accent" />
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-primary" />
               </div>
               <div className="space-y-3">
-                <span className="text-xs font-black uppercase tracking-widest text-accent">How we do</span>
-                <h3 className="text-3xl font-black text-foreground leading-tight">Our Activity</h3>
+                <span className="text-xs font-bold tracking-wider text-primary">How we do</span>
+                <h3 className="text-3xl font-bold text-foreground leading-tight">Our Activity</h3>
                 <div className="text-base text-muted-foreground font-medium space-y-3 pt-2">
                   <p>• Amplify your professional journey by staying updated with the latest trends and technologies</p>
                   <p>• Learn life skills and domain expertise through our guidance</p>
