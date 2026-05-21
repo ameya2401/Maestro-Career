@@ -170,19 +170,22 @@ export default function AdminDashboardPage() {
             }));
 
             try {
+                console.log(`Sending ${action} request for user ${userId}`);
                 const resp = await fetch(`/api/admin/users/${userId}/assessment-access`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ action }),
                 });
                 const data = await resp.json();
+                console.log("Response from server:", data);
 
                 if (!resp.ok || !data?.success) {
-                    throw new Error(data?.message || "Unable to update internal assessment access.");
+                    throw new Error(data?.message || `Unable to ${action} internal assessment access.`);
                 }
 
                 setInternalAccess((current) => ({ ...current, [userId]: data.data as InternalAssessmentAccess }));
             } catch (e) {
+                console.error("Update Internal Access Error:", e);
                 // Rollback on failure
                 setInternalAccess((current) => ({ ...current, [userId]: previousState }));
                 window.alert(e instanceof Error ? e.message : "Unable to update internal assessment access.");
@@ -196,22 +199,18 @@ export default function AdminDashboardPage() {
     const syncLinkInputs = useCallback((nextUsers: AdminUser[]) => {
         setLinkInput((current) => {
             const nextState = { ...current };
-
             for (const user of nextUsers) {
                 nextState[user.id] = user.psychometric_test_link ?? "";
             }
-
             return nextState;
         });
     }, []);
 
     const loadStats = useCallback(async () => {
         setStatsLoading(true);
-
         try {
             const response = await fetch("/api/admin/stats", { cache: "no-store" });
             const data = await response.json();
-
             if (response.ok && data?.success) {
                 setStats(data.data);
             }
@@ -222,11 +221,9 @@ export default function AdminDashboardPage() {
 
     const loadDashboardData = useCallback(async () => {
         setError("");
-
         try {
             const sessionResp = await fetch("/api/admin/session", { cache: "no-store" });
             const sessionData = await sessionResp.json();
-
             if (!sessionData?.authenticated) {
                 router.replace("/admin");
                 return;
@@ -262,14 +259,10 @@ export default function AdminDashboardPage() {
     }, [loadDashboardData]);
 
     useEffect(() => {
-        if (loading) {
-            return;
-        }
-
+        if (loading) return;
         const intervalId = window.setInterval(() => {
             void loadStats();
         }, 30000);
-
         return () => window.clearInterval(intervalId);
     }, [loading, loadStats]);
 
@@ -282,12 +275,8 @@ export default function AdminDashboardPage() {
 
     const handleSendLink = async (userId: string) => {
         const link = (linkInput[userId] ?? "").trim();
-        if (!link) {
-            return;
-        }
-
+        if (!link) return;
         setSendingLink((current) => ({ ...current, [userId]: true }));
-
         try {
             const resp = await fetch(`/api/admin/users/${userId}/send-link`, {
                 method: "POST",
@@ -295,10 +284,7 @@ export default function AdminDashboardPage() {
                 body: JSON.stringify({ psychometricTestLink: link }),
             });
             const data = await resp.json();
-
-            if (!resp.ok || !data?.success) {
-                throw new Error(data?.message || "Failed to distribute link.");
-            }
+            if (!resp.ok || !data?.success) throw new Error(data?.message || "Failed to distribute link.");
 
             setUsers((current) =>
                 current.map((user) =>
@@ -313,10 +299,33 @@ export default function AdminDashboardPage() {
         }
     };
 
+    const createEditForm = (user: AdminUser): AdminEditForm => ({
+        fullName: user.full_name || "",
+        mobile: user.mobile || "",
+        dateOfBirth: user.date_of_birth || "",
+        userType: user.user_type || "student",
+        city: user.city || "",
+        selectedPlanId: user.selected_plan_id || "",
+        paymentStatus: user.payment_status || "unpaid",
+        paymentMethod: inferPaymentMethod(user),
+        paymentId: user.payment_id || "",
+        transactionId: user.transaction_id || "",
+        paymentToken: user.payment_token || "",
+        manualCashAmount: user.manual_cash_amount?.toString() || "",
+        manualPaymentNotes: user.manual_payment_notes || "",
+        psychometricTestLink: user.psychometric_test_link || "",
+    });
+
     const handleEditStart = (user: AdminUser) => {
+        console.log("Starting edit for user:", user.id);
         setEditingUserId(user.id);
-        setEditForm(createEditForm(user));
-        void loadInternalAccess(user.id);
+        try {
+            const form = createEditForm(user);
+            setEditForm(form);
+            void loadInternalAccess(user.id);
+        } catch (err) {
+            console.error("Failed to start edit:", err);
+        }
     };
 
     const handleEditCancel = () => {
@@ -329,12 +338,9 @@ export default function AdminDashboardPage() {
     };
 
     const handleSaveEdit = async (userId: string) => {
-        if (!editForm) {
-            return;
-        }
-
+        if (!editForm) return;
         setSavingUserId(userId);
-
+        console.log("Saving edits for user:", userId, editForm);
         try {
             const response = await fetch(`/api/admin/users/${userId}`, {
                 method: "PATCH",
@@ -342,10 +348,7 @@ export default function AdminDashboardPage() {
                 body: JSON.stringify(editForm),
             });
             const data = await response.json();
-
-            if (!response.ok || !data?.success) {
-                throw new Error(data?.message || "Unable to save this registration.");
-            }
+            if (!response.ok || !data?.success) throw new Error(data?.message || "Unable to save this registration.");
 
             const updatedUser = data.data as AdminUser;
             setUsers((current) => current.map((user) => (user.id === userId ? updatedUser : user)));
@@ -355,7 +358,9 @@ export default function AdminDashboardPage() {
             }));
             setEditingUserId(null);
             setEditForm(null);
+            console.log("Successfully saved.");
         } catch (saveError) {
+            console.error("Save Edit Error:", saveError);
             window.alert(saveError instanceof Error ? saveError.message : "Unable to save this registration.");
         } finally {
             setSavingUserId(null);
