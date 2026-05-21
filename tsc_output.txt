@@ -1,0 +1,8 @@
+﻿fix-db.ts(2,25): error TS2307: Cannot find module 'dotenv' or its corresponding type declarations.
+src/app/admin/dashboard/page.tsx(307,21): error TS2552: Cannot find name 'createEditForm'. Did you mean 'setEditForm'?
+src/app/admin/dashboard/page.tsx(534,77): error TS2322: Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/app/admin/dashboard/page.tsx(543,81): error TS2322: Type 'UserType | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+  Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+src/app/admin/dashboard/page.tsx(732,148): error TS2345: Argument of type 'PaymentMethod | undefined' is not assignable to parameter of type 'PaymentMethod'.
+  Type 'undefined' is not assignable to type 'PaymentMethod'.

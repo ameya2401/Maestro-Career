@@ -18,6 +18,12 @@ export interface CareerMatch {
     description: string;
 }
 
+export interface BadCareerMatch {
+    career: string;
+    score: number;
+    reason: string;
+}
+
 export interface ChartDataPoint {
     subject: string;
     value: number;
@@ -50,6 +56,7 @@ export interface ReportData {
     recommendations: {
         bestCareers: string[];
         alternativeCareers: string[];
+        badCareers?: BadCareerMatch[];
         growthAdvice: string[];
     };
 

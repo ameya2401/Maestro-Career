@@ -388,7 +388,124 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 </section>
 
                 {/* ═══════════════════════════════════════════════
-                    PAGE 11 — IDEAL LEARNING ENVIRONMENT
+                    PAGE 11 — CAREER COMPARISON (5-Circle Venn)
+                ═══════════════════════════════════════════════ */}
+                <section className="dossier-page">
+                    <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+                        <h2 style={{ fontSize: '20pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Career Comparison</h2>
+                        <p style={{ fontSize: '8pt', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginTop: '0.25rem' }}>Best, Good &amp; Poor Career Fit</p>
+                    </div>
+
+                    <p className="dossier-body-sm" style={{ marginBottom: '1rem', color: '#555' }}>
+                        Not every career is right for every person. This diagram compares your <strong>best-fit</strong>,
+                        <strong> good-fit</strong>, and <strong>poor-fit</strong> career options based on your aptitude scores,
+                        personality traits, and overall profile alignment.
+                    </p>
+
+                    {/* ---- 5-Circle Venn SVG ---- */}
+                    {(() => {
+                        const bestCareer = data.careerMatches[0]?.career ?? 'Best Career';
+                        const goodCareers = data.recommendations.alternativeCareers.slice(0, 2);
+                        const badCareers = (data.recommendations.badCareers ?? []).slice(0, 4);
+
+                        return (
+                            <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
+                                <svg viewBox="0 0 480 380" width="480" height="380" style={{ maxWidth: '100%' }}>
+                                    {/* Outer circles (bad careers) — 4 directions */}
+                                    <circle cx="240" cy="100" r="80" fill="rgba(239,68,68,0.08)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 3" />
+                                    <circle cx="240" cy="280" r="80" fill="rgba(239,68,68,0.08)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 3" />
+                                    <circle cx="120" cy="190" r="80" fill="rgba(239,68,68,0.08)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 3" />
+                                    <circle cx="360" cy="190" r="80" fill="rgba(239,68,68,0.08)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 3" />
+
+                                    {/* Center circle (best career) */}
+                                    <circle cx="240" cy="190" r="85" fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="2" />
+
+                                    {/* Labels — Outer (bad) */}
+                                    <text x="240" y="62" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                        {badCareers[0]?.career ?? 'Poor Fit 1'}
+                                    </text>
+                                    <text x="240" y="74" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[0]?.score ?? 20}% match</text>
+
+                                    <text x="240" y="318" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                        {badCareers[1]?.career ?? 'Poor Fit 2'}
+                                    </text>
+                                    <text x="240" y="330" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[1]?.score ?? 20}% match</text>
+
+                                    <text x="80" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                        {badCareers[2]?.career ?? 'Poor Fit 3'}
+                                    </text>
+                                    <text x="80" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[2]?.score ?? 20}% match</text>
+
+                                    <text x="400" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                        {badCareers[3]?.career ?? 'Poor Fit 4'}
+                                    </text>
+                                    <text x="400" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[3]?.score ?? 30}% match</text>
+
+                                    {/* Labels — Overlap zones (good careers) */}
+                                    <text x="240" y="136" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                        {goodCareers[0] ?? 'Good Fit 1'}
+                                    </text>
+                                    <text x="240" y="248" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                        {goodCareers[1] ?? 'Good Fit 2'}
+                                    </text>
+
+                                    {/* Label — Center (best career) */}
+                                    <text x="240" y="183" textAnchor="middle" fontSize="10" fontWeight="900" fill="#15803d" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                        {bestCareer}
+                                    </text>
+                                    <text x="240" y="198" textAnchor="middle" fontSize="8" fontWeight="700" fill="#16a34a">
+                                        {data.careerMatches[0]?.score ?? 95}% match
+                                    </text>
+                                    <text x="240" y="212" textAnchor="middle" fontSize="7" fill="#555">Best Fit</text>
+                                </svg>
+                            </div>
+                        );
+                    })()}
+
+                    {/* Legend + Justification */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem', marginTop: '0.5rem' }}>
+                        <div style={{ padding: '0.75rem', background: 'rgba(22,163,74,0.08)', borderLeft: '3px solid #16a34a' }}>
+                            <div style={{ fontSize: '7pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#15803d', marginBottom: '0.4rem' }}>Best Fit (Centre)</div>
+                            <p style={{ fontSize: '7.5pt', lineHeight: 1.5, color: '#333', margin: 0 }}>
+                                Your aptitude scores, personality traits, and natural strengths all converge strongly with this career. It is the single highest alignment in your profile.
+                            </p>
+                        </div>
+                        <div style={{ padding: '0.75rem', background: 'rgba(217,119,6,0.08)', borderLeft: '3px solid #d97706' }}>
+                            <div style={{ fontSize: '7pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#b45309', marginBottom: '0.4rem' }}>Good Fit (Overlap)</div>
+                            <p style={{ fontSize: '7.5pt', lineHeight: 1.5, color: '#333', margin: 0 }}>
+                                These careers share significant overlap with your core strengths but require building 1–2 additional skills. They are strong alternatives worth exploring.
+                            </p>
+                        </div>
+                        <div style={{ padding: '0.75rem', background: 'rgba(239,68,68,0.06)', borderLeft: '3px solid #ef4444' }}>
+                            <div style={{ fontSize: '7pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#dc2626', marginBottom: '0.4rem' }}>Poor Fit (Outer)</div>
+                            <p style={{ fontSize: '7.5pt', lineHeight: 1.5, color: '#333', margin: 0 }}>
+                                Your aptitude scores or personality traits are significantly misaligned with these careers. Pursuing them would require overcoming fundamental skill gaps.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Individual bad-career justifications */}
+                    {(data.recommendations.badCareers ?? []).length > 0 && (
+                        <div style={{ marginTop: '0.75rem' }}>
+                            <h3 style={{ fontSize: '8pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#dc2626', marginBottom: '0.5rem' }}>
+                                Why These Careers Are a Poor Fit
+                            </h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                                {(data.recommendations.badCareers ?? []).map((bc, i) => (
+                                    <div key={i} style={{ padding: '0.6rem', background: '#fef2f2', fontSize: '7.5pt', lineHeight: 1.5, color: '#333' }}>
+                                        <strong style={{ color: '#b91c1c' }}>{bc.career} ({bc.score}%)</strong>
+                                        <span style={{ display: 'block', marginTop: '0.15rem' }}>{bc.reason}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <Footer page={11} />
+                </section>
+
+                {/* ═══════════════════════════════════════════════
+                    PAGE 12 — IDEAL LEARNING ENVIRONMENT
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
@@ -426,11 +543,11 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             </ul>
                         </div>
                     </div>
-                    <Footer page={11} />
+                    <Footer page={12} />
                 </section>
 
                 {/* ═══════════════════════════════════════════════
-                    PAGE 12 — STRATEGIC ROADMAP & CONCLUSION
+                    PAGE 13 — STRATEGIC ROADMAP & CONCLUSION
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div style={{ borderBottom: '2px solid #030712', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>

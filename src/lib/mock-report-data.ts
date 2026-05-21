@@ -8,10 +8,11 @@ export const mockReportData: Record<string, ReportData> = {
             email: "aryan@example.com",
             age: 17,
             class: "12th",
-            stream: "PCM (Physics, Chemistry, Maths)",
-            interests: ["Robotics", "Space Science", "Chess"],
-            careerInterests: ["Aerospace Engineering", "Data Science"],
-            reportDate: new Date().toLocaleDateString(),
+            stream: "Science (PCM)",
+            interests: ["Coding", "Robotics", "Physics"],
+            careerInterests: ["Software Engineering", "AI Research"],
+            careerGoals: "I want to become a Senior AI Researcher working on AGI, hopefully at a top lab.",
+            reportDate: new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
         },
         aptitudeScores: {
             logical_reasoning: 85,
@@ -108,6 +109,12 @@ export const mockReportData: Record<string, ReportData> = {
         recommendations: {
             bestCareers: ["Aerospace Engineering", "Robotics Research", "Computer Science"],
             alternativeCareers: ["Quantitative Finance", "Strategic Consulting"],
+            badCareers: [
+                { career: "Fashion Design", score: 22, reason: "Requires high creativity and visual arts aptitude, which are not your strongest areas." },
+                { career: "Social Work", score: 28, reason: "Demands exceptional empathy and communication skills, where your scores are below the threshold." },
+                { career: "Music Production", score: 18, reason: "This career relies on artistic intuition and auditory processing, which conflict with your analytical profile." },
+                { career: "Nursing", score: 30, reason: "High emotional stability and hands-on patient empathy are critical; your profile is oriented toward systems, not people-care." },
+            ],
             growthAdvice: [
                 "Participate in public speaking workshops to enhance communication.",
                 "Take on leadership roles in team projects to build empathy.",
@@ -216,6 +223,11 @@ export const mockReportData: Record<string, ReportData> = {
         recommendations: {
             bestCareers: ["UX/UI Design", "Creative Direction", "Media Studies"],
             alternativeCareers: ["Public Relations", "Brand Management"],
+            badCareers: [
+                { career: "Actuarial Science", score: 15, reason: "Requires extremely high numerical ability and statistical analysis, which are your weakest aptitude areas." },
+                { career: "Chartered Accountant", score: 20, reason: "Demands rigid discipline and intense numerical precision, directly opposing your creative personality." },
+                { career: "Mechanical Engineering", score: 25, reason: "Requires strong problem-solving in physics and mathematics, where your scores are below the required benchmark." },
+            ],
             growthAdvice: [
                 "Focus on learning basic data analytics to support your creative decisions.",
                 "Use project management tools to improve discipline and task tracking.",
