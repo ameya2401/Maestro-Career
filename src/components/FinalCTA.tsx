@@ -4,12 +4,28 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 
 export default function FinalCTA() {
-  const [formState, setFormState] = useState<"idle" | "submitting" | "sent">("idle");
+  const [formState, setFormState] = useState<"idle" | "submitting" | "sent" | "error">("idle");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormState("submitting");
-    setTimeout(() => setFormState("sent"), 1500);
+
+    try {
+      const res = await fetch("/api/inquiry/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email })
+      });
+      if (res.ok) {
+        setFormState("sent");
+      } else {
+        setFormState("error");
+      }
+    } catch (err) {
+      setFormState("error");
+    }
   };
 
   return (
@@ -59,6 +75,8 @@ export default function FinalCTA() {
                       <input
                         required
                         type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         placeholder="Enter your Name"
                         className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/30"
                       />
@@ -68,6 +86,8 @@ export default function FinalCTA() {
                       <input
                         required
                         type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email"
                         className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/30"
                       />
@@ -80,6 +100,12 @@ export default function FinalCTA() {
                   >
                     {formState === "submitting" ? "Sending..." : "Submit Inquiry"}
                   </button>
+
+                  {formState === "error" && (
+                    <p className="text-center text-xs text-red-500 font-medium mt-2">
+                      Something went wrong. Please try again.
+                    </p>
+                  )}
 
                   <p className="text-center text-[11px] text-foreground/40 font-medium mt-6 uppercase tracking-widest">
                     Absolute Confidentiality Guaranteed
