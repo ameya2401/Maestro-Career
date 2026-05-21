@@ -130,14 +130,46 @@
 
 @media print {
 
+  /* Kill the Chat Widget and all floating UI */
+  iframe,
+  .ch-widget,
+  #hubspot-messages-iframe-container,
+  .crisp-client,
+  #intercom-container,
+  .no-print,
+  [role="status"],
+  button {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+  }
+
   body,
   html,
-  main,
-  #__next,
-  .bg-\[\#030712\] {
+  main {
     background: white !important;
     background-color: white !important;
     color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Force framer-motion and other wrappers to stay out of the way */
+  div[style*="transform"],
+  div[style*="opacity"] {
+    transform: none !important;
+    opacity: 1 !important;
+    background: transparent !important;
+  }
+
+  .bg-\[\#030712\],
+  .bg-\[\#0a0a0a\] {
+    background: white !important;
+    background-color: white !important;
   }
 
   .dossier-page {
@@ -149,16 +181,16 @@
     color: black !important;
     width: 210mm !important;
     height: 297mm !important;
-    padding: 15mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    /* STRICT CLIPPING */
+    padding: 20mm !important;
     page-break-after: always !important;
     break-after: page !important;
     position: relative !important;
     display: flex !important;
     visibility: visible !important;
-  }
-
-  .no-print {
-    display: none !important;
   }
 
   * {
