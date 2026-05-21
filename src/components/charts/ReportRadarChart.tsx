@@ -25,8 +25,8 @@ export default function ReportRadarChart({ data, isPrinting = false }: ReportRad
             outerRadius="80%"
             data={data}
         >
-            <PolarGrid stroke="#374151" />
-            <PolarAngleAxis dataKey="subject" tick={{ fill: "#9CA3AF", fontSize: 12 }} />
+            <PolarGrid stroke={isPrinting ? "#d1d5db" : "#374151"} />
+            <PolarAngleAxis dataKey="subject" tick={{ fill: isPrinting ? "#1f2937" : "#9CA3AF", fontSize: 12, fontWeight: isPrinting ? 'bold' : 'normal' }} />
             <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
             <Radar
                 isAnimationActive={!isPrinting}

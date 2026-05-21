@@ -60,7 +60,6 @@
 /* Animations */
 @keyframes float {
   0% {
-<<<<<<< HEAD
     transform: translateY(0px);
   }
 
@@ -75,6 +74,22 @@
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  animation: marquee 150s linear infinite;
 }
 
 /* Glassmorphism */
@@ -172,18 +187,4 @@
   letter-spacing: 0.1em;
   font-weight: 700;
   opacity: 0.5;
-=======
-    transform: translate3d(0%, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-.animate-marquee {
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  animation: marquee 150s linear infinite;
->>>>>>> 859efa387dd4ad028b63e0a6f0699b8c2717116d
 }

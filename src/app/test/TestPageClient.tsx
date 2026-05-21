@@ -367,6 +367,38 @@ export default function TestPageClient() {
                                         <p className="text-sm font-semibold text-foreground">{progressLabel}</p>
                                     </div>
                                     <div className="flex items-center gap-3 text-sm">
+                                        <button
+                                            type="button"
+                                            onClick={async () => {
+                                                if (!attempt?.id || !questions.length) return;
+                                                setSaving(true);
+                                                try {
+                                                    const newResponses = { ...responses };
+                                                    let count = 0;
+                                                    for (const q of questions) {
+                                                        if (!newResponses[q.id]) {
+                                                            const randomOpt = q.options[Math.floor(Math.random() * q.options.length)];
+                                                            newResponses[q.id] = randomOpt.id;
+                                                            setResponses({...newResponses});
+                                                            await fetch("/api/test/response", {
+                                                                method: "PATCH",
+                                                                headers: { "Content-Type": "application/json" },
+                                                                body: JSON.stringify({ attemptId: attempt.id, questionId: q.id, optionId: randomOpt.id }),
+                                                            });
+                                                            count++;
+                                                            if (count % 5 === 0) await new Promise(r => setTimeout(r, 100));
+                                                        }
+                                                    }
+                                                } finally {
+                                                    setSaving(false);
+                                                }
+                                            }}
+                                            disabled={saving || submitting}
+                                            className="rounded-xl bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 text-xs font-bold transition-colors disabled:opacity-70"
+                                            title="Auto-fill remaining questions with random answers (Testing Only)"
+                                        >
+                                            🎲 Auto-Fill
+                                        </button>
                                         {(saving || submitting) && (
                                             <span className="text-foreground/60">{submitting ? "Submitting..." : "Saving..."}</span>
                                         )}

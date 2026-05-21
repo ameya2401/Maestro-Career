@@ -8,6 +8,7 @@ import {
     isAttemptExpired,
     upsertResponse,
 } from "@/lib/assessment/server";
+import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -45,7 +46,11 @@ export async function PATCH(req: NextRequest) {
         }
 
         if (isAttemptExpired(attempt)) {
-            const finalized = await finalizeAttempt({ supabase, userId: user.id, attemptId: attempt.id, forceExpired: true });
+            const supabaseAdmin = createClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                process.env.SUPABASE_SERVICE_ROLE_KEY!
+            );
+            const finalized = await finalizeAttempt({ supabase: supabaseAdmin, userId: user.id, attemptId: attempt.id, forceExpired: true });
             return applyToResponse(
                 NextResponse.json(
                     {

@@ -23,6 +23,21 @@ export async function GET(req: Request) {
         // Set viewport to A4 aspect ratio at high DPI
         await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 2 });
 
+        // Forward cookies for authentication
+        const cookieHeader = req.headers.get('cookie');
+        if (cookieHeader) {
+            const cookies = cookieHeader.split(';').map(c => {
+                const [name, ...rest] = c.trim().split('=');
+                return {
+                    name,
+                    value: rest.join('='),
+                    domain: host?.split(':')[0] || 'localhost',
+                    path: '/',
+                };
+            });
+            await page.setCookie(...cookies);
+        }
+
         // Emulate print media type
         await page.emulateMediaType('print');
 

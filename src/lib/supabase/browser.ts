@@ -16,7 +16,7 @@ export function createBrowserSupabaseClient() {
             auth: {
                 persistSession: true,
                 detectSessionInUrl: true,
-                flowType: "implicit",
+                flowType: "pkce",
             },
         });
     }
