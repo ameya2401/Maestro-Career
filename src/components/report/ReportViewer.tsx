@@ -16,7 +16,7 @@ const Footer = ({ page }: { page: number }) => (
     <div className="dossier-footer">
         <span>Maestro Career &copy; {new Date().getFullYear()}</span>
         <span>Confidential</span>
-        <span>Page {page} of 12</span>
+        <span>Page {page} of 13</span>
     </div>
 );
 
@@ -38,10 +38,9 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
             <div className={`report-container ${isPrinting ? 'bg-white' : 'bg-[#0a0a0a] py-12'}`}>
 
                 {/* ═══════════════════════════════════════════════
-                    PAGE 1 — COVER  (McKinsey-style centered)
+                    PAGE 1 — COVER
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page" style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-                    {/* Thin top rule */}
                     <div style={{ position: 'absolute', top: '20mm', left: '20mm', right: '20mm', borderTop: '1px solid #ddd' }} />
 
                     <div style={{ marginBottom: '3rem' }}>
@@ -53,32 +52,30 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         </h1>
                     </div>
 
-                        <div className="grid grid-cols-3 gap-12 border-t border-foreground/10 pt-12">
-                            <div>
-                                <div className="dossier-label">Subject ID</div>
-                                <div className="text-xl font-bold">{data.user.name}</div>
-                                <div className="text-xs opacity-50">{data.user.email}</div>
-                                <div className="text-xs opacity-50 mt-1">Age: {data.user.age} | Class: {data.user.class}</div>
-                            </div>
-                            <div>
-                                <div className="dossier-label">Analysis Date</div>
-                                <div className="text-xl font-bold">{data.user.reportDate}</div>
-                                <div className="text-xs opacity-50">Reference: MC-PR1-{data.user.id.slice(0, 8)}</div>
-                                <div className="text-xs opacity-50 mt-1">Classification: Level 1 Analysis</div>
-                            </div>
-                            <div>
-                                <div className="dossier-label">Global Index</div>
-                                <div className="text-4xl font-bold text-primary italic">{(data.charts?.comparisonData?.find(d => d.label === 'Overall')?.userScore || 85)} / 100</div>
-                                <div className="text-xs opacity-50 uppercase font-bold mt-1">Intelligence Quotient</div>
-                            </div>
+                    <div className="grid grid-cols-3 gap-12 border-t border-foreground/10 pt-12">
+                        <div>
+                            <div className="dossier-label">Subject ID</div>
+                            <div className="text-xl font-bold">{data.user.name}</div>
+                            <div className="text-xs opacity-50">{data.user.email}</div>
+                            <div className="text-xs opacity-50 mt-1">Age: {data.user.age} | Class: {data.user.class}</div>
                         </div>
                         <div>
-                            <div className="dossier-label">Overall Index</div>
-                            <div style={{ fontSize: '13pt', fontWeight: 700, marginTop: '4px', color: '#1294DD' }}>{overallScore}/100</div>
+                            <div className="dossier-label">Analysis Date</div>
+                            <div className="text-xl font-bold">{data.user.reportDate}</div>
+                            <div className="text-xs opacity-50">Reference: MC-PR1-{data.user.id.slice(0, 8)}</div>
+                            <div className="text-xs opacity-50 mt-1">Classification: Level 1 Analysis</div>
+                        </div>
+                        <div>
+                            <div className="dossier-label">Global Index</div>
+                            <div className="text-4xl font-bold text-primary italic">{(data.charts?.comparisonData?.find(d => d.label === 'Overall')?.userScore || 85)} / 100</div>
+                            <div className="text-xs opacity-50 uppercase font-bold mt-1">Intelligence Quotient</div>
                         </div>
                     </div>
+                    <div>
+                        <div className="dossier-label">Overall Index</div>
+                        <div style={{ fontSize: '13pt', fontWeight: 700, marginTop: '4px', color: '#1294DD' }}>{overallScore}/100</div>
+                    </div>
 
-                    {/* Bottom branding */}
                     <div style={{ position: 'absolute', bottom: '22mm', left: 0, right: 0, textAlign: 'center', fontSize: '7pt', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#bbb' }}>
                         www.maestrocareer.com
                     </div>
@@ -101,7 +98,6 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             comprehensive profile of the individual&apos;s natural strengths and development needs.
                         </p>
 
-                        {/* Two-column: Strengths / Improvement */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1rem' }}>
                             <div>
                                 <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
@@ -135,7 +131,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 </section>
 
                 {/* ═══════════════════════════════════════════════
-                    PAGE 3 — APTITUDE RADAR (Full-width chart)
+                    PAGE 3 — APTITUDE RADAR
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div className="dossier-section-header border-primary">
@@ -200,7 +196,6 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             is expressed in real-world contexts — under pressure, in teams, and in unfamiliar situations.
                         </p>
 
-                        {/* Polarity-style scales */}
                         {Object.entries(data.careerDNA || {}).map(([key, val]) => {
                             const opposite: Record<string, string> = {
                                 analytical: 'Intuitive', creative: 'Systematic', leadership: 'Collaborative',
@@ -234,7 +229,6 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        {/* Horizontal DNA bar visualisation */}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
                             {Object.entries(data.careerDNA || {}).map(([key, val]) => (
                                 <div key={key} className="p-4 bg-foreground/5 rounded border border-foreground/5">
@@ -266,7 +260,6 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             analytical thinking and personality tendencies converge, creating your unique advantage.
                         </p>
 
-                        {/* Clean SVG Venn — two overlapping circles */}
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <svg viewBox="0 0 400 220" width="400" height="220" style={{ maxWidth: '100%' }}>
                                 <circle cx="155" cy="110" r="85" fill="rgba(18,148,221,0.12)" stroke="#1294DD" strokeWidth="1.5" />
@@ -300,7 +293,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         <div className="text-6xl font-bold text-primary uppercase text-center mb-8 border-b-4 border-primary pb-4">{data.archetype.title}</div>
                         <div className="text-center max-w-xl space-y-6">
                             <p className="text-lg opacity-80 leading-relaxed font-serif italic">
-                                "{data.archetype.description}"
+                                &quot;{data.archetype.description}&quot;
                             </p>
                             <p className="text-sm opacity-60 leading-relaxed mt-4">
                                 This archetype is characterized by an innate ability to navigate complexity. They thrive in environments where rules are defined but outcomes are highly variable, requiring constant strategic recalibration.
@@ -326,7 +319,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <ComparisonGraph data={data.charts.comparisonData} isPrinting={isPrinting} />
-                        
+
                         <div className="grid grid-cols-3 gap-6 mt-16">
                             {data.charts.comparisonData.map((cd, i) => (
                                 <div key={i} className="text-center p-4 border border-foreground/10 bg-foreground/5">
@@ -334,8 +327,8 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                                     <div className={`text-2xl font-bold ${cd.userScore >= cd.idealScore ? 'text-green-500' : 'text-orange-500'}`}>
                                         {cd.userScore >= cd.idealScore ? '+' : ''}{(cd.userScore - cd.idealScore).toFixed(1)}
                                     </div>
-                                );
-                            })}
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <Footer page={9} />
@@ -357,20 +350,15 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         </p>
                         <div className="space-y-4">
                             {data.careerMatches.map((match, i) => (
-                                <div key={i} className="p-6 bg-primary/5 border-l-4 border-primary flex flex-col justify-center">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="font-bold text-lg uppercase tracking-wide">{match.career}</span>
-                                        <span className="text-xl font-mono font-bold text-primary">{match.score}% MATCH</span>
+                                <div key={i} className="p-6 bg-primary/5 border-l-4 border-primary flex items-center justify-between">
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontSize: '11pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.02em' }}>{match.career}</div>
+                                        <p className="dossier-body-sm" style={{ marginTop: '0.25rem', fontSize: '8pt' }}>{match.description}</p>
                                     </div>
-                                    <p className="text-xs opacity-70 leading-relaxed">{match.description}</p>
+                                    <div style={{ fontSize: '16pt', fontWeight: 900, color: '#1294DD', flexShrink: 0 }}>{match.score}%</div>
                                 </div>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ fontSize: '11pt', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.02em' }}>{match.career}</div>
-                                    <p className="dossier-body-sm" style={{ marginTop: '0.25rem', fontSize: '8pt' }}>{match.description}</p>
-                                </div>
-                                <div style={{ fontSize: '16pt', fontWeight: 900, color: '#1294DD', flexShrink: 0 }}>{match.score}%</div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                     <Footer page={10} />
                 </section>
@@ -380,8 +368,8 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Learning Pathway</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Optimal Data Ingestion Protocols</p>
+                        <h2 className="text-2xl font-bold uppercase">Career Comparison</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Best vs Good vs Poor Career Fits</p>
                     </div>
 
                     <p className="dossier-body-sm" style={{ marginBottom: '1rem', color: '#555' }}>
@@ -390,7 +378,6 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         personality traits, and overall profile alignment.
                     </p>
 
-                    {/* ---- 5-Circle Venn SVG ---- */}
                     {(() => {
                         const bestCareer = data.careerMatches[0]?.career ?? 'Best Career';
                         const goodCareers = data.recommendations.alternativeCareers.slice(0, 2);
@@ -398,81 +385,57 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
 
                         return (
                             <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
-                                <svg viewBox="0 0 480 380" width="480" height="380" style={{ maxWidth: '100%' }}>
-                                    {/* Outer circles (bad careers) — 4 directions */}
-                                    <circle cx="240" cy="100" r="80" fill="rgba(239,68,68,0.08)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 3" />
-                                    <circle cx="240" cy="280" r="80" fill="rgba(239,68,68,0.08)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 3" />
-                                    <circle cx="120" cy="190" r="80" fill="rgba(239,68,68,0.08)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 3" />
-                                    <circle cx="360" cy="190" r="80" fill="rgba(239,68,68,0.08)" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 3" />
+                                <svg viewBox="0 0 480 380" width="420" height="320" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                                    <circle cx="240" cy="100" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                    <circle cx="240" cy="280" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                    <circle cx="130" cy="190" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                    <circle cx="350" cy="190" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                    <circle cx="240" cy="190" r="60" fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="2" />
 
-                                    {/* Center circle (best career) */}
-                                    <circle cx="240" cy="190" r="85" fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="2" />
-
-                                    {/* Labels — Outer (bad) */}
-                                    <text x="240" y="62" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                        {badCareers[0]?.career ?? 'Poor Fit 1'}
-                                    </text>
+                                    <text x="240" y="62" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[0]?.career ?? 'Poor Fit 1'}</text>
                                     <text x="240" y="74" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[0]?.score ?? 20}% match</text>
 
-                                    <text x="240" y="318" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                        {badCareers[1]?.career ?? 'Poor Fit 2'}
-                                    </text>
+                                    <text x="240" y="318" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[1]?.career ?? 'Poor Fit 2'}</text>
                                     <text x="240" y="330" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[1]?.score ?? 20}% match</text>
 
-                                    <text x="80" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                        {badCareers[2]?.career ?? 'Poor Fit 3'}
-                                    </text>
+                                    <text x="80" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[2]?.career ?? 'Poor Fit 3'}</text>
                                     <text x="80" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[2]?.score ?? 20}% match</text>
 
-                                    <text x="400" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                        {badCareers[3]?.career ?? 'Poor Fit 4'}
-                                    </text>
+                                    <text x="400" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[3]?.career ?? 'Poor Fit 4'}</text>
                                     <text x="400" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[3]?.score ?? 30}% match</text>
 
-                                    {/* Labels — Overlap zones (good careers) */}
-                                    <text x="240" y="136" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                        {goodCareers[0] ?? 'Good Fit 1'}
-                                    </text>
-                                    <text x="240" y="248" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                        {goodCareers[1] ?? 'Good Fit 2'}
-                                    </text>
+                                    <text x="240" y="136" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[0] ?? 'Good Fit 1'}</text>
+                                    <text x="240" y="248" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[1] ?? 'Good Fit 2'}</text>
 
-                                    {/* Label — Center (best career) */}
-                                    <text x="240" y="183" textAnchor="middle" fontSize="10" fontWeight="900" fill="#15803d" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                        {bestCareer}
-                                    </text>
-                                    <text x="240" y="198" textAnchor="middle" fontSize="8" fontWeight="700" fill="#16a34a">
-                                        {data.careerMatches[0]?.score ?? 95}% match
-                                    </text>
+                                    <text x="240" y="183" textAnchor="middle" fontSize="10" fontWeight="900" fill="#15803d" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{bestCareer}</text>
+                                    <text x="240" y="198" textAnchor="middle" fontSize="8" fontWeight="700" fill="#16a34a">{data.careerMatches[0]?.score ?? 95}% match</text>
                                     <text x="240" y="212" textAnchor="middle" fontSize="7" fill="#555">Best Fit</text>
                                 </svg>
                             </div>
                         );
                     })()}
 
-                    {/* Legend + Justification */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem', marginTop: '0.5rem' }}>
                         <div style={{ padding: '0.75rem', background: 'rgba(22,163,74,0.08)', borderLeft: '3px solid #16a34a' }}>
                             <div style={{ fontSize: '7pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#15803d', marginBottom: '0.4rem' }}>Best Fit (Centre)</div>
                             <p style={{ fontSize: '7.5pt', lineHeight: 1.5, color: '#333', margin: 0 }}>
-                                Your aptitude scores, personality traits, and natural strengths all converge strongly with this career. It is the single highest alignment in your profile.
+                                Your aptitude scores, personality traits, and natural strengths all converge strongly with this career.
                             </p>
                         </div>
                         <div style={{ padding: '0.75rem', background: 'rgba(217,119,6,0.08)', borderLeft: '3px solid #d97706' }}>
                             <div style={{ fontSize: '7pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#b45309', marginBottom: '0.4rem' }}>Good Fit (Overlap)</div>
                             <p style={{ fontSize: '7.5pt', lineHeight: 1.5, color: '#333', margin: 0 }}>
-                                These careers share significant overlap with your core strengths but require building 1–2 additional skills. They are strong alternatives worth exploring.
+                                These careers share significant overlap with your core strengths but require building 1–2 additional skills.
                             </p>
                         </div>
                         <div style={{ padding: '0.75rem', background: 'rgba(239,68,68,0.06)', borderLeft: '3px solid #ef4444' }}>
                             <div style={{ fontSize: '7pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#dc2626', marginBottom: '0.4rem' }}>Poor Fit (Outer)</div>
                             <p style={{ fontSize: '7.5pt', lineHeight: 1.5, color: '#333', margin: 0 }}>
-                                Your aptitude scores or personality traits are significantly misaligned with these careers. Pursuing them would require overcoming fundamental skill gaps.
+                                Your aptitude scores or personality traits are significantly misaligned with these careers.
                             </p>
                         </div>
                     </div>
 
-                    {/* Individual bad-career justifications */}
                     {(data.recommendations.badCareers ?? []).length > 0 && (
                         <div style={{ marginTop: '0.75rem' }}>
                             <h3 style={{ fontSize: '8pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#dc2626', marginBottom: '0.5rem' }}>
@@ -504,14 +467,11 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem' }}>
                         <p className="dossier-body">
                             Understanding what to pursue is only part of the equation. How the individual absorbs
-                            and processes new information is equally critical to long-term success. The following
-                            recommendations are based on the subject&apos;s cognitive and behavioural profile.
+                            and processes new information is equally critical to long-term success.
                         </p>
 
                         <div style={{ padding: '1.5rem', background: '#f8f8f8', borderLeft: '4px solid #1294DD' }}>
-                            <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
-                                Recommended Approaches
-                            </h3>
+                            <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>Recommended Approaches</h3>
                             <ul className="dossier-body-sm" style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                 <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #1294DD' }}>Project-based, hands-on problem solving</li>
                                 <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #1294DD' }}>Deep-focus individual study sessions</li>
@@ -521,9 +481,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         </div>
 
                         <div style={{ padding: '1.5rem', background: '#fef8f8', borderLeft: '4px solid #e74c3c' }}>
-                            <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
-                                Approaches to Avoid
-                            </h3>
+                            <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>Approaches to Avoid</h3>
                             <ul className="dossier-body-sm" style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                 <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #e74c3c' }}>Rote memorisation without context</li>
                                 <li style={{ paddingLeft: '0.75rem', borderLeft: '2px solid #e74c3c' }}>Passive lecture-only formats</li>
@@ -540,32 +498,32 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 <section className="dossier-page">
                     <div className="dossier-section-header">
                         <h2 className="text-2xl font-bold uppercase">Strategic Roadmap</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Final Recommendations & Execution</p>
+                        <p className="text-xs opacity-50 tracking-wider">Final Recommendations &amp; Execution</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-between pt-8">
                         <div className="space-y-8">
                             <div className="grid grid-cols-3 gap-6">
                                 <div className="p-6 border border-foreground/10 rounded-sm">
                                     <div className="text-primary font-bold mb-2 text-sm">PHASE 01: EXPLORATION</div>
-                                    <p className="text-sm opacity-70 leading-relaxed">Focus on foundational skill acquisition and broad mental model development. Identify core constraints.</p>
+                                    <p className="text-sm opacity-70 leading-relaxed">Focus on foundational skill acquisition and broad mental model development.</p>
                                 </div>
                                 <div className="p-6 border border-foreground/10 rounded-sm">
                                     <div className="text-primary font-bold mb-2 text-sm">PHASE 02: SPECIALIZATION</div>
-                                    <p className="text-sm opacity-70 leading-relaxed">Deep-dive into preferred career DNA clusters. Begin eliminating extraneous vectors to focus energy.</p>
+                                    <p className="text-sm opacity-70 leading-relaxed">Deep-dive into preferred career DNA clusters. Begin eliminating extraneous vectors.</p>
                                 </div>
                                 <div className="p-6 border border-foreground/10 rounded-sm">
                                     <div className="text-primary font-bold mb-2 text-sm">PHASE 03: MASTERY</div>
-                                    <p className="text-sm opacity-70 leading-relaxed">Professional placement and leadership trajectory initiation. Execute primary archetype strengths.</p>
+                                    <p className="text-sm opacity-70 leading-relaxed">Professional placement and leadership trajectory initiation.</p>
                                 </div>
                             </div>
                             <div className="bg-primary text-primary-foreground p-10 rounded-lg shadow-xl mt-12">
                                 <h3 className="text-xl font-bold mb-4 tracking-wider border-b border-primary-foreground/20 pb-4">Conclusion Directive</h3>
                                 <p className="text-md leading-relaxed font-serif">
-                                    The subject is highly recommended for high-complexity analytical environments. Their primary mandate should be to find roles that allow autonomy in problem-solving. By developing their secondary soft-skill communication layers, they can effectively bridge the gap between technical logic depth and organizational leadership, maximizing their overall global index impact.
+                                    The subject is highly recommended for high-complexity analytical environments. Their primary mandate should be to find roles that allow autonomy in problem-solving. By developing their secondary soft-skill communication layers, they can effectively bridge the gap between technical logic depth and organizational leadership.
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div className="text-xs opacity-30 uppercase tracking-[0.5em] text-center mt-12 pb-4">
                             End of Confidential Psychological Report // Maestro Career
                         </div>

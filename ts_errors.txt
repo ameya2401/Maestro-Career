@@ -1,0 +1,13 @@
+src/components/report/ReportViewer.tsx(43,18): error TS17008: JSX element 'section' has no corresponding closing tag.
+src/components/report/ReportViewer.tsx(85,19): error TS17002: Expected corresponding JSX closing tag for 'MotionConfig'.
+src/components/report/ReportViewer.tsx(87,17): error TS1005: ')' expected.
+src/components/report/ReportViewer.tsx(327,22): error TS17008: JSX element 'div' has no corresponding closing tag.
+src/components/report/ReportViewer.tsx(338,29): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/components/report/ReportViewer.tsx(338,31): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/components/report/ReportViewer.tsx(340,21): error TS1005: ')' expected.
+src/components/report/ReportViewer.tsx(360,33): error TS2657: JSX expressions must have one parent element.
+src/components/report/ReportViewer.tsx(372,29): error TS1005: ')' expected.
+src/components/report/ReportViewer.tsx(373,27): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/components/report/ReportViewer.tsx(579,13): error TS1128: Declaration or statement expected.
+src/components/report/ReportViewer.tsx(580,9): error TS1109: Expression expected.
+src/components/report/ReportViewer.tsx(581,5): error TS1109: Expression expected.
