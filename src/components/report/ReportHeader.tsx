@@ -11,12 +11,11 @@ export default function ReportHeader({ isPrinting = false, resultId }: ReportHea
     if (isPrinting) return null;
 
     const handleDownload = () => {
-        const url = `/api/generate-report?resultId=${resultId || 'latest'}`;
-        window.open(url, '_blank');
+        window.print();
     };
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 py-4 px-8 bg-[#030712]/80 backdrop-blur-md border-b border-white/5 flex justify-between items-center">
+        <header className="no-print fixed top-0 left-0 right-0 z-50 py-4 px-8 bg-[#030712]/80 backdrop-blur-md border-b border-white/5 flex justify-between items-center">
             <div className="flex items-center gap-3">
                 <div className="text-xl font-bold tracking-tighter text-white">MAESTRO<span className="text-primary">CAREER</span></div>
                 <div className="h-4 w-[1px] bg-white/20 mx-2" />
