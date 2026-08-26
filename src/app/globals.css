@@ -129,9 +129,51 @@
 }
 
 @media print {
-  body {
+
+  /* Kill the Chat Widget and all floating UI */
+  iframe,
+  .ch-widget,
+  #hubspot-messages-iframe-container,
+  .crisp-client,
+  #intercom-container,
+  .no-print,
+  [role="status"],
+  button {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+  }
+
+  @page {
+    margin: 0;
+    size: A4 portrait;
+  }
+
+  body,
+  html,
+  main {
     background: white !important;
+    background-color: white !important;
     color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    height: auto !important;
+  }
+
+  /* Force framer-motion and other wrappers to stay out of the way */
+  div[style*="transform"],
+  div[style*="opacity"] {
+    transform: none !important;
+    opacity: 1 !important;
+    background: transparent !important;
+  }
+
+  .bg-\[\#030712\],
+  .bg-\[\#0a0a0a\] {
+    background: white !important;
+    background-color: white !important;
   }
 
   .dossier-page {
@@ -139,16 +181,21 @@
     border: none !important;
     box-shadow: none !important;
     background: white !important;
+    background-color: white !important;
     color: black !important;
     width: 210mm !important;
-    height: 297mm !important;
-    padding: 15mm !important;
+    height: 296mm !important;
+    /* Slightly under 297 to avoid phantom pages */
+    min-height: 296mm !important;
+    max-height: 296mm !important;
+    overflow: hidden !important;
+    /* STRICT CLIPPING */
+    padding: 20mm !important;
     page-break-after: always !important;
     break-after: page !important;
-  }
-
-  .no-print {
-    display: none !important;
+    position: relative !important;
+    display: flex !important;
+    visibility: visible !important;
   }
 
   * {
@@ -156,6 +203,13 @@
     print-color-adjust: exact !important;
     animation: none !important;
     transition: none !important;
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+
+  svg {
+    display: block !important;
+    visibility: visible !important;
   }
 }
 

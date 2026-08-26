@@ -88,6 +88,7 @@ export async function GET(req: NextRequest, { params }: { params: { userId: stri
 
         return NextResponse.json({ success: true, data: state });
     } catch (error) {
+        console.error("Admin Load State Error:", error);
         const message = error instanceof Error ? error.message : "Unable to load assessment access.";
         return NextResponse.json({ success: false, message }, { status: 400 });
     }
@@ -113,12 +114,8 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
         const state = await loadState(admin, params.userId);
 
         if (action === "grant") {
-            if (state.paymentStatus !== "paid") {
-                return NextResponse.json(
-                    { success: false, message: "Internal assessment can be granted only after payment is marked paid." },
-                    { status: 400 },
-                );
-            }
+            // REMOVED: strict "paid" check. As an admin, you should be able to grant access regardless of database payment status.
+            // This allows for free access grants or trial periods manually issued by admin.
 
             const now = new Date().toISOString();
             const { error } = await admin
@@ -154,6 +151,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
         const refreshed = await loadState(admin, params.userId);
         return NextResponse.json({ success: true, data: refreshed });
     } catch (error) {
+        console.error("Admin Grant Access Error:", error);
         const message = error instanceof Error ? error.message : "Unable to update assessment access.";
         return NextResponse.json({ success: false, message }, { status: 400 });
     }

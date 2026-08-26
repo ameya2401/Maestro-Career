@@ -7,6 +7,7 @@ export default function FinalCTA() {
   const [formState, setFormState] = useState<"idle" | "submitting" | "sent" | "error">("idle");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +17,7 @@ export default function FinalCTA() {
       const res = await fetch("/api/inquiry/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email })
+        body: JSON.stringify({ name, email, message })
       });
       if (res.ok) {
         setFormState("sent");
@@ -90,6 +91,17 @@ export default function FinalCTA() {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email"
                         className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/60"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Message</label>
+                      <textarea
+                        required
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="How can we help you?"
+                        rows={3}
+                        className="w-full rounded-xl border border-border/30 bg-background px-4 py-3 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition placeholder:text-foreground/60 resize-none"
                       />
                     </div>
                   </div>

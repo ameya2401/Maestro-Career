@@ -86,22 +86,19 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div className="dossier-section-header border-primary">
-                        <h2 className="text-2xl font-bold uppercase">Executive Summary</h2>
-                        <p className="text-xs opacity-50 tracking-wider">High-Level Architectural Overview</p>
+                        <h2 className="text-2xl font-bold uppercase">Report Summary</h2>
+                        <p className="text-xs opacity-50 tracking-wider">A Quick Look at Your Results</p>
                     </div>
 
                     <div className="dossier-body" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
-                        <p>
-                            This report presents the findings of a structured psychometric and aptitude assessment
-                            conducted on the above-named subject. The evaluation covered cognitive reasoning,
-                            analytical ability, behavioural disposition, and professional inclination to form a
-                            comprehensive profile of the individual&apos;s natural strengths and development needs.
+                        <p className="leading-relaxed">
+                            This report shows the results of your recent skills and personality test. We looked at how you think, how you solve problems, and how you work with others.
                         </p>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '1rem' }}>
                             <div>
                                 <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
-                                    Core Strengths
+                                    What You Are Good At
                                 </h3>
                                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                                     {data.strengths.map((s, i) => (
@@ -111,7 +108,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                             </div>
                             <div>
                                 <h3 style={{ fontSize: '10pt', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontFamily: 'var(--font-inter), sans-serif' }}>
-                                    Areas for Development
+                                    Ways to Grow
                                 </h3>
                                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                                     {data.improvementAreas.map((a, i) => (
@@ -122,9 +119,8 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                         </div>
 
                         <p className="dossier-body-sm" style={{ marginTop: '1.5rem', padding: '1rem', background: '#f8f8f8', borderLeft: '3px solid #1294DD' }}>
-                            The subject demonstrates strong capacity across multiple cognitive dimensions.
-                            The following pages present detailed aptitude metrics, personality traits,
-                            career alignment data, and a personalised strategic roadmap.
+                            You show a strong ability to handle different kinds of tasks.
+                            The next pages will show you exactly where you shine and how to plan for your future.
                         </p>
                     </div>
                     <Footer page={2} />
@@ -135,17 +131,16 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div className="dossier-section-header border-primary">
-                        <h2 className="text-2xl font-bold uppercase">Cognitive Foundation</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Multi-dimensional Aptitude Mapping</p>
+                        <h2 className="text-2xl font-bold uppercase">Your Core Skills</h2>
+                        <p className="text-xs opacity-50 tracking-wider">A Map of Your Thinking Abilities</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                        <div style={{ width: '100%', maxWidth: '520px' }}>
+                        <div style={{ width: '100%', maxWidth: '520px', height: '400px' }}>
                             <ReportRadarChart data={data.charts.radarChart} isPrinting={isPrinting} />
                         </div>
                         <p className="dossier-body-sm" style={{ textAlign: 'center', maxWidth: '480px', marginTop: '2rem' }}>
-                            The radar chart above maps the subject&apos;s cognitive bandwidth across core assessment domains.
-                            Outward peaks indicate areas of natural proficiency; inward valleys suggest opportunity for targeted development.
+                            This chart shows your skill balance. Points further out show your natural strengths, while points closer to the center show areas for growth.
                         </p>
                     </div>
                     <Footer page={3} />
@@ -156,8 +151,8 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div className="dossier-section-header border-primary">
-                        <h2 className="text-2xl font-bold uppercase">Cognitive Deep-Dive</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Aptitude Vector Breakdown</p>
+                        <h2 className="text-2xl font-bold uppercase">Thinking Strengths</h2>
+                        <p className="text-xs opacity-50 tracking-wider">How You Handle Different Challenges</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.25rem' }}>
@@ -172,8 +167,8 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                                 </div>
                                 <p className="dossier-body-sm" style={{ marginTop: '0.4rem', fontSize: '8.5pt' }}>
                                     {Number(value) > 75
-                                        ? `Strong proficiency. The subject handles ${key.replace(/_/g, ' ').toLowerCase()} tasks with confidence and speed.`
-                                        : `Developing proficiency. Focused practice in ${key.replace(/_/g, ' ').toLowerCase()} will yield measurable improvement.`}
+                                        ? `Strong proficiency. You handle ${key.replace(/_/g, ' ').toLowerCase()} tasks with confidence and speed.`
+                                        : `Developing proficiency. Focused practice in ${key.replace(/_/g, ' ').toLowerCase()} will yield improvement.`}
                                 </p>
                             </div>
                         ))}
@@ -186,14 +181,13 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div className="dossier-section-header border-secondary">
-                        <h2 className="text-2xl font-bold uppercase">Behavioral Architecture</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Psychometric Trait Distribution</p>
+                        <h2 className="text-2xl font-bold uppercase">Your Personality</h2>
+                        <p className="text-xs opacity-50 tracking-wider">What Makes You, You</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
                         <p className="dossier-body">
-                            While aptitude measures raw cognitive ability, the personality profile captures how that ability
-                            is expressed in real-world contexts — under pressure, in teams, and in unfamiliar situations.
+                            Your personality shows how you handle pressure, work in a team, and face new challenges.
                         </p>
 
                         {Object.entries(data.careerDNA || {}).map(([key, val]) => {
@@ -224,18 +218,18 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div className="dossier-section-header border-secondary">
-                        <h2 className="text-2xl font-bold uppercase">Psychometric Deep-Dive</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Core Behavioral DNA Drivers</p>
+                        <h2 className="text-2xl font-bold uppercase">Personality Secrets</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Understanding Your Inner Drivers</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
                             {Object.entries(data.careerDNA || {}).map(([key, val]) => (
                                 <div key={key} className="p-4 bg-foreground/5 rounded border border-foreground/5">
-                                    <div className="text-sm font-semibold mb-1">{key} Drive</div>
-                                    <div className="text-xl font-bold text-secondary mb-2">{val}% Intensity</div>
+                                    <div className="text-sm font-semibold mb-1">{key} Style</div>
+                                    <div className="text-xl font-bold text-secondary mb-2">{val}% Strong</div>
                                     <p className="text-xs opacity-70">
-                                        Dictates the baseline requirement for {key}-oriented stimuli in their daily operational environment.
+                                        This shows how much you naturally look for {key}-type activities in your daily life and work.
                                     </p>
                                 </div>
                             ))}
@@ -249,34 +243,32 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
                     <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Synergistic Intersections</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Cognitive Venn Intelligence</p>
+                        <h2 className="text-2xl font-bold uppercase">The Perfect Match</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Where Your Skills and Heart Meet</p>
                     </div>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2rem' }}>
                         <p className="dossier-body">
-                            The most reliable indicator of career success is found not in any single trait, but at the
-                            intersection of multiple well-developed abilities. The following analysis identifies where
-                            analytical thinking and personality tendencies converge, creating your unique advantage.
+                            The best way to find a career you love is to see where your skills and personality meet.
+                            This identifies your unique edge—the special mix of traits that sets you apart.
                         </p>
 
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <svg viewBox="0 0 400 220" width="400" height="220" style={{ maxWidth: '100%' }}>
                                 <circle cx="155" cy="110" r="85" fill="rgba(18,148,221,0.12)" stroke="#1294DD" strokeWidth="1.5" />
                                 <circle cx="245" cy="110" r="85" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" strokeWidth="1.5" />
-                                <text x="120" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#1294DD" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Analytical</text>
-                                <text x="120" y="120" textAnchor="middle" fontSize="8" fill="#888">Thinking</text>
-                                <text x="280" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Personality</text>
-                                <text x="280" y="120" textAnchor="middle" fontSize="8" fill="#888">Execution</text>
-                                <text x="200" y="105" textAnchor="middle" fontSize="8" fontWeight="800" fill="#030712" style={{ textTransform: 'uppercase' }}>Optimal</text>
-                                <text x="200" y="118" textAnchor="middle" fontSize="8" fontWeight="800" fill="#030712" style={{ textTransform: 'uppercase' }}>Zone</text>
+                                <text x="120" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#1294DD" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your</text>
+                                <text x="120" y="120" textAnchor="middle" fontSize="8" fill="#888">Skills</text>
+                                <text x="280" y="105" textAnchor="middle" fontSize="9" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your</text>
+                                <text x="280" y="120" textAnchor="middle" fontSize="8" fill="#888">Personality</text>
+                                <text x="200" y="105" textAnchor="middle" fontSize="8" fontWeight="800" fill="#030712" style={{ textTransform: 'uppercase' }}>Perfect</text>
+                                <text x="200" y="118" textAnchor="middle" fontSize="8" fontWeight="800" fill="#030712" style={{ textTransform: 'uppercase' }}>Match</text>
                             </svg>
                         </div>
 
                         <p className="dossier-body-sm" style={{ padding: '1rem', background: '#f8f8f8', borderLeft: '3px solid #1294DD' }}>
-                            The subject&apos;s overlap zone indicates a practical problem-solver — someone who analyses
-                            situations thoroughly and then acts on those findings with decisiveness. This combination
-                            is particularly valuable in consulting, engineering, and strategic management roles.
+                            Your results show that you are a practical problem-solver. You think things
+                            through and then act quickly to get things done. This makes you perfect for many professional roles.
                         </p>
                     </div>
                     <Footer page={7} />
@@ -285,8 +277,8 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                 {/* PAGE 8: ARCHETYPES */}
                 <section className="dossier-page">
                     <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Subject Archetype</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Primary Classification Protocol</p>
+                        <h2 className="text-2xl font-bold uppercase">Your Personality Type</h2>
+                        <p className="text-xs opacity-50 tracking-wider">The Best Category for You</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-center items-center">
                         <div className="dossier-label mb-6">Confirmed Designation</div>
@@ -296,7 +288,7 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                                 &quot;{data.archetype.description}&quot;
                             </p>
                             <p className="text-sm opacity-60 leading-relaxed mt-4">
-                                This archetype is characterized by an innate ability to navigate complexity. They thrive in environments where rules are defined but outcomes are highly variable, requiring constant strategic recalibration.
+                                This type of person is very good at handling difficult situations. They love working in places where they can use their brain to solve new problems every day.
                             </p>
                             <div className="flex flex-wrap gap-3 justify-center mt-8">
                                 {data.archetype.traits.map((t, i) => (
@@ -385,31 +377,31 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
 
                         return (
                             <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' }}>
-                                <svg viewBox="0 0 480 380" width="420" height="320" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-                                    <circle cx="240" cy="100" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
-                                    <circle cx="240" cy="280" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                <svg viewBox="0 0 520 380" width="460" height="340" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                                    <circle cx="260" cy="100" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                    <circle cx="260" cy="280" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
                                     <circle cx="130" cy="190" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
-                                    <circle cx="350" cy="190" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
-                                    <circle cx="240" cy="190" r="60" fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="2" />
+                                    <circle cx="390" cy="190" r="72" fill="rgba(239,68,68,0.07)" stroke="#ef4444" strokeWidth="1.5" />
+                                    <circle cx="260" cy="190" r="60" fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="2" />
 
-                                    <text x="240" y="62" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[0]?.career ?? 'Poor Fit 1'}</text>
-                                    <text x="240" y="74" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[0]?.score ?? 20}% match</text>
+                                    <text x="260" y="62" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[0]?.career ?? 'Poor Fit 1'}</text>
+                                    <text x="260" y="74" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[0]?.score ?? 20}% match</text>
 
-                                    <text x="240" y="318" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[1]?.career ?? 'Poor Fit 2'}</text>
-                                    <text x="240" y="330" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[1]?.score ?? 20}% match</text>
+                                    <text x="260" y="318" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[1]?.career ?? 'Poor Fit 2'}</text>
+                                    <text x="260" y="330" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[1]?.score ?? 20}% match</text>
 
                                     <text x="80" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[2]?.career ?? 'Poor Fit 3'}</text>
                                     <text x="80" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[2]?.score ?? 20}% match</text>
 
-                                    <text x="400" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[3]?.career ?? 'Poor Fit 4'}</text>
-                                    <text x="400" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[3]?.score ?? 30}% match</text>
+                                    <text x="440" y="188" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#dc2626" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{badCareers[3]?.career ?? 'Poor Fit 4'}</text>
+                                    <text x="440" y="200" textAnchor="middle" fontSize="6.5" fill="#999">{badCareers[3]?.score ?? 30}% match</text>
 
-                                    <text x="240" y="136" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[0] ?? 'Good Fit 1'}</text>
-                                    <text x="240" y="248" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[1] ?? 'Good Fit 2'}</text>
+                                    <text x="260" y="136" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[0] ?? 'Good Fit 1'}</text>
+                                    <text x="260" y="248" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#d97706" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{goodCareers[1] ?? 'Good Fit 2'}</text>
 
-                                    <text x="240" y="183" textAnchor="middle" fontSize="10" fontWeight="900" fill="#15803d" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{bestCareer}</text>
-                                    <text x="240" y="198" textAnchor="middle" fontSize="8" fontWeight="700" fill="#16a34a">{data.careerMatches[0]?.score ?? 95}% match</text>
-                                    <text x="240" y="212" textAnchor="middle" fontSize="7" fill="#555">Best Fit</text>
+                                    <text x="260" y="183" textAnchor="middle" fontSize="10" fontWeight="900" fill="#15803d" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>{bestCareer}</text>
+                                    <text x="260" y="198" textAnchor="middle" fontSize="8" fontWeight="700" fill="#16a34a">{data.careerMatches[0]?.score ?? 95}% match</text>
+                                    <text x="260" y="212" textAnchor="middle" fontSize="7" fill="#555">Best Fit</text>
                                 </svg>
                             </div>
                         );
@@ -496,24 +488,24 @@ export default function ReportViewer({ data, isPrinting = false }: ReportViewerP
                     PAGE 13 — STRATEGIC ROADMAP & CONCLUSION
                 ═══════════════════════════════════════════════ */}
                 <section className="dossier-page">
-                    <div className="dossier-section-header">
-                        <h2 className="text-2xl font-bold uppercase">Strategic Roadmap</h2>
-                        <p className="text-xs opacity-50 tracking-wider">Final Recommendations &amp; Execution</p>
+                    <div className="dossier-section-header border-emerald-500">
+                        <h2 className="text-2xl font-bold uppercase">Your Action Plan</h2>
+                        <p className="text-xs opacity-50 tracking-wider">Steps to reach your goals</p>
                     </div>
                     <div className="flex-1 flex flex-col justify-between pt-8">
                         <div className="space-y-8">
                             <div className="grid grid-cols-3 gap-6">
                                 <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 01: EXPLORATION</div>
-                                    <p className="text-sm opacity-70 leading-relaxed">Focus on foundational skill acquisition and broad mental model development.</p>
+                                    <div className="text-primary font-bold mb-2 text-sm">STEP 1: LEARNING</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Focus on learning the basics and building a strong foundation of knowledge.</p>
                                 </div>
                                 <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 02: SPECIALIZATION</div>
-                                    <p className="text-sm opacity-70 leading-relaxed">Deep-dive into preferred career DNA clusters. Begin eliminating extraneous vectors.</p>
+                                    <div className="text-primary font-bold mb-2 text-sm">STEP 2: FOCUSING</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Dig deep into the jobs that really interest you. Start picking your favorite paths.</p>
                                 </div>
                                 <div className="p-6 border border-foreground/10 rounded-sm">
-                                    <div className="text-primary font-bold mb-2 text-sm">PHASE 03: MASTERY</div>
-                                    <p className="text-sm opacity-70 leading-relaxed">Professional placement and leadership trajectory initiation.</p>
+                                    <div className="text-primary font-bold mb-2 text-sm">STEP 3: WINNING</div>
+                                    <p className="text-sm opacity-70 leading-relaxed">Get your first job and start leadings others with your unique skills.</p>
                                 </div>
                             </div>
                             <div className="bg-primary text-primary-foreground p-10 rounded-lg shadow-xl mt-12">

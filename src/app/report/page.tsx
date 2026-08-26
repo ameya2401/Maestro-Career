@@ -42,8 +42,21 @@ export default async function ReportPage({
     if (!data) return <div className="p-20 text-white">No intelligence data found.</div>;
 
     return (
-        <div className="bg-[#030712] min-h-screen">
-            <ReportHeader isPrinting={isPrinting} />
+        <div className={`transition-colors duration-500 ${isPrinting ? 'bg-white' : 'bg-[#030712]'} min-h-screen`}>
+            {/* Auto-print trigger for the specialized print view */}
+            {isPrinting && (
+                <script dangerouslySetInnerHTML={{
+                    __html: `
+                        window.onload = function() {
+                            setTimeout(function() {
+                                window.print();
+                            }, 1000);
+                        }
+                    `
+                }} />
+            )}
+
+            <ReportHeader isPrinting={isPrinting} resultId={searchParams.resultId} />
             <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white font-mono tracking-widest text-xs uppercase opacity-50">Decoding Dossier Persistence...</div>}>
                 <div className={isPrinting ? '' : 'pt-20'}>
                     <ReportViewer data={data} isPrinting={isPrinting} />

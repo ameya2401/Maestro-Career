@@ -223,7 +223,7 @@ export default function DashboardPage() {
             setGoalsMessage("Goals saved successfully.");
             await loadData();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Unable to save goals.");
+            setGoalsMessage(`Error: ${err instanceof Error ? err.message : "Unable to save goals."}`);
         } finally {
             setSavingGoals(false);
         }
