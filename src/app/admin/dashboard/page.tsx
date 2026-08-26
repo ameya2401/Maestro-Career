@@ -38,8 +38,8 @@ interface AdminStats {
 interface AdminEditForm {
     fullName: string;
     mobile: string;
-    dateOfBirth?: string | null;
-    userType?: UserType | null;
+    dateOfBirth?: string;
+    userType?: UserType;
     city?: string;
     selectedPlanId?: string;
     paymentStatus?: PaymentStatus;
@@ -60,30 +60,42 @@ interface InternalAssessmentAccess {
     latestResultId?: string | null;
 }
 
+const PLAN_MAP = new Map(PLANS.map((plan) => [plan.id, plan]));
+
 function inferPaymentMethod(user: AdminUser): PaymentMethod {
     if (user.payment_method === "manual_upi") return "manual_upi";
     if (user.payment_method === "cash") return "cash";
     return "razorpay";
 }
 
-function formatAge(dateOfBirth: string | null) {
+function calculateAge(dateOfBirth: string | null) {
     if (!dateOfBirth) {
-        return "-";
+        return null;
+    }
+
+    const birthDate = new Date(dateOfBirth);
+    if (Number.isNaN(birthDate.getTime())) {
+        return null;
     }
 
     const today = new Date();
-    const birthDate = new Date(dateOfBirth);
     let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDelta = today.getMonth() - birthDate.getMonth();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
 
-    if (monthDelta < 0 || (monthDelta === 0 && today.getDate() < birthDate.getDate())) {
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
         age -= 1;
     }
 
     return age;
 }
 
-function getPaymentMethodLabel(method: PaymentMethod) {
+function formatAge(dateOfBirth: string | null) {
+    const age = calculateAge(dateOfBirth);
+    return age !== null ? `${age} yrs` : "-";
+}
+
+function getPaymentMethodLabel(method?: PaymentMethod | null) {
+    if (!method) return "TBD";
     if (method === "cash") {
         return "Manual Cash";
     }

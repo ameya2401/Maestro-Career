@@ -39,7 +39,7 @@ export async function GET(req: Request) {
                         : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
                     : await chromium.executablePath(),
                 headless: true,
-                ignoreHTTPSErrors: true,
+                acceptInsecureCerts: true,
             });
             console.log(`[PDF] Browser launched successfully`);
         } catch (launchError) {
