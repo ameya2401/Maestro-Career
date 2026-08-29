@@ -68,12 +68,34 @@ async function resolvePlaceId(apiKey: string): Promise<string | null> {
     return placeId || null;
 }
 
+import manualGoogleReviews from "@/data/manualGoogleReviews.json";
+
 export async function GET() {
     const apiKey = process.env.GOOGLE_MAPS_API_KEY;
     if (!apiKey) {
-        return jsonError(
-            "Missing GOOGLE_MAPS_API_KEY. Set it in your environment to enable Google reviews.",
-            500
+        const fallbackReviews = (manualGoogleReviews as Array<{ authorName: string; text: string; rating: number }>)
+            .filter((r) => r.rating === 5)
+            .map((r) => ({
+                authorName: r.authorName || "Anonymous",
+                text: (r.text || "").replace(/\s*…\s*More\s*$/i, "").replace(/\s*\.\.\.\s*More\s*$/i, "").trim(),
+            }))
+            .filter((r) => r.text.length > 0)
+            .slice(0, 20);
+
+        return NextResponse.json(
+            {
+                ok: true,
+                source: "fallback",
+                place: {
+                    placeId: "manual_fallback",
+                    name: "Maestro Career",
+                    url: null,
+                    rating: 5.0,
+                    userRatingsTotal: fallbackReviews.length,
+                },
+                reviews: fallbackReviews,
+            },
+            { status: 200, headers: { "Cache-Control": "no-store" } }
         );
     }
 

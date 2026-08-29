@@ -199,12 +199,15 @@ export async function POST(req: NextRequest) {
     `;
 
     const isLocal = process.env.NODE_ENV === 'development';
+    const envChromePath = process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_PATH;
     const browser = await puppeteer.launch({
-      args: isLocal ? [] : chromium.args,
-      executablePath: isLocal ?
-        (process.platform === 'win32'
-          ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-          : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+      args: isLocal ? ['--no-sandbox', '--disable-setuid-sandbox'] : chromium.args,
+      executablePath: envChromePath
+        ? envChromePath
+        : isLocal
+        ? (process.platform === 'win32'
+            ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+            : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
         : await chromium.executablePath(),
       headless: true,
     });

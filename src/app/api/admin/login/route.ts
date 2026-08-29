@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const userId = String(body?.userId ?? "").trim();
+        const userId = String(body?.userId ?? body?.username ?? "").trim();
         const password = String(body?.password ?? "").trim();
 
         if (!validateAdminCredentials(userId, password)) {

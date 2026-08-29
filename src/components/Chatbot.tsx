@@ -172,6 +172,8 @@ export default function Chatbot() {
                 whileHover={{ scale: 1.05, y: -2, boxShadow: "0 20px 40px hsla(var(--primary) / 0.3)" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
+                aria-label="Toggle career guide chat assistant"
+                title="Career Guide Assistant"
                 className="w-16 h-16 rounded-[1.8rem] bg-foreground text-background shadow-3d flex items-center justify-center relative transition-all group"
             >
                 <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity rounded-[1.8rem]" />
